@@ -14,17 +14,29 @@ import Input from '../components/Input';
 import Button from '../components/Button';
 import { COLORS_THEME, COLORS } from '../utils/styles';
 import { SIGN_VIEW } from '../utils/constants';
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
+// import DateTimePicker from '@react-native-community/datetimepicker';
 
 const SigninScreen = ({ view = SIGN_VIEW.in }) => {
 	const translateAnim = useRef(new Animated.Value(0)).current;
 	const [signView, setSignView] = useState(view);
 	const [emailIn, setEmailIn] = useState('');
 	const [passwordIn, setPasswordIn] = useState('');
-	const [username, setUsername] = useState('');
-	const [familyName, setFamilyName] = useState('');
+	const [firstname, setFirstname] = useState('');
+	const [lastname, setLastname] = useState('');
+	const [datePickerVisible, setDatePickerVisible] = useState(false);
+	const [dateOB, setDateOB] = useState(new Date());
 	const [emailUp, setEmailUp] = useState('');
 	const [passwordUp, setPasswordUp] = useState('');
 	const [confirmedPasswordUp, setConfirmedPasswordUp] = useState('');
+
+	const showDatePicker = () => {
+		setDatePickerVisible(true);
+	};
+
+	const hideDatePicker = () => {
+		setDatePickerVisible(false);
+	};
 
 	useEffect(() => {
 		Animated.timing(translateAnim, {
@@ -90,8 +102,8 @@ const SigninScreen = ({ view = SIGN_VIEW.in }) => {
 							autoFocus={true}
 							autoCapitalize="none"
 							keyboardType="default"
-							onChangeText={(value) => setUsername(value)}
-							value={username}
+							onChangeText={(value) => setFirstname(value)}
+							value={firstname}
 						/>
 						<Input
 							label="Nom"
@@ -99,9 +111,71 @@ const SigninScreen = ({ view = SIGN_VIEW.in }) => {
 							autoFocus={false}
 							autoCapitalize="none"
 							keyboardType="default"
-							onChangeText={(value) => setFamilyName(value)}
-							value={familyName}
+							onChangeText={(value) => setLastname(value)}
+							value={lastname}
 						/>
+
+						<View
+							style={{
+								padding: 0,
+								// flex: 1,
+								borderWidth: 1,
+								borderColor: 'red',
+								justifyContent: 'center',
+								alignItems: 'center',
+							}}>
+							<Text
+								style={{ fontSize: 24, fontWeight: 'bold', marginBottom: 20 }}>
+								{dateOB ? dateOB.toLocaleDateString() : 'No date selected'}
+							</Text>
+							<Button
+								label="Select a date"
+								type="secondary"
+								onpress={showDatePicker}
+							/>
+							<DateTimePickerModal
+								date={dateOB}
+								isVisible={datePickerVisible}
+								mode="date"
+								onConfirm={(date) => {
+									setDateOB(date);
+									hideDatePicker();
+								}}
+								onCancel={hideDatePicker}
+							/>
+							{/* <DateTimePicker
+								style={{ width: 200 }}
+								value={dateOB}
+								date="date"
+								mode="date"
+								placeholder="select date"
+								format="YYYY-MM-DD"
+								// minDate="2016-05-01"
+								// maxDate="2016-06-01"
+								// autoFocus={false}
+								// open={open}
+								// onOpen={() => setOpen(true)}
+								// onClose={() => setOpen(false)}
+								confirmBtnText="Confirm"
+								cancelBtnText="Cancel"
+								customStyles={{
+									dateIcon: {
+										position: 'absolute',
+										left: 0,
+										top: 4,
+										marginLeft: 0,
+									},
+									dateInput: {
+										marginLeft: 36,
+									},
+								}}
+								onDateChange={(date) => {
+									setDateOB(date);
+									hideDatePicker();
+								}}
+							/> */}
+						</View>
+
 						<Input
 							label="Email"
 							theme={COLORS_THEME.dark}
