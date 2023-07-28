@@ -1,4 +1,4 @@
-[![forthebadge](https://forthebadge.com/images/badges/uses-brains.svg)](https://forthebadge.com)[![forthebadge](https://forthebadge.com/images/badges/built-with-love.svg)](https://forthebadge.com)[!\[my badge\](https://badgen.net/badge/hello/world/red?icon=twitter)
+[![forthebadge](https://forthebadge.com/images/badges/uses-brains.svg)](https://forthebadge.com)[![forthebadge](https://forthebadge.com/images/badges/built-with-love.svg)](https://forthebadge.com)!\[my badge\](https://badgen.net/badge/hello/world/red?icon=twitter)
 
 ### Iconic Travel
 
