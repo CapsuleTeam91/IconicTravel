@@ -1,4 +1,4 @@
-[![forthebadge](https://forthebadge.com/images/badges/uses-brains.svg)](https://forthebadge.com)
+[![forthebadge](https://forthebadge.com/images/badges/uses-brains.svg)](https://forthebadge.com)[![forthebadge](https://forthebadge.com/images/badges/built-with-love.svg)](https://forthebadge.com)
 ### Iconic Travel
 
 Nous savons que rencontrer des habitants originaires du pays de destination est compliqué et qu'il faut généralement passer par des agences de voyage. C'est pour cela que nous avons mis en place l'application Iconic Travel.
