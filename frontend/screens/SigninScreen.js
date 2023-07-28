@@ -12,8 +12,8 @@ import {
 } from 'react-native';
 import Input from '../components/Input';
 import Button from '../components/Button';
-import { COLORS } from '../utils/styles';
-import { COLORS_THEME, SIGN_VIEW } from '../utils/constants';
+import { COLORS_THEME, COLORS } from '../utils/styles';
+import { SIGN_VIEW } from '../utils/constants';
 
 const SigninScreen = ({ view = SIGN_VIEW.in }) => {
 	const translateAnim = useRef(new Animated.Value(0)).current;
