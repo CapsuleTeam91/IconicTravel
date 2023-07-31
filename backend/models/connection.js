@@ -1,13 +1,9 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
-const connectionString = process.env.CONNEXION_STRING;
+const connectionString = process.env.CONNECTION_STRING;
 
-mongoose.set("strictQuery", true);
-
+mongoose.set('strictQuery', false);
 mongoose
-  .connect(connectionString, { connectTimeoutMS: 2000 })
-  .then(() => console.log("Database connected"))
-  .catch(error => console.error(error));
-
-
-module.exports = connectionString; 
+	.connect(connectionString, { connectTimeoutMS: 2000 })
+	.then(() => console.log('🛫 Database connected - Travel begins 🌍🌏🌎'))
+	.catch((error) => console.error(error));
