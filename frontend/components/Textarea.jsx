@@ -78,11 +78,9 @@ const styles = StyleSheet.create({
 		width: '70%',
 		borderRadius: 8,
 		borderWidth: 1,
-		justifyContent: 'center',
 		borderColor: COLORS.darkBlue,
 	},
 	input: {
-		// height: 50,
 		paddingVertical: 10,
 		paddingHorizontal: 20,
 	},
@@ -117,7 +115,7 @@ const styles = StyleSheet.create({
 	dark: {
 		container: {
 			borderWidth: 0,
-			marginVertical: 15,
+			// marginVertical: 15,
 			backgroundColor: COLORS.bgDark,
 		},
 		isHighlightedLabelContainer: {
