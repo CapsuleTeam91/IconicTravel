@@ -9,7 +9,7 @@ const initialState = {
 		password: null,
 		avatarUrl: null,
 		description: null,
-		city: null,
+		city: { name: null, latitude: null, longitude: null },
 		spokenLanguages: [],
 		hobbies: [],
 	},
@@ -19,10 +19,18 @@ export const userSlice = createSlice({
 	name: 'user',
 	initialState,
 	reducers: {
-		// TODO : géréer les entrées une par une  - attention aux doublons d'infos !
 		addData: (state, action) => {
-			console.log({ ...state.value, ...action.payload });
+			// const payloadKeys = Object.keys(action.payload); //get payload object keys
+			// const stateKeys = Object.keys(state.value); //get state value object keys
+			// // state.value already have property ? update it : add it
+			// payloadKeys.map((key) =>
+			// 	stateKeys.includes(key)
+			// 		? (state.value[key] = action.payload[key])
+			// 		: (state.value = { ...state.value, ...action.payload[key] })
+			// );
+
 			state.value = { ...state.value, ...action.payload };
+			console.log('Reducer: ', state.value);
 		},
 		addAvatar: (state, action) => {
 			state.value.avatarUrl = action.payload;
@@ -49,9 +57,9 @@ export default userSlice.reducer;
 // 		required: [true, ERRORS.required],
 // 	},
 // 	token: String,
-// 	avatar: { type: String, default: DEFAULT_PHOTO },
+// 	avatarUrl: { type: String, default: DEFAULT_PHOTO },
 // 	description: { type: String, default: DEFAULT_DESCRIPTION },
-// 	city: { type: String, default: null }, // if no city registered display create profil screen at connexion ?
+// 	city: citySchema,
 // 	spokenLanguages: [{ type: String, default: DEFAULT_LANGUAGE }],
 // 	hobbies: [{ type: String, default: DEFAULT_HOBBY }],
 // 	travels: [travelSchema],
