@@ -13,22 +13,66 @@ import {
 import Input from '../components/Input';
 import Button from '../components/Button';
 import { COLORS_THEME, COLORS } from '../utils/styles';
-import { SIGN_VIEW } from '../utils/constants';
+import { ERRORS, SIGN_VIEW } from '../utils/constants';
 import DatePicker from '../components/DatePicker';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import PasswordInput from '../components/PasswordInput';
 
-const SigninScreen = ({ view = SIGN_VIEW.in }) => {
+const SigninScreen = ({ navigation, view = SIGN_VIEW.in }) => {
 	const translateAnim = useRef(new Animated.Value(0)).current;
 	const [signView, setSignView] = useState(view);
 	const [emailIn, setEmailIn] = useState('');
 	const [passwordIn, setPasswordIn] = useState('');
 	const [firstname, setFirstname] = useState('');
 	const [lastname, setLastname] = useState('');
+	const [errorIn, setErrorIn] = useState('');
 
 	const [dateOB, setDateOB] = useState(new Date());
 	const [emailUp, setEmailUp] = useState('');
 	const [passwordUp, setPasswordUp] = useState('');
 	const [confirmedPasswordUp, setConfirmedPasswordUp] = useState('');
+
+	const handleConnection = () => {
+		setErrorIn(''); // reset previous errors
+
+		// check inputs fileds content
+		if (!emailIn || !passwordIn) {
+			setErrorIn(ERRORS.err403);
+			return;
+		} else if (!EMAIL_REGEX.test(emailIn)) {
+			setErrorIn(ERRORS.invalidEmailFormat);
+			return;
+		}
+
+		// send request for authentication
+		fetch(`${URL_EXPO}:3000/users/signin`, {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({
+				email: emailIn,
+				password: passwordIn,
+			}),
+		})
+			.then((response) =>
+				response.status > 400 ? response.status : response.json()
+			)
+			.then((data) => {
+				if (typeof data === 'number') {
+					setErrorIn(ERRORS[`err${data}`]);
+					return;
+				}
+
+				if (data.result) {
+					console.log('token: ', data.token);
+					// dispatch(login({ token: data.token }));
+					setEmailIn('');
+					setPasswordIn('');
+					navigation.navigate('TabNavigator', { screen: 'Search' });
+				} else {
+					setErrorIn(ERRORS[`err${data.status}`]);
+				}
+			});
+	};
 
 	useEffect(() => {
 		Animated.timing(translateAnim, {
@@ -53,7 +97,9 @@ const SigninScreen = ({ view = SIGN_VIEW.in }) => {
 							transform: [{ translateY: translateAnim }], // Bind translateY to animated value
 						},
 					]}>
-					<Text style={[styles.title, styles.titleDark]}>CONNECTION</Text>
+					<Text style={[STYLES_GLOBAL.title, styles.titleDark]}>
+						CONNECTION
+					</Text>
 
 					<View style={styles.inputContainer}>
 						<Input
@@ -66,7 +112,7 @@ const SigninScreen = ({ view = SIGN_VIEW.in }) => {
 							onChangeText={(value) => setEmailIn(value)}
 							value={emailIn}
 						/>
-						<Input
+						{/* <Input
 							label="Mot de passe"
 							theme={COLORS_THEME.light}
 							autoFocus={false}
@@ -74,15 +120,20 @@ const SigninScreen = ({ view = SIGN_VIEW.in }) => {
 							secureTextEntry={true}
 							onChangeText={(value) => setPasswordIn(value)}
 							value={passwordIn}
+						/> */}
+						<PasswordInput
+							label="Mot de passe"
+							theme={COLORS_THEME.light}
+							onchangetext={(value) => setPasswordIn(value)}
+							value={passwordIn}
 						/>
 					</View>
+					{errorIn && <Text style={STYLES_GLOBAL.error}>{errorIn}</Text>}
 
 					<Button
-						onpress={() => {
-							console.log('Se connecter');
-						}}
-						label="Se connecter"
 						type="primary"
+						label="Se connecter"
+						onpress={handleConnection}
 					/>
 				</Animated.View>
 

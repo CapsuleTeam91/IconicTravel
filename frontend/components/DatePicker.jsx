@@ -1,18 +1,10 @@
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { COLORS } from '../utils/styles';
-import { Easing } from 'react-native-reanimated';
-import {
-	View,
-	StyleSheet,
-	Text,
-	TouchableOpacity,
-	Animated,
-} from 'react-native';
+import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const DatePicker = (props) => {
-	const transY = useRef(new Animated.Value(0)).current;
 	const [datePickerVisible, setDatePickerVisible] = useState(false);
 
 	const showDatePicker = () => {
@@ -32,7 +24,10 @@ const DatePicker = (props) => {
 				]}>
 				{props.label}
 			</Text>
-			<TouchableOpacity onPress={showDatePicker} activeOpacity={0.8}>
+			<TouchableOpacity
+				onPress={showDatePicker}
+				activeOpacity={0.8}
+				style={styles.btnContainer}>
 				<Ionicons name="calendar-outline" size={28} color={COLORS.bg} />
 			</TouchableOpacity>
 			<DateTimePickerModal
@@ -52,6 +47,7 @@ const DatePicker = (props) => {
 const styles = StyleSheet.create({
 	container: {
 		width: '70%',
+		height: 50,
 		flexDirection: 'row',
 		alignItems: 'center',
 		justifyContent: 'space-between',
@@ -60,6 +56,13 @@ const styles = StyleSheet.create({
 		paddingVertical: 10,
 		paddingHorizontal: 20,
 		marginVertical: 20,
+	},
+	btnContainer: {
+		...StyleSheet.absoluteFillObject,
+		right: 20,
+		flexDirection: 'row',
+		alignItems: 'center',
+		justifyContent: 'flex-end',
 	},
 	label: {
 		color: COLORS.bg,

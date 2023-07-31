@@ -1,4 +1,4 @@
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import StrokeAnimation from '../components/StrokeAnimation';
 import Button from '../components/Button';
 
