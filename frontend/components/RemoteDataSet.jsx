@@ -1,6 +1,7 @@
 import React, { memo, useCallback, useState } from 'react';
 import { Text } from 'react-native';
 import { AutocompleteDropdown } from 'react-native-autocomplete-dropdown';
+import { COLORS } from '../utils/styles';
 
 export const RemoteDataSet = memo((props) => {
 	const [loading, setLoading] = useState(false);
@@ -47,15 +48,27 @@ export const RemoteDataSet = memo((props) => {
 				closeOnBlur={false}
 				useFilter={false}
 				clearOnFocus={false}
-				textInputProps={{
-					width: '85%',
-					placeholder: 'Search city',
-				}}
 				onSelectItem={props.addCity}
 				loading={loading}
 				onChangeText={getSuggestions}
+				textInputProps={{
+					color: COLORS.bg,
+					placeholder: 'Ville de Résidence',
+				}}
+				inputContainerStyle={{
+					width: '70%',
+					margin: 10,
+					color: COLORS.bg,
+					borderRadius: 8,
+					backgroundColor: COLORS.bgDark,
+				}}
+				suggestionsListContainerStyle={{
+					backgroundColor: COLORS.pink,
+				}}
 				suggestionsListTextStyle={{
-					color: '#8f3c96',
+					color: COLORS.bgDark,
+					fontWeight: '700',
+					letterSpacing: 1,
 				}}
 				EmptyResultComponent={
 					<Text style={{ padding: 10, fontSize: 15 }}>Not Found</Text>
