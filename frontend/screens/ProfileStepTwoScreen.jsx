@@ -16,6 +16,51 @@ const ProfileStepTwoScreen = ({ navigation }) => {
 	const [spokenLaguages, setSpokenLanguages] = useState([]); // CF utils/data.js - > dropdown ?
 	const [error, setError] = useState('');
 
+	// GET ALL CITIES BEGINING WITH INPUT VALUE => AutocompleteDropdown dataset
+	const getCities = (city) => {
+		if (city.length === 0) {
+			setError('Sélectionnez une ville valide !');
+			return;
+		} else if (city.length < 4 || city.length > 200) {
+			setError('La ville doit contenir entre 3 et 200 lettres');
+			return;
+		}
+
+		console.log('city:', city)
+
+		const URL = `https://www.mapquestapi.com/geocoding/v1/address?key=WvE5tMdxgRUWtFIPcZXO1qITivOTwk7V&location=${city}`
+		fetch(URL).then(response =>
+			response.json()).then(data => console.log(data.results[0].locations)).catch(error => {
+				console.log('error:', error);
+			});
+
+		//adminArea5 ET displayLatLng:{"lat": 48.85717, "lng": 2.3414}
+
+		// fetch(URL)
+		// 	.then((r) => r.json())
+		// 	.then((d) => {
+		// 		console.log(d)
+		// 		d && setCities([...d.features.map((f) => f.properties.name)]);
+		// 	});
+	};
+
+	const getSelectedCity = (city) => {
+		// TODO : handle error if no city !!!!
+
+		// TODO : FIND WORLDWIDE API !!!!!! + handleErrors
+		city &&
+			fetch(`https://api-adresse.data.gouv.fr/search/?q=${city.title}`)
+				.then((response) => response.json())
+				.then((data) => {
+					data &&
+						setCity({
+							name: data.features[0].properties.name,
+							latitude: data.features[0].geometry.coordinates[1],
+							longitude: data.features[0].geometry.coordinates[0],
+						});
+					setCities([]);
+				});
+	};
 
 	const handleRegister = () => {
 		dispatch(addData({ description, city, spokenLaguages }));

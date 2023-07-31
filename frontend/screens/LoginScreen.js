@@ -17,6 +17,12 @@ export default function LoginScreen({ navigation }) {
 				label="Créer un compte"
 				onpress={() => navigation.navigate('Signup')}
 			/>
+
+<Button
+				type="secondary"
+				label="Créer un compte"
+				onpress={() => navigation.navigate('ProfileStepTwo')}
+			/>
 		</View>
 	);
 }
