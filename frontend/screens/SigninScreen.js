@@ -18,7 +18,7 @@ import DatePicker from '../components/DatePicker';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import PasswordInput from '../components/PasswordInput';
 import { useDispatch } from 'react-redux';
-import { addData } from '../reducers/newUser';
+import { addData } from '../reducers/user';
 
 const SigninScreen = ({ navigation, view = SIGN_VIEW.in }) => {
 	const dispatch = useDispatch();
@@ -213,7 +213,7 @@ const SigninScreen = ({ navigation, view = SIGN_VIEW.in }) => {
 							date={dateOfBirth}
 							label={
 								dateOfBirth.toLocaleDateString() !==
-								new Date().toLocaleDateString()
+									new Date().toLocaleDateString()
 									? dateOfBirth.toLocaleDateString()
 									: 'Date de naissance'
 							}

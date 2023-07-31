@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { addAvatar, addData } from '../reducers/newUser';
+import { addAvatar, addData } from '../reducers/user';
 import { useDispatch } from 'react-redux';
 import { useIsFocused } from '@react-navigation/native';
 import { COLORS, STYLES_GLOBAL } from '../utils/styles';

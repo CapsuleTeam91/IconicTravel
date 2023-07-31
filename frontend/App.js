@@ -12,7 +12,7 @@ import { persistStore, persistReducer } from 'redux-persist';
 import { PersistGate } from 'redux-persist/integration/react';
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import newUser from './reducers/newUser';
+import user from './reducers/user';
 
 // Screens
 import LoginScreen from './screens/LoginScreen';
@@ -29,7 +29,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import { COLORS } from './utils/styles';
 
 // Store
-const reducers = combineReducers({ newUser });
+const reducers = combineReducers({ user });
 const persistConfig = { key: 'iconic', storage: AsyncStorage };
 const store = configureStore({
 	reducer: persistReducer(persistConfig, reducers),

@@ -4,13 +4,13 @@ import Button from '../components/Button';
 import ButtonIcon from '../components/ButtonIcon';
 
 import React, { useState } from 'react';
-import { addData } from '../reducers/newUser';
+import { addData } from '../reducers/user';
 import { useDispatch, useSelector } from 'react-redux';
 import { ERRORS, URL_EXPO } from '../utils/constants';
 
 const ProfileStepThreeScreen = ({ navigation }) => {
 	const dispatch = useDispatch();
-	const newUser = useSelector((state) => state.newUser.value);
+	const user = useSelector((state) => state.user.value);
 	const [hobbies, setHobbies] = useState(['voyage']);
 	const [error, setError] = useState('');
 
@@ -22,12 +22,12 @@ const ProfileStepThreeScreen = ({ navigation }) => {
 		}
 		dispatch(addData({ hobbies }));
 
-		console.log(newUser);
+		console.log(user);
 
 		fetch(`${URL_EXPO}:3000/users/signup`, {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify(newUser),
+			body: JSON.stringify(user),
 		})
 			.then((response) =>
 				response.status > 400 ? response.status : response.json()

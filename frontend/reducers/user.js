@@ -15,8 +15,8 @@ const initialState = {
 	},
 };
 
-export const newUserSlice = createSlice({
-	name: 'newUser',
+export const userSlice = createSlice({
+	name: 'user',
 	initialState,
 	reducers: {
 		// TODO : géréer les entrées une par une  - attention aux doublons d'infos !
@@ -30,8 +30,8 @@ export const newUserSlice = createSlice({
 	},
 });
 
-export const { addData, addAvatar } = newUserSlice.actions;
-export default newUserSlice.reducer;
+export const { addData, addAvatar } = userSlice.actions;
+export default userSlice.reducer;
 
 /* REMINDER */
 // const userSchema = mongoose.Schema({
