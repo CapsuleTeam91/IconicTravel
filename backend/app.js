@@ -1,16 +1,18 @@
 require('dotenv').config();
+require('./models/connection');
 var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
-require('./models/connection');
-
-
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
 var app = express();
+
+const fileUpload = require('express-fileupload');
+app.use(fileUpload());
+
 const cors = require('cors');
 app.use(cors());
 
