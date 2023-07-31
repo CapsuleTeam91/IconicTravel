@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { addData } from '../reducers/newUser';
 import { useDispatch } from 'react-redux';
-import { COLORS, STYLES_GLOBAL } from '../utils/styles';
+import { COLORS, COLORS_THEME, STYLES_GLOBAL } from '../utils/styles';
 import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
 import { AutocompleteDropdown } from 'react-native-autocomplete-dropdown';
 import { AutocompleteDropdownContextProvider } from 'react-native-autocomplete-dropdown';
 import Button from '../components/Button';
 import ButtonIcon from '../components/ButtonIcon';
+import Textarea from '../components/Textarea';
 
 const ProfileStepTwoScreen = ({ navigation }) => {
 	const dispatch = useDispatch();
@@ -52,39 +53,8 @@ const ProfileStepTwoScreen = ({ navigation }) => {
 
 	const handleRegister = () => {
 		dispatch(addData({ description, city, spokenLaguages }));
+		console.log(navigation);
 		navigation.navigate('ProfileStepThree');
-		// setError(''); // reset previous errors
-
-		// If user doesn't add description or spokenLanguges api will give a default ones, so don't worry be happy🎵
-
-		// TODO : handle error if no city !!!!
-		// if (city.length === 0) {
-		// 	setError('Sélectionnez une ville valide !');
-		// 	return;
-		// } else if (city.length < 4 || city.length > 200) {
-		// 	setError('La ville doit contenir entre 3 et 200 lettres');
-		// 	return;
-		// }
-
-		// // TODO : FIND WORLDWIDE API !!!!!! + handleErrors
-		// fetch(`https://api-adresse.data.gouv.fr/search/?q=${city}`)
-		// 	.then((response) => response.json())
-		// 	.then((data) => {
-		// 		if (data.code >= 400) {
-		// 			setError(data.message);
-		// 			return;
-		// 		}
-		// 		console.log(data);
-		// 		const data.features[0] = data.features[0];
-		// 		const newCity = {
-		// 			name: firstCity.properties.city,
-		// 			latitude: firstCity.geometry.coordinates[1],
-		// 			longitude: firstCity.geometry.coordinates[0],
-		// 		};
-		// dispatch(addData({ description, city: newCity, spokenLaguages }));
-		// navigation.navigate('ProfileStepThree');
-		// 		setCity('');
-		// 	});
 	};
 
 	return (
@@ -100,6 +70,14 @@ const ProfileStepTwoScreen = ({ navigation }) => {
 				<Text style={STYLES_GLOBAL.textLight}>
 					Faisons plus ample connaissance ...
 				</Text>
+
+				<Textarea
+					label="Description"
+					theme={COLORS_THEME.dark}
+					autoFocus={false}
+					onChangeText={(value) => setDescription(value)}
+					value={description}
+				/>
 
 				<AutocompleteDropdown
 					// containerStyle={styles.dropdown}

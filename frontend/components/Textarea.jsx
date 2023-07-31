@@ -3,7 +3,7 @@ import { COLORS } from '../utils/styles';
 import { Easing } from 'react-native-reanimated';
 import { StyleSheet, TextInput, View, Text, Animated } from 'react-native';
 
-const Input = (props) => {
+const Textarea = (props) => {
 	const transY = useRef(new Animated.Value(0)).current;
 	const [isHighlighted, setIsHighlighted] = useState(props.autoFocus);
 
@@ -57,10 +57,16 @@ const Input = (props) => {
 			</Animated.View>
 			<TextInput
 				{...props}
-				maxLength={100}
+				maxLength={1000}
+				multiligne={true}
+				numberOfLines={10}
 				onFocus={handleFocus}
 				onBlur={handleBlur}
-				style={[styles[props.theme].input, styles.input]}
+				style={[
+					styles[props.theme].input,
+					styles.input,
+					{ height: 200, textAlignVertical: 'top' },
+				]}
 				cursorColor={COLORS.pink}
 			/>
 		</View>
@@ -130,4 +136,4 @@ const styles = StyleSheet.create({
 	},
 });
 
-export default Input;
+export default Textarea;
