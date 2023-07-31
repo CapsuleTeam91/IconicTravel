@@ -4,7 +4,7 @@ import { Easing } from 'react-native-reanimated';
 import { StyleSheet, TextInput, View, Text, Animated } from 'react-native';
 
 const Textarea = (props) => {
-	const transY = useRef(new Animated.Value(0)).current;
+	const transY = useRef(new Animated.Value(10)).current;
 	const [isHighlighted, setIsHighlighted] = useState(props.autoFocus);
 
 	const handleFocus = () => {
@@ -21,7 +21,7 @@ const Textarea = (props) => {
 		setIsHighlighted(false);
 		if (!props.value) {
 			Animated.timing(transY, {
-				toValue: 0,
+				toValue: 10,
 				duration: 200,
 				easing: Easing.ease,
 				useNativeDriver: true,
@@ -76,6 +76,7 @@ const Textarea = (props) => {
 const styles = StyleSheet.create({
 	container: {
 		width: '70%',
+		marginVertical: 20,
 		borderRadius: 8,
 		borderWidth: 1,
 		borderColor: COLORS.darkBlue,
@@ -115,7 +116,6 @@ const styles = StyleSheet.create({
 	dark: {
 		container: {
 			borderWidth: 0,
-			// marginVertical: 15,
 			backgroundColor: COLORS.bgDark,
 		},
 		isHighlightedLabelContainer: {

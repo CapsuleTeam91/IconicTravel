@@ -94,17 +94,19 @@ const ProfileStepOneScreen = ({ navigation }) => {
 			<Text style={[STYLES_GLOBAL.subTitle, STYLES_GLOBAL.subTitleLight]}>
 				Etape 1/3
 			</Text>
-			<Image
-				source={{
-					uri: image || DEFAULT_AVATAR,
-				}}
-				style={styles.camera}
-			/>
+			{!cameraOpen && (
+				<Image
+					source={{
+						uri: image || DEFAULT_AVATAR,
+					}}
+					style={styles.camera}
+				/>
+			)}
 			{hasCameraPermission && cameraOpen && (
 				<View style={styles.cameraContainer}>
 					<View style={styles.buttonsContainer}>
 						<ButtonIcon
-							type="secondary"
+							type="tertiary"
 							name={
 								type === CameraType.back ? 'sync-circle' : 'sync-circle-outline'
 							}
@@ -116,7 +118,7 @@ const ProfileStepOneScreen = ({ navigation }) => {
 						/>
 
 						<ButtonIcon
-							type="secondary"
+							type="tertiary"
 							name={flashMode === FlashMode.off ? 'flash' : 'flash-outline'}
 							onpress={() =>
 								setFlashMode(
@@ -132,8 +134,8 @@ const ProfileStepOneScreen = ({ navigation }) => {
 						style={styles.camera}></Camera>
 					<View style={styles.snapContainer}>
 						<ButtonIcon
-							type="secondary"
-							name="camera-outline"
+							type="tertiary"
+							name="aperture-outline"
 							onpress={() => cameraRef && takePicture()}
 						/>
 					</View>
@@ -190,7 +192,7 @@ const styles = StyleSheet.create({
 		backgroundColor: COLORS.darkBlue,
 	},
 	cameraContainer: {
-		width: '100%',
+		width: '90%',
 		flexDirection: 'row',
 		justifyContent: 'center',
 	},
@@ -210,9 +212,8 @@ const styles = StyleSheet.create({
 	},
 	snapContainer: {
 		flex: 1,
-		paddingBottom: 5,
 		alignItems: 'center',
-		justifyContent: 'flex-end',
+		justifyContent: 'center',
 	},
 });
 

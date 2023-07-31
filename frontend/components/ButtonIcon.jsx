@@ -20,11 +20,20 @@ const ButtonIcon = (props) => {
 
 const styles = StyleSheet.create({
 	btn: {
-		width: 72,
+		width: 62,
 		alignItems: 'center',
 		borderRadius: 30,
 		paddingVertical: 15,
 		marginVertical: 20,
+		shadowColor: COLORS.bg,
+		shadowOffset: {
+			width: 0,
+			height: 1,
+		},
+		shadowOpacity: 0.2,
+		shadowRadius: 1.41,
+
+		elevation: 2,
 	},
 	primaryBtn: {
 		backgroundColor: COLORS.darkBlue,
@@ -34,11 +43,17 @@ const styles = StyleSheet.create({
 		borderColor: COLORS.darkBlue,
 		backgroundColor: COLORS.bg,
 	},
+	tertiaryBtn: {
+		backgroundColor: COLORS.bgDark,
+	},
 	primaryTextBtn: {
 		color: COLORS.bg,
 	},
 	secondaryTextBtn: {
 		color: COLORS.lightBlue,
+	},
+	tertiaryTextBtn: {
+		color: COLORS.bg,
 	},
 });
 
