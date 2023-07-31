@@ -42,7 +42,12 @@ const ProfileStepOneScreen = ({ navigation }) => {
 	};
 
 	const handleRegister = () => {
-		console.log('image ', image);
+		if (!image) {
+			setImage(DEFAULT_AVATAR);
+			dispatch(addAvatar(image));
+			navigation.navigate('ProfileStepTwo');
+		}
+
 		const formData = new FormData();
 
 		formData.append('avatar', {
