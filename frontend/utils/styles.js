@@ -7,6 +7,7 @@ export const COLORS = {
 	darkBlue: '#073B4C',
 	lightBlue: '#95B8D1',
 };
+
 export const COLORS_THEME = {
 	light: 'light',
 	dark: 'dark',

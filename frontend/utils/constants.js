@@ -1,5 +1,6 @@
 /* ENV */
-export const URL_EXPO = 'http://10.9.1.4';
+// export const URL_EXPO = 'http://10.9.1.4';
+export const URL_EXPO = 'http://192.168.1.17';
 
 /* DATA */
 export const DEFAULT_AVATAR =

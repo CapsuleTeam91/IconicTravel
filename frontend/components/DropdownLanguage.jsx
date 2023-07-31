@@ -53,7 +53,7 @@ const DropdownLanguage = ({ spokenLanguages, setSpokenLanguages }) => {
 					backgroundColor: COLORS.bgDark,
 				}}
 				suggestionsListContainerStyle={{
-					backgroundColor: COLORS.pink,
+					backgroundColor: COLORS.lightBlue,
 				}}
 				suggestionsListTextStyle={{
 					color: COLORS.bgDark,
