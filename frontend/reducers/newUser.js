@@ -7,7 +7,7 @@ const initialState = {
 		dateOfBirth: null,
 		email: null,
 		password: null,
-		avatar: null,
+		avatarUrl: null,
 		description: null,
 		city: null,
 		spokenLanguages: [],
@@ -25,7 +25,7 @@ export const newUserSlice = createSlice({
 			state.value = { ...state.value, ...action.payload };
 		},
 		addAvatar: (state, action) => {
-			state.value.avatar = action.payload;
+			state.value.avatarUrl = action.payload;
 		},
 	},
 });

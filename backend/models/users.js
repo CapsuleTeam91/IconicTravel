@@ -39,13 +39,13 @@ const userSchema = mongoose.Schema({
 		required: [true, ERRORS.required],
 	},
 	token: String,
-	avatar: { type: String, default: DEFAULT_PHOTO },
+	avatarUrl: { type: String, default: DEFAULT_PHOTO },
 	description: { type: String, default: DEFAULT_DESCRIPTION },
 	city: citySchema,
 	spokenLanguages: [{ type: String, default: DEFAULT_LANGUAGE }],
 	hobbies: [{ type: String, default: DEFAULT_HOBBY }],
 	travels: [travelSchema],
-	isHosting: { type: Boolean, default: true },
+	canHost: { type: Boolean, default: false },
 });
 
 const User = mongoose.model('users', userSchema);
