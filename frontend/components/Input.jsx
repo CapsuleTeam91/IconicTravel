@@ -75,6 +75,7 @@ const styles = StyleSheet.create({
 		borderColor: COLORS.darkBlue,
 	},
 	input: {
+		height: 50,
 		paddingVertical: 10,
 		paddingHorizontal: 20,
 	},

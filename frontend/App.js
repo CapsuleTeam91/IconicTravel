@@ -41,6 +41,7 @@ export default function App() {
 	return (
 		<NavigationContainer>
 			<StatusBar style={styles.container} />
+
 			<Stack.Navigator screenOptions={{ headerShown: false }}>
 				<Stack.Screen name="Login" component={LoginScreen} />
 				<Stack.Screen name="Signin" component={SigninScreen} />
