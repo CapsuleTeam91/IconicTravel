@@ -12,13 +12,16 @@ import {
 } from 'react-native';
 import Input from '../components/Input';
 import Button from '../components/Button';
-import { COLORS_THEME, COLORS } from '../utils/styles';
-import { ERRORS, SIGN_VIEW } from '../utils/constants';
+import { COLORS_THEME, COLORS, STYLES_GLOBAL } from '../utils/styles';
+import { EMAIL_REGEX, ERRORS, SIGN_VIEW, URL_EXPO } from '../utils/constants';
 import DatePicker from '../components/DatePicker';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import PasswordInput from '../components/PasswordInput';
+import { useDispatch } from 'react-redux';
+import { addData } from '../reducers/newUser';
 
 const SigninScreen = ({ navigation, view = SIGN_VIEW.in }) => {
+	const dispatch = useDispatch();
 	const translateAnim = useRef(new Animated.Value(0)).current;
 	const [signView, setSignView] = useState(view);
 	const [emailIn, setEmailIn] = useState('');
@@ -27,10 +30,17 @@ const SigninScreen = ({ navigation, view = SIGN_VIEW.in }) => {
 	const [lastname, setLastname] = useState('');
 	const [errorIn, setErrorIn] = useState('');
 
-	const [dateOB, setDateOB] = useState(new Date());
+	const [dateOfBirth, setDateOfBirth] = useState(new Date());
 	const [emailUp, setEmailUp] = useState('');
 	const [passwordUp, setPasswordUp] = useState('');
-	const [confirmedPasswordUp, setConfirmedPasswordUp] = useState('');
+	const [confirmedPassword, setConfirmedPassword] = useState('');
+	const [errorUp, setErrorUp] = useState('');
+
+	const checkDOB = (dob) => {
+		var ageDifMs = Date.now() - dob;
+		var ageDate = new Date(ageDifMs); // miliseconds from epoch
+		return Math.abs(ageDate.getUTCFullYear() - 1970) <= 18;
+	};
 
 	const handleConnection = () => {
 		setErrorIn(''); // reset previous errors
@@ -74,6 +84,54 @@ const SigninScreen = ({ navigation, view = SIGN_VIEW.in }) => {
 			});
 	};
 
+	const handleRegister = () => {
+		setErrorUp(''); // reset previous errors
+
+		// check inputs fields content
+		if (
+			!firstname ||
+			!lastname ||
+			!dateOfBirth ||
+			!emailUp ||
+			!passwordUp ||
+			!confirmedPassword
+		) {
+			setErrorUp(ERRORS.err403);
+			return;
+		} else if (checkDOB(dateOfBirth)) {
+			setErrorUp('18 ans chaton');
+			return;
+		} else if (!EMAIL_REGEX.test(emailUp)) {
+			setErrorUp(ERRORS.invalidEmailFormat);
+			return;
+		} else if (passwordUp !== confirmedPassword) {
+			setErrorUp(ERRORS.difPassword);
+			return;
+		}
+
+		// save datas in store
+		dispatch(
+			addData({
+				firstname,
+				lastname,
+				dateOfBirth,
+				email: emailUp,
+				password: passwordUp,
+			})
+		);
+
+		// reset inputs fields
+		setFirstname('');
+		setLastname('');
+		setDateOfBirth(new Date());
+		setEmailUp('');
+		setPasswordUp('');
+		setConfirmedPassword('');
+
+		// go to next step
+		navigation.navigate('ProfileStepOne');
+	};
+
 	useEffect(() => {
 		Animated.timing(translateAnim, {
 			toValue: signView === SIGN_VIEW.up ? -700 : -10,
@@ -112,15 +170,6 @@ const SigninScreen = ({ navigation, view = SIGN_VIEW.in }) => {
 							onChangeText={(value) => setEmailIn(value)}
 							value={emailIn}
 						/>
-						{/* <Input
-							label="Mot de passe"
-							theme={COLORS_THEME.light}
-							autoFocus={false}
-							autoCapitalize="none"
-							secureTextEntry={true}
-							onChangeText={(value) => setPasswordIn(value)}
-							value={passwordIn}
-						/> */}
 						<PasswordInput
 							label="Mot de passe"
 							theme={COLORS_THEME.light}
@@ -161,13 +210,14 @@ const SigninScreen = ({ navigation, view = SIGN_VIEW.in }) => {
 						/>
 
 						<DatePicker
-							date={dateOB}
+							date={dateOfBirth}
 							label={
-								dateOB.toLocaleDateString() !== new Date().toLocaleDateString()
-									? dateOB.toLocaleDateString()
+								dateOfBirth.toLocaleDateString() !==
+								new Date().toLocaleDateString()
+									? dateOfBirth.toLocaleDateString()
 									: 'Date de naissance'
 							}
-							onconfirm={(date) => setDateOB(date)}
+							onconfirm={(date) => setDateOfBirth(date)}
 						/>
 
 						<Input
@@ -180,7 +230,7 @@ const SigninScreen = ({ navigation, view = SIGN_VIEW.in }) => {
 							onChangeText={(value) => setEmailUp(value)}
 							value={emailUp}
 						/>
-						<Input
+						{/* <Input
 							label="Mot de passe"
 							theme={COLORS_THEME.dark}
 							autoFocus={false}
@@ -188,8 +238,20 @@ const SigninScreen = ({ navigation, view = SIGN_VIEW.in }) => {
 							secureTextEntry={true}
 							onChangeText={(value) => setPasswordUp(value)}
 							value={passwordUp}
+						/> */}
+						<PasswordInput
+							label="Mot de passe"
+							theme={COLORS_THEME.dark}
+							onchangetext={(value) => setPasswordUp(value)}
+							value={passwordUp}
 						/>
-						<Input
+						<PasswordInput
+							label="Confirmer le mot de passe"
+							theme={COLORS_THEME.dark}
+							onchangetext={(value) => setConfirmedPassword(value)}
+							value={confirmedPassword}
+						/>
+						{/* <Input
 							label="Confirmer le mot de passe"
 							theme={COLORS_THEME.dark}
 							autoFocus={false}
@@ -197,14 +259,14 @@ const SigninScreen = ({ navigation, view = SIGN_VIEW.in }) => {
 							secureTextEntry={true}
 							onChangeText={(value) => setConfirmedPasswordUp(value)}
 							value={confirmedPasswordUp}
-						/>
+						/> */}
 					</View>
+					{errorUp && <Text style={STYLES_GLOBAL.error}>{errorUp}</Text>}
+
 					<Button
 						type="secondary"
 						label="Créer un compte"
-						onpress={() => {
-							console.log('Créer un compte');
-						}}
+						onpress={handleRegister}
 					/>
 				</View>
 
