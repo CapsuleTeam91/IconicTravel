@@ -26,11 +26,23 @@ const ProfileStepTwoScreen = ({ navigation }) => {
 			setError('La ville doit contenir entre 3 et 200 lettres');
 			return;
 		}
-		fetch(`https://api-adresse.data.gouv.fr/search/?q=${city}`)
-			.then((r) => r.json())
-			.then((d) => {
-				d && setCities([...d.features.map((f) => f.properties.name)]);
+
+		console.log('city:', city)
+
+			const URL = `https://www.mapquestapi.com/geocoding/v1/address?key=WvE5tMdxgRUWtFIPcZXO1qITivOTwk7V&location=${city}`
+			fetch(URL).then(response => 
+			response.json()).then(data => console.log(data.results[0].locations)).catch(error => {
+			  console.log('error:', error);
 			});
+
+		//adminArea5 ET displayLatLng:{"lat": 48.85717, "lng": 2.3414}
+
+		// fetch(URL)
+		// 	.then((r) => r.json())
+		// 	.then((d) => {
+		// 		console.log(d)
+		// 		d && setCities([...d.features.map((f) => f.properties.name)]);
+		// 	});
 	};
 
 	const getSelectedCity = (city) => {
