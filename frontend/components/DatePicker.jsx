@@ -32,6 +32,7 @@ const DatePicker = (props) => {
 			</TouchableOpacity>
 			<DateTimePickerModal
 				date={props.date}
+				display='spinner'
 				isVisible={datePickerVisible}
 				mode="date"
 				onConfirm={(date) => {
