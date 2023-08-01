@@ -6,14 +6,16 @@ import ButtonIcon from '../components/ButtonIcon';
 const ProfileStepFourScreen = ({ navigation }) => {
 	return (
 		<SafeAreaView style={styles.container}>
-			<Text style={STYLES_GLOBAL.title}>Félicitations et bienvenue</Text>
+			<Text style={STYLES_GLOBAL.title}>Bienvenue</Text>
 			<Text style={[STYLES_GLOBAL.subTitle]}>
 				Vous avez achevé la création de votre profil d'Iconic Traveler !
 			</Text>
 
-			<Text>
-				Vous faîtes désormais partie de notre Iconic community, merci de
-				respecter les genres, religions ...
+			<Text style={styles.welcome}>
+				Bienvenue dans notre Iconic Community. 
+				C'est un endroit qui permet de rencontrer des nouvelles personnes et de créer des liens.
+				Nous vous demandons d'être respectueux et de respecter les règles de la communauté. 
+				Au plaisir !
 			</Text>
 			<Button
 				type="primary"
@@ -27,7 +29,7 @@ const ProfileStepFourScreen = ({ navigation }) => {
 				type="secondary"
 				name="information-circle-outline"
 				onpress={() => {
-					console.log('Ici un lien vers un à propos');
+					navigation.navigate('About')
 				}}
 			/>
 		</SafeAreaView>
@@ -40,6 +42,7 @@ const styles = StyleSheet.create({
 		justifyContent: 'space-between',
 		backgroundColor: COLORS.bg,
 	},
+	
 });
 
 export default ProfileStepFourScreen;

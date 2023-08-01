@@ -16,6 +16,7 @@ import user from './reducers/user';
 
 // Screens
 import LoginScreen from './screens/LoginScreen';
+import AboutScreen from './screens/AboutScreen';
 import SigninScreen from './screens/SigninScreen';
 import SignupScreen from './screens/SignupScreen';
 import SearchScreen from './screens/SearchScreen';
@@ -116,6 +117,10 @@ export default function App() {
 						<Stack.Screen
 							name="ProfileStepFour"
 							component={ProfileStepFourScreen}
+						/>
+						<Stack.Screen
+							name="About"
+							component={AboutScreen}
 						/>
 						<Stack.Screen name="TabNavigator" component={TabNavigator} />
 					</Stack.Navigator>

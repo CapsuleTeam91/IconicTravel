@@ -40,7 +40,7 @@ const SignUp = (props) => {
 			setError(ERRORS.err403);
 			return;
 		} else if (checkDOB(dateOfBirth)) {
-			setError('18 ans chaton');
+			setError('18 ans ou plus');
 			return;
 		} else if (!EMAIL_REGEX.test(email)) {
 			setError(ERRORS.invalidEmailFormat);
