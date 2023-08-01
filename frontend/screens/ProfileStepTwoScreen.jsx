@@ -1,32 +1,28 @@
 import React, { useState } from 'react';
-import { addData } from '../reducers/user';
-import { useDispatch } from 'react-redux';
-import { LANGUAGES_ISO } from '../utils/data';
-import { COLORS, COLORS_THEME, STYLES_GLOBAL } from '../utils/styles';
 import {
 	SafeAreaView,
 	StyleSheet,
 	Text,
 	View,
-	StatusBar,
 	KeyboardAvoidingView,
 	ScrollView,
 } from 'react-native';
+import { addData } from '../reducers/user';
+import { useDispatch } from 'react-redux';
 import { RemoteDataSet } from '../components/RemoteDataSet';
-import {
-	AutocompleteDropdown,
-	AutocompleteDropdownContextProvider,
-} from 'react-native-autocomplete-dropdown';
+import { COLORS, COLORS_THEME, STYLES_GLOBAL } from '../utils/styles';
+import { AutocompleteDropdownContextProvider } from 'react-native-autocomplete-dropdown';
 import Button from '../components/Button';
-import ButtonIcon from '../components/ButtonIcon';
 import Textarea from '../components/Textarea';
+import ButtonIcon from '../components/ButtonIcon';
+import DropdownLanguage from '../components/DropdownLanguage';
 
 const ProfileStepTwoScreen = ({ navigation }) => {
 	const dispatch = useDispatch();
-	const [description, setDescription] = useState('');
 	const [city, setCity] = useState('');
-	const [spokenLanguages, setSpokenLanguages] = useState([]);
 	const [error, setError] = useState('');
+	const [description, setDescription] = useState('');
+	const [spokenLanguages, setSpokenLanguages] = useState([]);
 
 	// GET ALL CITIES BEGINING WITH INPUT VALUE => AutocompleteDropdown dataset
 	// const getCities = (city) => {
@@ -77,112 +73,106 @@ const ProfileStepTwoScreen = ({ navigation }) => {
 	// };
 
 	const handleRegister = () => {
-		console.log('selected', spokenLanguages);
+		if (!city) {
+			setError('Vous devez sélectionner une ville');
+			return;
+		}
 		dispatch(addData({ description, city, spokenLanguages }));
 		navigation.navigate('ProfileStepThree');
 	};
 
 	const addCity = (newCity) => {
 		if (!newCity) return;
-		setCity(newCity);
-	};
-
-	const getSelectedLanguages = (language) => {
-		if (!language?.title) return;
-		language &&
-			setSpokenLanguages([...spokenLanguages, LANGUAGES_ISO[language.title]]);
+		// setCity(newCity);
+		setCity({
+			name: 'Bordeaux',
+			latitude: 44.851895,
+			longitude: -0.587877,
+		});
 	};
 
 	return (
-		<SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
+		<SafeAreaView style={styles.container}>
 			<KeyboardAvoidingView
-				style={{ flex: 1 }}
+				style={styles.container}
 				behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
 				enabled>
-				{/* <ScrollView
-					contentContainerStyle={styles.scrollContainer}
-					style={{ flex: 1 }}> */}
-				<View style={styles.container}>
-					<Text style={[STYLES_GLOBAL.title, STYLES_GLOBAL.titleLight]}>
-						Création de votre profil
-					</Text>
-					<Text style={[STYLES_GLOBAL.subTitle, STYLES_GLOBAL.subTitleLight]}>
-						Etape 2/3
-					</Text>
-					<Text style={STYLES_GLOBAL.textLight}>
-						Faisons plus ample connaissance ...
-					</Text>
+				<ScrollView
+					nestedScrollEnabled
+					keyboardDismissMode="on-drag"
+					keyboardShouldPersistTaps="handled"
+					contentInsetAdjustmentBehavior="automatic"
+					contentContainerStyle={{
+						paddingBottom: 200,
+						justifyContent: 'space-between',
+					}}
+					style={{ flex: 1 }}>
+					<View
+						style={[styles.container, Platform.select({ ios: { zIndex: 1 } })]}>
+						<Text style={[STYLES_GLOBAL.title, STYLES_GLOBAL.titleLight]}>
+							Création de votre profil
+						</Text>
+						<Text style={[STYLES_GLOBAL.subTitle, STYLES_GLOBAL.subTitleLight]}>
+							Etape 2/3
+						</Text>
+						<Text style={[STYLES_GLOBAL.textLight, { marginBottom: 20 }]}>
+							Faisons plus ample connaissance ...
+						</Text>
 
-					<Textarea
-						label="Description"
-						theme={COLORS_THEME.dark}
-						autoFocus={false}
-						onChangeText={(value) => setDescription(value)}
-						value={description}
-					/>
-					<AutocompleteDropdownContextProvider>
-						<RemoteDataSet addCity={addCity} />
-					</AutocompleteDropdownContextProvider>
-
-					<AutocompleteDropdownContextProvider>
-						<AutocompleteDropdown
-							clearOnFocus={false}
-							closeOnBlur={true}
-							closeOnSubmit={false}
-							textInputProps={{
-								placeholder: 'Langues parlées',
-								// autoCorrect: false,
-								// autoCapitalize: 'none',
-							}}
-							// initialValue={{ id: 1 }}
-							onSelectItem={(item) => getSelectedLanguages(item)}
-							dataSet={Object.keys(LANGUAGES_ISO)?.map((el, i) => ({
-								id: i,
-								title: el,
-							}))}
-							inputContainerStyle={{
-								backgroundColor: COLORS.bgDark,
-								borderRadius: 8,
-								width: '70%',
-								color: COLORS.bg,
-							}}
-							suggestionsListContainerStyle={{
-								backgroundColor: COLORS.bgDark,
-								color: COLORS.bg,
-							}}
+						<Textarea
+							label="Description"
+							theme={COLORS_THEME.dark}
+							autoFocus={false}
+							onChangeText={(value) => setDescription(value)}
+							value={description}
 						/>
-					</AutocompleteDropdownContextProvider>
 
-					{spokenLanguages.length > 0 &&
-						spokenLanguages.map((el, i) => <Text key={i}>{el}</Text>)}
+						<AutocompleteDropdownContextProvider>
+							<RemoteDataSet addCity={addCity} />
+							<DropdownLanguage
+								spokenLanguages={spokenLanguages}
+								setSpokenLanguages={setSpokenLanguages}
+							/>
+						</AutocompleteDropdownContextProvider>
 
-					{error && <Text style={STYLES_GLOBAL.error}>{error}</Text>}
+						{error && <Text style={STYLES_GLOBAL.error}>{error}</Text>}
 
-					<View style={STYLES_GLOBAL.btnBottomContainer}>
-						<ButtonIcon
-							type="secondary"
-							name="arrow-undo-outline"
-							onpress={() => navigation.navigate('ProfileStepOne')}
-						/>
-						<Button type="secondary" label="Suivant" onpress={handleRegister} />
+						<View
+							style={[
+								STYLES_GLOBAL.btnBottomContainer,
+								styles.btnBottomContainer,
+							]}>
+							<ButtonIcon
+								type="secondary"
+								name="arrow-undo-outline"
+								onpress={() => navigation.navigate('ProfileStepOne')}
+							/>
+							<Button
+								type="secondary"
+								label="Suivant"
+								onpress={handleRegister}
+							/>
+						</View>
 					</View>
-				</View>
-				{/* </ScrollView> */}
+				</ScrollView>
 			</KeyboardAvoidingView>
 		</SafeAreaView>
 	);
 };
 const styles = StyleSheet.create({
 	container: {
-		alignItems: 'center',
-		backgroundColor: COLORS.darkBlue,
-		paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
-	},
-	scrollContainer: {
 		flex: 1,
-		justifyContent: 'flex-end',
+		alignItems: 'center',
+		justifyContent: 'center',
 		backgroundColor: COLORS.darkBlue,
+		// paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
 	},
+	// scrollContainer: {
+	// 	flex: 1,
+	// 	justifyContent: 'flex-end',
+	// 	backgroundColor: COLORS.darkBlue,
+	// },
+	btnBottomContainer: {},
 });
 
 export default ProfileStepTwoScreen;
