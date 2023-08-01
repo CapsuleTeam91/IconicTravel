@@ -41,13 +41,13 @@ const SignIn = (props) => {
 				response.status > 400 ? response.status : response.json()
 			)
 			.then((data) => {
+				console.log(data)
 				if (typeof data === 'number') {
 					setError(ERRORS[`err${data}`]);
 					return;
 				}
 
 				if (data.result) {
-					const data = data.data;
 					dispatch(addData({ data }));
 					setEmail('');
 					setPassword('');

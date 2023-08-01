@@ -5,6 +5,7 @@ import MapView from 'react-native-maps'
 const SearchScreen = () => {
 	const user = useSelector((state) => state.user.value);
 
+	console.log(user.firstname)
 	return (
 		<SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
 			<View style={styles.container}>
