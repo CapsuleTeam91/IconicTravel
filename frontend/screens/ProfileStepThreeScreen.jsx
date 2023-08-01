@@ -13,6 +13,7 @@ const ProfileStepThreeScreen = ({ navigation }) => {
 	const dispatch = useDispatch();
 	const user = useSelector((state) => state.user.value);
 	const [hobbies, setHobbies] = useState([]);
+	const [selectedHobbies, setSelectedHobbies] = useState([]);
 	const [newHobby, setNewHobby] = useState('');
 	const [error, setError] = useState('');
 
@@ -34,7 +35,6 @@ const ProfileStepThreeScreen = ({ navigation }) => {
 			.then((response) => response.json())
 			.then((data) => {
 				if (data.result) {
-					console.log('new hobby added');
 					const newHobbies = data.hobbiesList?.map((el) =>
 						el.replace('_', ' ')
 					);
@@ -46,13 +46,20 @@ const ProfileStepThreeScreen = ({ navigation }) => {
 			});
 	};
 
+	const handleSelection = (hobby) => {
+		selectedHobbies.includes(hobby)
+			? setSelectedHobbies(selectedHobbies.filter((el) => el !== hobby))
+			: setSelectedHobbies([...selectedHobbies, hobby]);
+	};
+
 	const handleRegister = () => {
 		setError(''); // reset previous errors
-		if (hobbies.length <= 0) {
+
+		if (selectedHobbies.length === 0) {
 			setError('Sélectionnez au moins une passion !');
 			return;
 		}
-		dispatch(addData({ hobbies }));
+		dispatch(addData({ hobbies: selectedHobbies }));
 
 		console.log(user);
 
@@ -72,7 +79,7 @@ const ProfileStepThreeScreen = ({ navigation }) => {
 				if (data.result) {
 					console.log('token: ', data.token);
 					// dispatch(login({ token: data.token }));
-					setHobbies([]);
+					setSelectedHobbies([]);
 
 					navigation.navigate('ProfileStepFour');
 				} else {
@@ -93,8 +100,6 @@ const ProfileStepThreeScreen = ({ navigation }) => {
 					console.log('UseEffect', hobbies);
 				}
 			});
-
-		return () => {};
 	}, []);
 
 	return (
@@ -115,7 +120,12 @@ const ProfileStepThreeScreen = ({ navigation }) => {
 			<View style={styles.hobbiesBtn}>
 				{hobbies.length > 0 &&
 					hobbies.map((hobby, i) => (
-						<Button key={i} label={hobby} type="tertiary" onpress={() => { }} />
+						<Button
+							key={i}
+							label={hobby}
+							type={selectedHobbies.includes(hobby) ? 'primary' : 'tertiary'}
+							onpress={() => handleSelection(hobby)}
+						/>
 					))}
 			</View>
 
