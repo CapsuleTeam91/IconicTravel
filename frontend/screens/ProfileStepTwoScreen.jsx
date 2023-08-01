@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
+import { SafeAreaView, StatusBar, StyleSheet, Text, View } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { addData } from '../reducers/user';
 import { RemoteDataSet } from '../components/RemoteDataSet';
@@ -43,16 +43,14 @@ const ProfileStepTwoScreen = ({ navigation }) => {
 	};
 
 	return (
-		<SafeAreaView style={styles.container}>
+
+		<SafeAreaView style={{ flex: 1 }}>
+			<StatusBar backgroundColor={'white'} />
 			<KeyboardAwareScrollView
 				extraScrollHeight={100} // (when scroll)to have extra height between keyboard and text input
 				enableOnAndroid={true}
 				extraHeight={100} // make some height so the keyboard wont cover other component
-				contentContainerStyle={{
-					flexGrow: 1,
-					justifyContent: 'center',
-					alignItems: 'center',
-				}}>
+				contentContainerStyle={styles.container}>
 				<Text style={[STYLES_GLOBAL.title, STYLES_GLOBAL.titleLight]}>
 					Création de votre profil
 				</Text>
@@ -82,7 +80,7 @@ const ProfileStepTwoScreen = ({ navigation }) => {
 				{error && <Text style={STYLES_GLOBAL.error}>{error}</Text>}
 
 				<View
-					style={[STYLES_GLOBAL.btnBottomContainer, styles.btnBottomContainer]}>
+					style={STYLES_GLOBAL.btnBottomContainer}>
 					<ButtonIcon
 						type="secondary"
 						name="arrow-undo-outline"
@@ -96,14 +94,11 @@ const ProfileStepTwoScreen = ({ navigation }) => {
 };
 const styles = StyleSheet.create({
 	container: {
-		flex: 1,
-		alignItems: 'center',
+		flexGrow: 1,
 		justifyContent: 'center',
+		alignItems: 'center',
 		backgroundColor: COLORS.darkBlue,
-	},
-	btnBottomContainer: {
-		justifyContent: 'flex-end',
-	},
+	}
 });
 
 export default ProfileStepTwoScreen;

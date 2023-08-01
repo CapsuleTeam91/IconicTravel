@@ -9,6 +9,7 @@ import {
 	Keyboard,
 	ScrollView,
 } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { SIGN_VIEW } from '../utils/constants';
 import { COLORS, STYLES_GLOBAL } from '../utils/styles';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -23,27 +24,22 @@ const SigninScreen = ({ navigation, view = SIGN_VIEW.in }) => {
 			onPress={() => Keyboard.dismiss()}
 			style={{ flex: 1 }}>
 			<SafeAreaView style={{ flex: 1 }}>
-				<KeyboardAvoidingView
-					style={styles.container}
-					behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-					enabled>
+				<KeyboardAwareScrollView
+					extraScrollHeight={100} // (when scroll)to have extra height between keyboard and text input
+					enableOnAndroid={true}
+					extraHeight={100} // make some height so the keyboard wont cover other component
+					contentContainerStyle={{
+						flexGrow: 1,
+						justifyContent: 'center',
+						alignItems: 'center',
+						backgroundColor: COLORS.darkBlue,
+					}}>
 					<SignIn
 						signView={signView}
 						navigate={() =>
 							navigation.navigate('TabNavigator', { screen: 'Search' })
 						}
 					/>
-
-					{/* <ScrollView
-					nestedScrollEnabled
-					keyboardDismissMode="on-drag"
-					keyboardShouldPersistTaps="handled"
-					contentInsetAdjustmentBehavior="automatic"
-					contentContainerStyle={{
-						paddingBottom: 200,
-						justifyContent: 'space-between',
-					}}
-					style={{ flex: 1 }}> */}
 					<SignUp navigate={() => navigation.navigate('ProfileStepOne')} />
 
 					<View>
@@ -64,8 +60,7 @@ const SigninScreen = ({ navigation, view = SIGN_VIEW.in }) => {
 							</Text>
 						</TouchableOpacity>
 					</View>
-					{/* </ScrollView> */}
-				</KeyboardAvoidingView>
+				</KeyboardAwareScrollView>
 			</SafeAreaView>
 		</TouchableWithoutFeedback>
 	);

@@ -1,4 +1,4 @@
-import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
+import { SafeAreaView, StatusBar, StyleSheet, Text, View } from 'react-native';
 import { COLORS, COLORS_THEME, STYLES_GLOBAL } from '../utils/styles';
 import Button from '../components/Button';
 import ButtonIcon from '../components/ButtonIcon';
@@ -99,6 +99,7 @@ const ProfileStepThreeScreen = ({ navigation }) => {
 
 	return (
 		<SafeAreaView style={styles.container}>
+			<StatusBar backgroundColor={'white'} />
 			<Text style={[STYLES_GLOBAL.title, STYLES_GLOBAL.titleLight]}>
 				Création de votre profil
 			</Text>
@@ -114,7 +115,7 @@ const ProfileStepThreeScreen = ({ navigation }) => {
 			<View style={styles.hobbiesBtn}>
 				{hobbies.length > 0 &&
 					hobbies.map((hobby, i) => (
-						<Button key={i} label={hobby} type="tertiary" onpress={() => {}} />
+						<Button key={i} label={hobby} type="tertiary" onpress={() => { }} />
 					))}
 			</View>
 
