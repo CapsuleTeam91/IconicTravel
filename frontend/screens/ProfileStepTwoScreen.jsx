@@ -1,16 +1,10 @@
 import React, { useState } from 'react';
-import {
-	SafeAreaView,
-	StyleSheet,
-	Text,
-	View,
-	KeyboardAvoidingView,
-	ScrollView,
-} from 'react-native';
-import { addData } from '../reducers/user';
+import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
 import { useDispatch } from 'react-redux';
+import { addData } from '../reducers/user';
 import { RemoteDataSet } from '../components/RemoteDataSet';
 import { COLORS, COLORS_THEME, STYLES_GLOBAL } from '../utils/styles';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { AutocompleteDropdownContextProvider } from 'react-native-autocomplete-dropdown';
 import Button from '../components/Button';
 import Textarea from '../components/Textarea';
@@ -50,69 +44,53 @@ const ProfileStepTwoScreen = ({ navigation }) => {
 
 	return (
 		<SafeAreaView style={styles.container}>
-			<KeyboardAvoidingView
-				style={styles.container}
-				behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-				enabled>
-				<ScrollView
-					nestedScrollEnabled
-					keyboardDismissMode="on-drag"
-					keyboardShouldPersistTaps="handled"
-					contentInsetAdjustmentBehavior="automatic"
-					contentContainerStyle={{
-						paddingBottom: 200,
-						justifyContent: 'space-between',
-					}}
-					style={{ flex: 1 }}>
-					<View
-						style={[styles.container, Platform.select({ ios: { zIndex: 1 } })]}>
-						<Text style={[STYLES_GLOBAL.title, STYLES_GLOBAL.titleLight]}>
-							Création de votre profil
-						</Text>
-						<Text style={[STYLES_GLOBAL.subTitle, STYLES_GLOBAL.subTitleLight]}>
-							Etape 2/3
-						</Text>
-						<Text style={[STYLES_GLOBAL.textLight, { marginBottom: 20 }]}>
-							Faisons plus ample connaissance ...
-						</Text>
+			<KeyboardAwareScrollView
+				extraScrollHeight={100} // (when scroll)to have extra height between keyboard and text input
+				enableOnAndroid={true}
+				extraHeight={100} // make some height so the keyboard wont cover other component
+				contentContainerStyle={{
+					flexGrow: 1,
+					justifyContent: 'center',
+					alignItems: 'center',
+				}}>
+				<Text style={[STYLES_GLOBAL.title, STYLES_GLOBAL.titleLight]}>
+					Création de votre profil
+				</Text>
+				<Text style={[STYLES_GLOBAL.subTitle, STYLES_GLOBAL.subTitleLight]}>
+					Etape 2/3
+				</Text>
+				<Text style={[STYLES_GLOBAL.textLight, { marginBottom: 20 }]}>
+					Faisons plus ample connaissance ...
+				</Text>
 
-						<Textarea
-							label="Description"
-							theme={COLORS_THEME.dark}
-							autoFocus={false}
-							onChangeText={(value) => setDescription(value)}
-							value={description}
-						/>
+				<Textarea
+					label="Description"
+					theme={COLORS_THEME.dark}
+					autoFocus={false}
+					onChangeText={(value) => setDescription(value)}
+					value={description}
+				/>
 
-						<AutocompleteDropdownContextProvider>
-							<RemoteDataSet addCity={addCity} />
-							<DropdownLanguage
-								spokenLanguages={spokenLanguages}
-								setSpokenLanguages={setSpokenLanguages}
-							/>
-						</AutocompleteDropdownContextProvider>
+				<AutocompleteDropdownContextProvider>
+					<RemoteDataSet addCity={addCity} />
+					<DropdownLanguage
+						spokenLanguages={spokenLanguages}
+						setSpokenLanguages={setSpokenLanguages}
+					/>
+				</AutocompleteDropdownContextProvider>
 
-						{error && <Text style={STYLES_GLOBAL.error}>{error}</Text>}
+				{error && <Text style={STYLES_GLOBAL.error}>{error}</Text>}
 
-						<View
-							style={[
-								STYLES_GLOBAL.btnBottomContainer,
-								styles.btnBottomContainer,
-							]}>
-							<ButtonIcon
-								type="secondary"
-								name="arrow-undo-outline"
-								onpress={() => navigation.navigate('ProfileStepOne')}
-							/>
-							<Button
-								type="secondary"
-								label="Suivant"
-								onpress={handleRegister}
-							/>
-						</View>
-					</View>
-				</ScrollView>
-			</KeyboardAvoidingView>
+				<View
+					style={[STYLES_GLOBAL.btnBottomContainer, styles.btnBottomContainer]}>
+					<ButtonIcon
+						type="secondary"
+						name="arrow-undo-outline"
+						onpress={() => navigation.navigate('ProfileStepOne')}
+					/>
+					<Button type="secondary" label="Suivant" onpress={handleRegister} />
+				</View>
+			</KeyboardAwareScrollView>
 		</SafeAreaView>
 	);
 };
@@ -122,14 +100,10 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		justifyContent: 'center',
 		backgroundColor: COLORS.darkBlue,
-		// paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
 	},
-	// scrollContainer: {
-	// 	flex: 1,
-	// 	justifyContent: 'flex-end',
-	// 	backgroundColor: COLORS.darkBlue,
-	// },
-	btnBottomContainer: {},
+	btnBottomContainer: {
+		justifyContent: 'flex-end',
+	},
 });
 
 export default ProfileStepTwoScreen;
