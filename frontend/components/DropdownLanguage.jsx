@@ -12,7 +12,6 @@ import { AutocompleteDropdown } from 'react-native-autocomplete-dropdown';
 
 const DropdownLanguage = ({ spokenLanguages, setSpokenLanguages }) => {
 
-
 	const getSelectedLanguages = (language) => {
 		if (!language?.title) return;
 		// add language only if not already in the list
@@ -37,6 +36,9 @@ const DropdownLanguage = ({ spokenLanguages, setSpokenLanguages }) => {
 				closeOnSubmit={false}
 				useFilter={false}
 				direction={Platform.select({ ios: 'down' })}
+				onOpenSuggestionsList={useCallback((isOpened) => {
+					Keyboard.dismiss();
+				}, [])}
 				textInputProps={{
 					showSoftInputOnFocus: false,
 					color: COLORS.bg,
