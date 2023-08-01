@@ -32,7 +32,9 @@ const styles = StyleSheet.create({
 		backgroundColor: COLORS.bg,
 	},
 	tertiaryBtn: {
-		width: 100,
+		maxWidth: 110,
+		justifyContent: 'center',
+		padding: 5,
 		borderWidth: 1,
 		borderColor: COLORS.darkBlue,
 		backgroundColor: COLORS.bg,
@@ -49,6 +51,7 @@ const styles = StyleSheet.create({
 		color: COLORS.darkBlue,
 	},
 	tertiaryTextBtn: {
+		textAlign: 'center',
 		color: COLORS.darkBlue,
 	},
 });

@@ -116,19 +116,6 @@ const ProfileStepThreeScreen = ({ navigation }) => {
 				Envie de partager vos passions ? Séléctionnez en au moins une et
 				terminez la création de votre Iconic Profile !
 			</Text>
-
-			<View style={styles.hobbiesBtn}>
-				{hobbies.length > 0 &&
-					hobbies.map((hobby, i) => (
-						<Button
-							key={i}
-							label={hobby}
-							type={selectedHobbies.includes(hobby) ? 'primary' : 'tertiary'}
-							onpress={() => handleSelection(hobby)}
-						/>
-					))}
-			</View>
-
 			<View style={styles.inputContainer}>
 				<Input
 					label="Hobby"
@@ -144,6 +131,18 @@ const ProfileStepThreeScreen = ({ navigation }) => {
 					name="add-outline"
 					onpress={handleNewHobby}
 				/>
+			</View>
+
+			<View style={styles.hobbiesBtn}>
+				{hobbies.length > 0 &&
+					hobbies.map((hobby, i) => (
+						<Button
+							key={i}
+							label={hobby}
+							type={selectedHobbies.includes(hobby) ? 'primary' : 'tertiary'}
+							onpress={() => handleSelection(hobby)}
+						/>
+					))}
 			</View>
 
 			{error && <Text style={STYLES_GLOBAL.error}>{error}</Text>}
@@ -170,11 +169,11 @@ const styles = StyleSheet.create({
 		flexWrap: 'wrap',
 		flexDirection: 'row',
 		justifyContent: 'space-around',
+		rowGap: -20,
 	},
 	inputContainer: {
 		flexDirection: 'row',
 		alignItems: 'center',
-		// justifyContent: 'space-between',
 	},
 });
 
