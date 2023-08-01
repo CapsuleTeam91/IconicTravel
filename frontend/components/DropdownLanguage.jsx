@@ -65,10 +65,8 @@ const DropdownLanguage = ({ spokenLanguages, setSpokenLanguages }) => {
 			{spokenLanguages.length > 0 && (
 				<View style={styles.languagesContainer}>
 					{spokenLanguages.map((el, i) => (
-						<TouchableOpacity onPress={() => RemoveLanguage(el)}>
-							<Text key={i} style={styles.language}>
-								{el}
-							</Text>
+						<TouchableOpacity key={i} onPress={() => RemoveLanguage(el)}>
+							<Text style={styles.language}>{el}</Text>
 						</TouchableOpacity>
 					))}
 				</View>
