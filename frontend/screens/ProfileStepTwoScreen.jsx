@@ -80,6 +80,12 @@ const ProfileStepTwoScreen = ({ navigation }) => {
 		if (!city) {
 			setError('Vous devez sélectionner une ville');
 			return;
+		} else if (!description) {
+			setError('Attention vous avez oublié de vous présenter');
+			return;
+		} else if (spokenLanguages.length <= 0) {
+			setError('On sait que vous parlez au moin une langue mais laquelle ?');
+			return;
 		}
 		dispatch(addData({ description, city, spokenLanguages }));
 		navigation.navigate('ProfileStepThree');
@@ -87,11 +93,10 @@ const ProfileStepTwoScreen = ({ navigation }) => {
 
 	const addCity = (newCity) => {
 		if (!newCity) return;
-		// setCity(newCity);
 		setCity({
-			name: 'Bordeaux',
-			latitude: 44.851895,
-			longitude: -0.587877,
+			name: newCity.title,
+			latitude: newCity.latitude,
+			longitude: newCity.longitude,
 		});
 	};
 

@@ -31,6 +31,12 @@ const styles = StyleSheet.create({
 		borderColor: COLORS.darkBlue,
 		backgroundColor: COLORS.bg,
 	},
+	tertiaryBtn: {
+		width: 120,
+		borderWidth: 1,
+		borderColor: COLORS.darkBlue,
+		backgroundColor: COLORS.bg,
+	},
 	textBtn: {
 		fontSize: 18,
 		fontWeight: '700',
@@ -40,6 +46,9 @@ const styles = StyleSheet.create({
 	},
 	secondaryTextBtn: {
 		color: COLORS.darkBlue,
+	},
+	tertiaryTextBtn: {
+		color: COLORS.pink,
 	},
 });
 
