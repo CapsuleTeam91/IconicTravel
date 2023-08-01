@@ -16,7 +16,7 @@ router.post('/new', async (req, res) => {
 	});
 
 	const newHobbies = await newHobby.save();
-	console.log(newHobbies);
+
 	if (!newHobbies)
 		return res
 			.status(409)

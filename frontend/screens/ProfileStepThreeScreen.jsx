@@ -23,7 +23,7 @@ const ProfileStepThreeScreen = ({ navigation }) => {
 			setError('Entrez un nouvel hobby');
 			return;
 		}
-		let hobby = newHobby.replace(' ', '_');
+		let hobby = newHobby.toLowerCase().replace(' ', '_');
 		console.log(hobby);
 
 		fetch(`${URL_EXPO}:3000/hobbies/new`, {
@@ -35,7 +35,10 @@ const ProfileStepThreeScreen = ({ navigation }) => {
 			.then((data) => {
 				if (data.result) {
 					console.log('new hobby added');
-					setHobbies([...data.hobbiesList]);
+					const newHobbies = data.hobbiesList?.map((el) =>
+						el.replace('_', ' ')
+					);
+					setHobbies(newHobbies);
 					setNewHobby('');
 				} else {
 					setError('Problème');
@@ -83,10 +86,15 @@ const ProfileStepThreeScreen = ({ navigation }) => {
 			.then((response) => response.json())
 			.then((data) => {
 				if (data.result) {
-					setHobbies([...data.hobbiesList]);
+					const newHobbies = data.hobbiesList?.map((el) =>
+						el.replace('_', ' ')
+					);
+					setHobbies(newHobbies);
 					console.log('UseEffect', hobbies);
 				}
 			});
+
+		return () => {};
 	}, []);
 
 	return (
@@ -103,16 +111,14 @@ const ProfileStepThreeScreen = ({ navigation }) => {
 				terminez la création de votre Iconic Profile !
 			</Text>
 
-			{/* Add Hobbies */}
-			<View style={styles.hobbyBtn}>
+			<View style={styles.hobbiesBtn}>
 				{hobbies.length > 0 &&
 					hobbies.map((hobby, i) => (
 						<Button key={i} label={hobby} type="tertiary" onpress={() => {}} />
 					))}
 			</View>
 
-			{/* Input Hobby */}
-			<View style={styles.inputcontainer}>
+			<View style={styles.inputContainer}>
 				<Input
 					label="Hobby"
 					theme={COLORS_THEME.dark}
@@ -122,17 +128,12 @@ const ProfileStepThreeScreen = ({ navigation }) => {
 					onChangeText={(value) => setNewHobby(value)}
 					value={newHobby}
 				/>
-			</View>
-
-			{/* Button Icon + */}
-			<View style={styles.tertiaryTextBtn}>
 				<ButtonIcon
 					type="tertiary"
 					name="add-outline"
 					onpress={handleNewHobby}
 				/>
 			</View>
-			{/* End Hobby */}
 
 			{error && <Text style={STYLES_GLOBAL.error}>{error}</Text>}
 
@@ -154,26 +155,15 @@ const styles = StyleSheet.create({
 		justifyContent: 'space-between',
 		backgroundColor: COLORS.darkBlue,
 	},
-	tertiaryTextBtn: {
-		color: COLORS.bg,
-	},
-	hobbyBtn: {
+	hobbiesBtn: {
 		flexWrap: 'wrap',
 		flexDirection: 'row',
-		justifyContent: 'center',
+		justifyContent: 'space-around',
 	},
-	inputcontainer: {
-		width: '70%',
-		borderRadius: 8,
-		borderWidth: 1,
-		justifyContent: 'center',
-		borderColor: COLORS.darkBlue,
-		marginLeft: 100,
-	},
-	tertiaryTextBtn: {
-		flexWrap: 'wrap',
+	inputContainer: {
 		flexDirection: 'row',
-		justifyContent: 'center',
+		alignItems: 'center',
+		// justifyContent: 'space-between',
 	},
 });
 
