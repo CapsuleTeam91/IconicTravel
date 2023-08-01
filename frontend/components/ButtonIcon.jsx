@@ -44,6 +44,7 @@ const styles = StyleSheet.create({
 		backgroundColor: COLORS.bg,
 	},
 	tertiaryBtn: {
+		margin: 5,
 		backgroundColor: COLORS.bgDark,
 	},
 	primaryTextBtn: {

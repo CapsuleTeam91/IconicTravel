@@ -3,13 +3,20 @@ import { useSelector } from 'react-redux';
 import MapView from 'react-native-maps'
 
 const SearchScreen = () => {
-	const user = useSelector((state) => state.user.value);
+	const user = useSelector((state) => state.user.value.data);
 
+	console.log(user)
 	return (
 		<SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
 			<View style={styles.container}>
 				<Text>Bonjour {user.firstname}</Text>
-				<MapView style={styles.map} />
+				<MapView style={styles.map}
+					initialRegion={{
+						latitude: user.city.latitude,
+						longitude: user.city.longitude,
+						latitudeDelta: 0.0922,
+						longitudeDelta: 0.0421,
+					}} />
 			</View>
 		</SafeAreaView>
 	);

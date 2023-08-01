@@ -1,16 +1,17 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import {
 	StyleSheet,
 	Text,
 	View,
 	Keyboard,
-	TouchableOpacity,
+	TouchableOpacity
 } from 'react-native';
 import { COLORS } from '../utils/styles';
 import { LANGUAGES_ISO } from '../utils/data';
 import { AutocompleteDropdown } from 'react-native-autocomplete-dropdown';
 
 const DropdownLanguage = ({ spokenLanguages, setSpokenLanguages }) => {
+
 	const getSelectedLanguages = (language) => {
 		if (!language?.title) return;
 		// add language only if not already in the list
@@ -33,11 +34,13 @@ const DropdownLanguage = ({ spokenLanguages, setSpokenLanguages }) => {
 				readOnly={true}
 				closeOnBlur={false}
 				closeOnSubmit={false}
+				useFilter={false}
+				direction={Platform.select({ ios: 'down' })}
 				onOpenSuggestionsList={useCallback((isOpened) => {
 					Keyboard.dismiss();
 				}, [])}
-				direction={Platform.select({ ios: 'down' })}
 				textInputProps={{
+					showSoftInputOnFocus: false,
 					color: COLORS.bg,
 					placeholder: 'Langues parlées',
 				}}
@@ -50,15 +53,15 @@ const DropdownLanguage = ({ spokenLanguages, setSpokenLanguages }) => {
 					width: '70%',
 					color: COLORS.bg,
 					borderRadius: 8,
-					backgroundColor: COLORS.bgDark,
+					backgroundColor: COLORS.bgDark
 				}}
 				suggestionsListContainerStyle={{
-					backgroundColor: COLORS.lightBlue,
+					backgroundColor: COLORS.lightBlue
 				}}
 				suggestionsListTextStyle={{
 					color: COLORS.bgDark,
 					fontWeight: '700',
-					letterSpacing: 1,
+					letterSpacing: 1
 				}}
 			/>
 

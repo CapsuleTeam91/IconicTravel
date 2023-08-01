@@ -49,5 +49,6 @@ export const STYLES_GLOBAL = StyleSheet.create({
 		flexDirection: 'row',
 		alignItems: 'center',
 		justifyContent: 'space-between',
+		marginBottom: 10
 	},
 });
