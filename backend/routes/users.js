@@ -65,8 +65,8 @@ router.post('/signup', async (req, res) => {
 				hobbies,
 			});
 
-			newUser.save().then((newDoc) => {
-				res.json({ result: true, token: newDoc.token });
+			newUser.save().then((data) => {
+				res.json({ result: true, data });
 			});
 		} else {
 			// User already exists in database
@@ -102,6 +102,7 @@ router.post('/signin', (req, res) => {
 
 	User.findOne({ email: { $regex: new RegExp(email, 'i') } }).then((data) => {
 		if (data && bcrypt.compareSync(password, data.password)) {
+			console.log(data)
 			res.json({ result: true, data });
 		} else {
 			res

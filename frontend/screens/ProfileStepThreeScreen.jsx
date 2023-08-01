@@ -4,7 +4,7 @@ import Button from '../components/Button';
 import ButtonIcon from '../components/ButtonIcon';
 
 import React, { useEffect, useState } from 'react';
-import { addData } from '../reducers/user';
+import { addData, fetchData } from '../reducers/user';
 import { useDispatch, useSelector } from 'react-redux';
 import { ERRORS, URL_EXPO } from '../utils/constants';
 import Input from '../components/Input';
@@ -71,19 +71,19 @@ const ProfileStepThreeScreen = ({ navigation }) => {
 			.then((response) =>
 				response.status > 400 ? response.status : response.json()
 			)
-			.then((data) => {
-				if (typeof data === 'number') {
-					setError(ERRORS[`err${data}`]);
+			.then((userFound) => {
+				if (typeof userFound === 'number') {
+					setError(ERRORS[`err${userFound}`]);
 					return;
 				}
-				if (data.result) {
-					console.log('token: ', data.token);
-					// dispatch(login({ token: data.token }));
+				if (userFound.result) {
+					console.log('token: ', userFound.data);
+					dispatch(fetchData(userFound.data));
 					setSelectedHobbies([]);
 
 					navigation.navigate('ProfileStepFour');
 				} else {
-					setError(ERRORS[`err${data.status}`]);
+					setError(ERRORS[`err${userFound.status}`]);
 				}
 			});
 	};
