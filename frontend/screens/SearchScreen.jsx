@@ -3,9 +3,9 @@ import { useSelector } from 'react-redux';
 import MapView from 'react-native-maps'
 
 const SearchScreen = () => {
-	const user = useSelector((state) => state.user.value);
+	const user = useSelector((state) => state.user.value.data);
 
-	console.log(user.firstname)
+	console.log(user)
 	return (
 		<SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
 			<View style={styles.container}>

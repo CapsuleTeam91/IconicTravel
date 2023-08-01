@@ -7,7 +7,7 @@ import { EMAIL_REGEX, ERRORS, SIGN_VIEW, URL_EXPO } from '../utils/constants';
 import Input from './Input';
 import Button from './Button';
 import PasswordInput from './PasswordInput';
-import { addData } from '../reducers/user';
+import { addData, fetchData } from '../reducers/user';
 
 const SignIn = (props) => {
 	const dispatch = useDispatch();
@@ -40,20 +40,20 @@ const SignIn = (props) => {
 			.then((response) =>
 				response.status > 400 ? response.status : response.json()
 			)
-			.then((data) => {
-				console.log(data)
-				if (typeof data === 'number') {
-					setError(ERRORS[`err${data}`]);
+			.then((userFound) => {
+				console.log("résultat du fetch de connexion : ", userFound)
+				if (typeof userFound === 'number') {
+					setError(ERRORS[`err${userFound}`]);
 					return;
 				}
 
-				if (data.result) {
-					dispatch(addData({ data }));
+				if (userFound.result) {
+					dispatch(fetchData(userFound.data));
 					setEmail('');
 					setPassword('');
 					props.navigate();
 				} else {
-					setError(ERRORS[`err${data.status}`]);
+					setError(ERRORS[`err${userFound.status}`]);
 				}
 			});
 	};

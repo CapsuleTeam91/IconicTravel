@@ -6,12 +6,13 @@ const initialState = {
 		lastname: null,
 		dateOfBirth: null,
 		email: null,
-		password: null,
+		token: null,
 		avatarUrl: null,
 		description: null,
 		city: { name: null, latitude: null, longitude: null },
 		spokenLanguages: [],
 		hobbies: [],
+		travels: []
 	},
 };
 
@@ -30,7 +31,21 @@ export const userSlice = createSlice({
 			// );
 
 			state.value = { ...state.value, ...action.payload };
-			console.log('Reducer: ', state.value);
+
+		},
+		fetchData: (state, action) => {
+			console.log('Reducer de connexion : ', state.value.data);
+			const { firstname,
+				lastname,
+				dateOfBirth,
+				email,
+				token,
+				avatarUrl,
+				description,
+				city,
+				spokenLanguages,
+				hobbies,
+				travels } = action.payload
 		},
 		addAvatar: (state, action) => {
 			state.value.avatarUrl = action.payload;
@@ -38,7 +53,7 @@ export const userSlice = createSlice({
 	},
 });
 
-export const { addData, addAvatar } = userSlice.actions;
+export const { addData, fetchData, addAvatar } = userSlice.actions;
 export default userSlice.reducer;
 
 /* REMINDER */
