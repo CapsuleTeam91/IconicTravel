@@ -1,5 +1,5 @@
 import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
-import { COLORS, STYLES_GLOBAL } from '../utils/styles';
+import { COLORS, COLORS_THEME, STYLES_GLOBAL } from '../utils/styles';
 import Button from '../components/Button';
 import ButtonIcon from '../components/ButtonIcon';
 
@@ -7,11 +7,13 @@ import React, { useState } from 'react';
 import { addData } from '../reducers/user';
 import { useDispatch, useSelector } from 'react-redux';
 import { ERRORS, URL_EXPO } from '../utils/constants';
+import Input from '../components/Input';
 
 const ProfileStepThreeScreen = ({ navigation }) => {
 	const dispatch = useDispatch();
 	const user = useSelector((state) => state.user.value);
 	const [hobbies, setHobbies] = useState(['voyage']);
+	const [newHobby, setNewHobby] = useState('');
 	const [error, setError] = useState('');
 
 	const handleRegister = () => {
@@ -63,6 +65,33 @@ const ProfileStepThreeScreen = ({ navigation }) => {
 				terminez la création de votre Iconic Profile !
 			</Text>
 
+			<View>
+				{hobbies.length > 0 &&
+					hobbies.map((hobby, i) => (
+						<Button key={i} label={hobby} type="tertiary" onpress={() => {}} />
+					))}
+			</View>
+
+			<View>
+				<Input
+					label="Hobby"
+					theme={COLORS_THEME.dark}
+					autoFocus={false}
+					autoCapitalize="none"
+					keyboardType="default"
+					onChangeText={(value) => setNewHobby(value)}
+					value={newHobby}
+				/>
+
+				<ButtonIcon
+					type="tertiary"
+					name="add-outline"
+					onpress={() => {
+						setHobbies([...hobbies, newHobby]);
+						setNewHobby('');
+					}}
+				/>
+			</View>
 			{error && <Text style={STYLES_GLOBAL.error}>{error}</Text>}
 
 			<View style={STYLES_GLOBAL.btnBottomContainer}>
