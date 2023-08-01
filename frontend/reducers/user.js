@@ -12,7 +12,7 @@ const initialState = {
 		city: { name: null, latitude: null, longitude: null },
 		spokenLanguages: [],
 		hobbies: [],
-		travels: []
+		travels: [],
 	},
 };
 
@@ -21,31 +21,7 @@ export const userSlice = createSlice({
 	initialState,
 	reducers: {
 		addData: (state, action) => {
-			// const payloadKeys = Object.keys(action.payload); //get payload object keys
-			// const stateKeys = Object.keys(state.value); //get state value object keys
-			// // state.value already have property ? update it : add it
-			// payloadKeys.map((key) =>
-			// 	stateKeys.includes(key)
-			// 		? (state.value[key] = action.payload[key])
-			// 		: (state.value = { ...state.value, ...action.payload[key] })
-			// );
-
 			state.value = { ...state.value, ...action.payload };
-
-		},
-		fetchData: (state, action) => {
-			console.log('Reducer de connexion : ', state.value.data);
-			const { firstname,
-				lastname,
-				dateOfBirth,
-				email,
-				token,
-				avatarUrl,
-				description,
-				city,
-				spokenLanguages,
-				hobbies,
-				travels } = action.payload
 		},
 		addAvatar: (state, action) => {
 			state.value.avatarUrl = action.payload;
@@ -53,7 +29,7 @@ export const userSlice = createSlice({
 	},
 });
 
-export const { addData, fetchData, addAvatar } = userSlice.actions;
+export const { addData, addAvatar } = userSlice.actions;
 export default userSlice.reducer;
 
 /* REMINDER */

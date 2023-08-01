@@ -4,7 +4,7 @@ import Button from '../components/Button';
 import ButtonIcon from '../components/ButtonIcon';
 
 import React, { useEffect, useState } from 'react';
-import { addData, fetchData } from '../reducers/user';
+import { addData } from '../reducers/user';
 import { useDispatch, useSelector } from 'react-redux';
 import { ERRORS, URL_EXPO } from '../utils/constants';
 import Input from '../components/Input';
@@ -61,7 +61,7 @@ const ProfileStepThreeScreen = ({ navigation }) => {
 		}
 		dispatch(addData({ hobbies: selectedHobbies }));
 
-		console.log(user);
+		console.log('User from creation reducer', user);
 
 		fetch(`${URL_EXPO}:3000/users/signup`, {
 			method: 'POST',
@@ -77,8 +77,35 @@ const ProfileStepThreeScreen = ({ navigation }) => {
 					return;
 				}
 				if (userFound.result) {
-					console.log('token: ', userFound.data);
-					dispatch(fetchData(userFound.data));
+					console.log('User reçu avant dispatch:', userFound.data);
+					const {
+						firstname,
+						lastname,
+						dateOfBirth,
+						email,
+						token,
+						avatarUrl,
+						description,
+						city,
+						spokenLanguages,
+						hobbies,
+						travels,
+					} = userFound.data;
+					dispatch(
+						addData({
+							firstname,
+							lastname,
+							dateOfBirth,
+							email,
+							token,
+							avatarUrl,
+							description,
+							city,
+							spokenLanguages,
+							hobbies,
+							travels,
+						})
+					);
 					setSelectedHobbies([]);
 
 					navigation.navigate('ProfileStepFour');
@@ -97,7 +124,6 @@ const ProfileStepThreeScreen = ({ navigation }) => {
 						el.replace('_', ' ')
 					);
 					setHobbies(newHobbies);
-					console.log('UseEffect', hobbies);
 				}
 			});
 	}, []);
