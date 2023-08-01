@@ -65,14 +65,16 @@ const ProfileStepThreeScreen = ({ navigation }) => {
         terminez la création de votre Iconic Profile !
       </Text>
 
-      <View>
+      {/* Add Hobbies */}
+      <View style={styles.hobbyBtn}>
         {hobbies.length > 0 &&
           hobbies.map((hobby, i) => (
             <Button key={i} label={hobby} type="tertiary" onpress={() => {}} />
           ))}
       </View>
 
-      <View>
+      {/* Input Hobby */}
+      <View style={styles.inputcontainer}>
         <Input
           label="Hobby"
           theme={COLORS_THEME.dark}
@@ -82,7 +84,10 @@ const ProfileStepThreeScreen = ({ navigation }) => {
           onChangeText={(value) => setNewHobby(value)}
           value={newHobby}
         />
+      </View>
 
+      {/* Button Icon + */}
+      <View style={styles.tertiaryTextBtn}>
         <ButtonIcon
           type="tertiary"
           name="add-outline"
@@ -92,6 +97,8 @@ const ProfileStepThreeScreen = ({ navigation }) => {
           }}
         />
       </View>
+      {/* End Hobby */}
+
       {error && <Text style={STYLES_GLOBAL.error}>{error}</Text>}
 
       <View style={STYLES_GLOBAL.btnBottomContainer}>
@@ -111,6 +118,27 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     backgroundColor: COLORS.darkBlue,
+  },
+  tertiaryTextBtn: {
+    color: COLORS.bg,
+  },
+  hobbyBtn: {
+    flexWrap: "wrap",
+    flexDirection: "row",
+    justifyContent: "center",
+  },
+  inputcontainer: {
+    width: "70%",
+    borderRadius: 8,
+    borderWidth: 1,
+    justifyContent: "center",
+    borderColor: COLORS.darkBlue,
+    marginLeft: 100,
+  },
+  tertiaryTextBtn: {
+    flexWrap: "wrap",
+    flexDirection: "row",
+    justifyContent: "center",
   },
 });
 
