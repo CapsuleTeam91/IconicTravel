@@ -102,7 +102,7 @@ router.post('/signin', (req, res) => {
 
 	User.findOne({ email: { $regex: new RegExp(email, 'i') } }).then((data) => {
 		if (data && bcrypt.compareSync(password, data.password)) {
-			res.json({ result: true, token: data.token });
+			res.json({ result: true, data });
 		} else {
 			res
 				.status(404)

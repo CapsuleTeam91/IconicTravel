@@ -2,30 +2,36 @@ var express = require('express');
 var router = express.Router();
 // MODELS
 const Hobby = require('../models/hobbies');
-// UTILS
-const { checkBody } = require('../modules/checkBody');
 
 /* POST / - add a new hobby if does not already exists in db*/
-router.post('/', async (req, res) => {
+router.post('/new', async (req, res) => {
 	const { hobby } = req.body;
 
-	// Check if the user has not already been registered
-	Hobby.findOne({ hobby: { $regex: new RegExp(hobby, 'i') } }).then((data) => {
-		if (!data) {
-			const newHobby = new Hobby({ hobby });
-
-			newHobby.save().then(() => {
-				res.json({ result: true });
-			});
-		} else {
-			res.status(409).json({ result: false, error: 'Already exists' });
-		}
+	Hobby.findOne({ hobby }).then((data) => {
+		if (data) return res.json({ result: false, error: 'Already exists' });
 	});
+
+	const newHobby = new Hobby({
+		hobby,
+	});
+
+	const newHobbies = await newHobby.save();
+	console.log(newHobbies);
+	if (!newHobbies)
+		return res
+			.status(409)
+			.json({ result: false, error: 'Can not add new hobby' });
+
+	const hobbies = await Hobby.find();
+	const hobbiesList = hobbies.map((el) => el.hobby);
+	res.json({ result: true, hobbiesList });
 });
 
 /* GET / - return all hobbies*/
 router.get('/', (req, res) => {
-	Hobby.find().then((hobbies) => res.json({ result: true, hobbies }));
+	Hobby.find().then((hobbies) =>
+		res.json({ result: true, hobbies: hobbies.map((el) => el.hobby) })
+	);
 });
 
 module.exports = router;
