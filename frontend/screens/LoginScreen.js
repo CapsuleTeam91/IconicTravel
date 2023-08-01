@@ -20,7 +20,7 @@ export default function LoginScreen({ navigation }) {
 
       <Button
         type="secondary"
-        label="Créer un compte"
+        label="Test"
         onpress={() => navigation.navigate("ProfileStepThree")}
       />
     </View>
