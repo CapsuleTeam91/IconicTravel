@@ -6,10 +6,12 @@ import { RemoteDataSet } from '../components/RemoteDataSet';
 import { COLORS, COLORS_THEME, STYLES_GLOBAL } from '../utils/styles';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { AutocompleteDropdownContextProvider } from 'react-native-autocomplete-dropdown';
-import Button from '../components/Button';
+import { SelectList } from 'react-native-dropdown-select-list'
+import { Dropdown } from 'react-native-element-dropdown';
 import ButtonIcon from '../components/ButtonIcon';
 import MapView, { Marker } from 'react-native-maps';
 import { ERRORS, URL_EXPO } from '../utils/constants';
+import { Entypo } from '@expo/vector-icons';
 
 const SearchScreen = ({ navigation }) => {
 	const dispatch = useDispatch();
@@ -17,6 +19,15 @@ const SearchScreen = ({ navigation }) => {
 	const [city, setCity] = useState(null);
 	const [usersAroundDestination, setUsersAroundDestination] = useState([]);
 	const [error, setError] = useState('');
+	const [distanceSelected, setDistanceSelected] = useState("");
+
+	const distances = [
+		{ label: '10km', value: '1' },
+		{ label: '20km', value: '2' },
+		{ label: '50km', value: '3' },
+		{ label: '100km', value: '4' },
+		{ label: '200km', value: '5' },
+	]
 
 	const mapRef = useRef(null)
 
@@ -74,6 +85,8 @@ const SearchScreen = ({ navigation }) => {
 			});
 	}, []);
 
+	console.log('Distance selectionnée : ', distanceSelected)
+
 
 	return (
 		<SafeAreaView style={{ flex: 1 }}>
@@ -83,15 +96,37 @@ const SearchScreen = ({ navigation }) => {
 				enableOnAndroid={true}
 				extraHeight={100} // make some height so the keyboard wont cover other component
 				contentContainerStyle={styles.container}>
-				<View style={styles.searchContainer}>
-					<AutocompleteDropdownContextProvider>
+				<AutocompleteDropdownContextProvider>
+					<View style={styles.searchContainer}>
+
 						<RemoteDataSet
 							addCity={addCity}
 							label="Destination"
 							ligthTheme={true}
+							width={200}
 						/>
-					</AutocompleteDropdownContextProvider>
-				</View>
+						<Dropdown
+							style={styles.dropdown}
+							placeholderStyle={styles.placeholderStyle}
+							selectedTextStyle={styles.selectedTextStyle}
+							inputSearchStyle={styles.inputSearchStyle}
+							iconStyle={styles.iconStyle}
+							data={distances}
+							maxHeight={300}
+							labelField="label"
+							valueField="value"
+							placeholder="Distance"
+							searchPlaceholder="Search..."
+							value={distanceSelected}
+							onChange={item => {
+								setDistanceSelected(item.value);
+							}}
+							renderLeftIcon={() => (
+								<Entypo name="magnifying-glass" size={24} color="black" />
+							)}
+						/>
+					</View>
+				</AutocompleteDropdownContextProvider>
 				<MapView
 					style={styles.map}
 					ref={mapRef}
@@ -152,10 +187,42 @@ const styles = StyleSheet.create({
 	statusBar: {
 		backgroundColor: 'white'
 	},
+	searchContainer: {
+		flexDirection: 'row',
+		justifyContent: 'center',
+		alignItems: 'center',
+		width: '100%'
+	},
 	map: {
 		zIndex: -1,
 		width: '100%',
 		height: '50%',
+	},
+	dropdown: {
+		justifyContent: 'center',
+		alignItems: 'center',
+		width: 120,
+		margin: 16,
+		height: 50,
+		borderBottomColor: 'gray',
+		borderBottomWidth: 0.5,
+	},
+	icon: {
+		marginRight: 5,
+	},
+	placeholderStyle: {
+		fontSize: 16,
+	},
+	selectedTextStyle: {
+		fontSize: 16,
+	},
+	iconStyle: {
+		width: 20,
+		height: 20,
+	},
+	inputSearchStyle: {
+		height: 40,
+		fontSize: 16,
 	},
 });
 

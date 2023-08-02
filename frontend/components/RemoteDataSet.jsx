@@ -48,7 +48,7 @@ export const RemoteDataSet = memo((props) => {
 				placeholder: props.label,
 			}}
 			inputContainerStyle={{
-				width: '70%',
+				width: props.width ? props.width : '70%',
 				margin: 10,
 				borderRadius: 8,
 				backgroundColor: props.ligthTheme ? COLORS.bg : COLORS.bgDark,
