@@ -120,16 +120,6 @@ const SearchScreen = ({ navigation }) => {
 	const markersList = [];
 	if(usersAroundDestination.length > 0) {
 		usersAroundDestination.map((user, i) => {
-			let distance = city
-				? convertCoordsToKm(
-					{ latitude: city.latitude, longitude: city.longitude },
-					{
-						latitude: user.city.latitude,
-						longitude: user.city.longitude,
-					}
-				)
-				: 0;
-			
 				markersList.push(<Marker
 					key={i}
 					coordinate={{
@@ -139,7 +129,7 @@ const SearchScreen = ({ navigation }) => {
 					title={user.firstname}
 					pinColor="#fecb2d"
 					// icon={icons[user.type]}
-					description={city && `${distance}km`}
+					description={`${user.distance}km`}
 				/>)
 			;
 		})
