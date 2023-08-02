@@ -1,14 +1,44 @@
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
-import { URL_EXPO } from '../utils/constants';
-import { COLORS, STYLES_GLOBAL } from '../utils/styles';
+import { ERRORS, URL_EXPO } from '../utils/constants';
+import { COLORS, COLORS_THEME, STYLES_GLOBAL } from '../utils/styles';
 import { SafeAreaView, StyleSheet, Text, View, Modal } from 'react-native';
 import Button from '../components/Button';
 import ButtonIcon from '../components/ButtonIcon';
+import PasswordInput from '../components/PasswordInput';
 
 const SafetyScreen = ({ navigation }) => {
 	const user = useSelector((state) => state.user.value);
-	const [modalVisible, setModalVisible] = useState(false);
+	const [deleteModalVisible, setDeleteModalVisible] = useState(false);
+	const [updateModalVisible, setUpdateModalVisible] = useState(false);
+	const [newPassword, setNewPassword] = useState('');
+	const [newConfirmedPassword, setNewConfirmedPassword] = useState('');
+	const [success, setSuccess] = useState(false);
+	const [error, setError] = useState('');
+
+	const handleUpdate = () => {
+		setError('');
+
+		if (!newPassword || !newConfirmedPassword) {
+			setError(ERRORS.err403);
+		} else if (newPassword !== newConfirmedPassword) {
+			setError(ERRORS.difPassword);
+		}
+
+		fetch(`${URL_EXPO}:3000/users/password/${user.token}`, {
+			method: 'PUT',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({ password: newPassword }),
+		})
+			.then((response) => response.json())
+			.then((data) => {
+				if (data.result) {
+					setSuccess(true);
+				} else {
+					setError(`ECHEC DE L'ACTUALISATION`);
+				}
+			});
+	};
 
 	const handleDelete = () => {
 		fetch(`${URL_EXPO}:3000/users/deletepicture/${user.token}`, {
@@ -46,7 +76,9 @@ const SafetyScreen = ({ navigation }) => {
 				<Button
 					type="primary"
 					label="Changer le mot de passe"
-					onpress={() => {}}
+					onpress={() => {
+						setUpdateModalVisible(true);
+					}}
 				/>
 			</View>
 
@@ -61,19 +93,68 @@ const SafetyScreen = ({ navigation }) => {
 					<Button
 						type="secondary"
 						label="Supprimer le compte"
-						onpress={() => setModalVisible(true)}
+						onpress={() => setDeleteModalVisible(true)}
 					/>
 				</View>
 			</View>
 
-			<Modal visible={modalVisible} animationType="fade" transparent>
+			<Modal visible={updateModalVisible} animationType="fade" transparent>
 				<View style={styles.centeredView}>
 					<View style={styles.modalView}>
 						<View style={styles.closeBtn}>
 							<ButtonIcon
 								type="transparent"
 								name="close-outline"
-								onpress={() => setModalVisible(false)}
+								onpress={() => setUpdateModalVisible(false)}
+							/>
+						</View>
+						<Text style={STYLES_GLOBAL.subTitle}>
+							MODIFICATION DU MOT DE PASSE
+						</Text>
+						{success ? (
+							<Text>Votre mot de passe a bien été mis à jour</Text>
+						) : (
+							<View>
+								<PasswordInput
+									label="Nouveau mot de passe"
+									theme={COLORS_THEME.light}
+									onchangetext={(value) => setNewPassword(value)}
+									value={newPassword}
+								/>
+
+								<PasswordInput
+									label="Confirmer le mot de passe"
+									theme={COLORS_THEME.light}
+									onchangetext={(value) => setNewConfirmedPassword(value)}
+									value={newConfirmedPassword}
+								/>
+								{error && <Text style={STYLES_GLOBAL.error}>{error}</Text>}
+								<View style={styles.modalBtnContainer}>
+									<Button
+										type="secondary"
+										label="Annuler"
+										onpress={() => setUpdateModalVisible(false)}
+									/>
+									<Button
+										type="primary"
+										label="Valider"
+										onpress={handleUpdate}
+									/>
+								</View>
+							</View>
+						)}
+					</View>
+				</View>
+			</Modal>
+
+			<Modal visible={deleteModalVisible} animationType="fade" transparent>
+				<View style={styles.centeredView}>
+					<View style={styles.modalView}>
+						<View style={styles.closeBtn}>
+							<ButtonIcon
+								type="transparent"
+								name="close-outline"
+								onpress={() => setDeleteModalVisible(false)}
 							/>
 						</View>
 						<Text style={STYLES_GLOBAL.subTitle}>SUPPRESSION DU COMPTE</Text>
@@ -85,7 +166,7 @@ const SafetyScreen = ({ navigation }) => {
 							<Button
 								type="secondary"
 								label="Non"
-								onpress={() => setModalVisible(false)}
+								onpress={() => setDeleteModalVisible(false)}
 							/>
 							<Button type="primary" label="Oui" onpress={handleDelete} />
 						</View>

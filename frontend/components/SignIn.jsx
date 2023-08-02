@@ -117,6 +117,7 @@ const SignIn = (props) => {
 				/>
 				<PasswordInput
 					label="Mot de passe"
+					width="100%"
 					theme={COLORS_THEME.light}
 					onchangetext={(value) => setPassword(value)}
 					value={password}

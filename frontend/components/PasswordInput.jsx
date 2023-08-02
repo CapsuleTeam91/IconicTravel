@@ -8,7 +8,7 @@ const PasswordInput = (props) => {
 	const [passwordVisible, setPasswordVisible] = useState(true);
 
 	return (
-		<View style={styles.inputContainer}>
+		<View style={[styles.inputContainer, { width: props.width }]}>
 			<Input
 				label={props.label}
 				theme={props.theme}
@@ -34,7 +34,6 @@ const PasswordInput = (props) => {
 
 const styles = StyleSheet.create({
 	inputContainer: {
-		width: '100%',
 		alignItems: 'center',
 	},
 	btnContainer: {

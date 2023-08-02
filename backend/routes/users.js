@@ -161,6 +161,23 @@ router.put('/hosting/:token', async (req, res) => {
 	res.json({ result: true, canHost: newUser.canHost });
 });
 
+/* PUT /password/:token - update only canHost property*/
+router.put('/password/:token', async (req, res) => {
+	const { password } = req.body;
+	const user = await User.findOne({ token: req.params.token });
+
+	user.password = bcrypt.hashSync(password, 10);
+
+	const newUser = await user.save();
+
+	if (!newUser)
+		return res
+			.status(409)
+			.json({ result: false, error: 'Can not update password' });
+
+	res.json({ result: true });
+});
+
 /* DELETE /delete/:token - remove all data from user in db (pusher ?) */
 router.delete('/delete/:token', (req, res) => {
 	//TODO : DELETE FOREIGN KEY OR NOT ?
@@ -168,7 +185,6 @@ router.delete('/delete/:token', (req, res) => {
 	// DELETE USER FROM DB
 	User.deleteOne({ token: req.params.token }).then((deletedDoc) => {
 		if (deletedDoc.deletedCount > 0) {
-			console.log('User deleted');
 			res.json({ result: true });
 		} else {
 			res.json({ result: false });
