@@ -103,7 +103,7 @@ export default function App() {
 		<Provider store={store}>
 			<PersistGate persistor={persistor}>
 				<NavigationContainer>
-					<StatusBar barStyle={'default'} />
+					<StatusBar backgroundColor='grey' />
 					<View style={{ flex: 1, paddingTop: STATUSBAR_HEIGHT }}>
 
 						<Stack.Navigator screenOptions={{ headerShown: false }}>
