@@ -6,14 +6,15 @@ import {
 	Text,
 	View,
 } from 'react-native';
-import ButtonIcon from '../components/ButtonIcon';
-import { COLORS, STYLES_GLOBAL } from '../utils/styles';
-import { useSelector } from 'react-redux';
 import { useState } from 'react';
+import { useSelector } from 'react-redux';
+import { ERRORS, URL_EXPO } from '../utils/constants';
+import { COLORS, STYLES_GLOBAL } from '../utils/styles';
+import ButtonIcon from '../components/ButtonIcon';
 
 const UserProfileScreen = ({ navigation }) => {
 	const user = useSelector((state) => state.user.value);
-	const [isEnabled, setIsEnabled] = useState(false);
+	const [isEnabled, setIsEnabled] = useState(user.canHost);
 
 	const getAge = (dob) => {
 		var ageDifMs = Date.now() - new Date(dob);
@@ -23,6 +24,16 @@ const UserProfileScreen = ({ navigation }) => {
 
 	const toggleSwitch = () => {
 		setIsEnabled(!isEnabled);
+
+		fetch(`${URL_EXPO}:3000/users/hosting/${user.token}`, { method: 'PUT' })
+			.then((response) => response.json())
+			.then((data) => {
+				if (data.result) {
+					console.log(data.canHost);
+				} else {
+					setError(ERRORS[`err${data.status}`]);
+				}
+			});
 	};
 
 	return (

@@ -149,7 +149,7 @@ router.get('/:token', (req, res) => {
 router.put('/hosting/:token', async (req, res) => {
 	// User.updateOne({ token: req.params.token }, {canHost:}).then((data) => {
 	// 	if (data) {
-	// 		res.json({ result: true, data }); //TODO : CHOSE DATA TO RETURN
+	// 		res.json({ result: true });
 	// 	} else {
 	// 		res.json({ result: false, error: 'User not found' });
 	// 	}
@@ -165,7 +165,7 @@ router.put('/hosting/:token', async (req, res) => {
 			.status(409)
 			.json({ result: false, error: 'Can not update hosting property' });
 
-	res.json({ result: true });
+	res.json({ result: true, canHost: newUser.canHost });
 });
 
 /* DELETE /delete/:token - remove all data from user in db/cloudinary/pusher ? */
