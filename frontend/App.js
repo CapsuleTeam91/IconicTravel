@@ -103,7 +103,7 @@ export default function App() {
 		<Provider store={store}>
 			<PersistGate persistor={persistor}>
 				<NavigationContainer>
-					<StatusBar barStyle={Platform.OS === 'ios' ? 'black' : ''} />
+					<StatusBar barStyle={'default'} />
 					<View style={{ flex: 1, paddingTop: STATUSBAR_HEIGHT }}>
 
 						<Stack.Navigator screenOptions={{ headerShown: false }}>
@@ -146,7 +146,6 @@ export default function App() {
 
 const styles = StyleSheet.create({
 	statusBar: {
-
 		backgroundColor: 'black'
 	},
 });
