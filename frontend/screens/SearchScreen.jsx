@@ -143,6 +143,7 @@ const SearchScreen = ({ navigation }) => {
 
 	const clear = () => {
 		setCity(null)
+		setDistanceSelected(null)
 	}
 
 	//console.log("Utilisateurs trouvés : ", usersAroundDestination);
