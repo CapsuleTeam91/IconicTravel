@@ -92,7 +92,7 @@ const TabNavigator = () => {
 			})}>
 			<Tab.Screen name="History" component={SearchScreen} />
 			<Tab.Screen name="Adventures" component={SearchScreen} />
-			<Tab.Screen name="Search" component={HomeScreen} />
+			<Tab.Screen name="Search" component={SearchScreen} />
 			<Tab.Screen name="Messages" component={SearchScreen} />
 			<Tab.Screen name="Settings" component={SettingsScreen} />
 		</Tab.Navigator>

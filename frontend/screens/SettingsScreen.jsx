@@ -72,7 +72,7 @@ const SettingsScreen = ({ navigation }) => {
 					<View>
 						{links.map((link, i) => (
 							<TouchableOpacity
-								onpress={() => navigation.navigate(link.page)}
+								onPress={() => navigation.navigate(link.page)}
 								activeOpacity={0.8}
 								style={styles.linkContainer}>
 								<Ionicons name={link.icon} size={20} style={styles.icon} />
@@ -93,7 +93,7 @@ const SettingsScreen = ({ navigation }) => {
 				<Button
 					type="secondary"
 					label="Se déconnecter"
-					onpress={() => navigation.navigate('LoginScreen')}
+					onpress={() => navigation.navigate('Login')}
 				/>
 			</View>
 		</SafeAreaView>
