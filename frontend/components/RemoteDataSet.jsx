@@ -18,12 +18,7 @@ export const RemoteDataSet = memo((props) => {
 		setLoading(true);
 
 		const URL = `https://www.mapquestapi.com/geocoding/v1/address?key=WvE5tMdxgRUWtFIPcZXO1qITivOTwk7V&location=${filterToken}`;
-		const response = await fetch(URL).then(
-			(data) =>
-				new Promise((res) => {
-					setTimeout(() => res(data), 2000); // imitate of a long response
-				})
-		);
+		const response = await fetch(URL);
 		const items = await response.json();
 		const detailedCities = items.results[0].locations;
 
