@@ -56,6 +56,21 @@ const SearchScreen = ({ navigation }) => {
 		}
 		sortedUsers = sortedUsers.sort(
 			(p1, p2) => (Number(p1.distance) < Number(p2.distance)) ? -1 : (Number(p1.distance) > Number(p2.distance)) ? 1 : 0);
+	}else{
+		for (let i = 0; i < sortedUsers.length; i++) {
+			
+			let distance = convertCoordsToKm(
+				{ latitude: user.city.latitude, longitude: user.city.longitude },
+				{
+					latitude: sortedUsers[i].city.latitude,
+					longitude: sortedUsers[i].city.longitude,
+				}
+			)
+			Object.assign(sortedUsers[i], {distance})
+			
+		}
+		sortedUsers = sortedUsers.sort(
+			(p1, p2) => (Number(p1.distance) < Number(p2.distance)) ? -1 : (Number(p1.distance) > Number(p2.distance)) ? 1 : 0);
 	}
 
 	const usersList = sortedUsers.map((user, i) => {
