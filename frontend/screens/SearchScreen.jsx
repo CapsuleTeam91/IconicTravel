@@ -239,15 +239,17 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		justifyContent: 'center',
 		alignItems: 'center',
-		backgroundColor: 'red',
+		backgroundColor: '#E3E8ED',
 		width: '100%',
 		height: 80,
 		borderColor: 'black',
-		borderWidth: 1,
+		borderWidth: 0.5,
+		borderRadius: 10,
+		padding: 10,
 		marginBottom: 10
 	},
 	avatar: {
-		width: "20%",
+		width: "17%",
 		height: '100%',
 		borderRadius: 250
 	},
