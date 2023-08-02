@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { SafeAreaView, StatusBar, StyleSheet, Text, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { addData } from '../reducers/user';
@@ -15,12 +15,10 @@ const HomeScreen = ({ navigation }) => {
 	const dispatch = useDispatch();
 	const user = useSelector((state) => state.user.value);
 	const [city, setCity] = useState(null);
-	const [mapPosition, setMapPosition] = useState({
-		latitude: user.city.latitude,
-		longitude: user.city.longitude,
-	});
 	const [usersAroundDestination, setUsersAroundDestination] = useState([]);
 	const [error, setError] = useState('');
+
+	const mapRef = useRef(null)
 
 	const toRadius = (deg) => {
 		return deg * (Math.PI / 180);
@@ -35,8 +33,8 @@ const HomeScreen = ({ navigation }) => {
 		const a =
 			Math.pow(Math.sin(latRadians), 2) +
 			Math.cos(toRadius(origin.latitude)) *
-				Math.cos(toRadius(target.latitude)) *
-				Math.pow(Math.sin(longRadians), 2);
+			Math.cos(toRadius(target.latitude)) *
+			Math.pow(Math.sin(longRadians), 2);
 		const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
 		return (R * c).toFixed(2);
@@ -50,10 +48,12 @@ const HomeScreen = ({ navigation }) => {
 			latitude: newCity.latitude,
 			longitude: newCity.longitude,
 		});
-		setMapPosition({
+		mapRef.current.animateToRegion({
 			latitude: newCity.latitude,
 			longitude: newCity.longitude,
-		});
+			latitudeDelta: 0.2,
+			longitudeDelta: 0.2,
+		})
 	};
 
 	useEffect(() => {
@@ -74,7 +74,7 @@ const HomeScreen = ({ navigation }) => {
 			});
 	}, []);
 
-	console.log(mapPosition);
+
 	return (
 		<SafeAreaView style={{ flex: 1 }}>
 			<StatusBar backgroundColor={'white'} />
@@ -93,9 +93,10 @@ const HomeScreen = ({ navigation }) => {
 
 				<MapView
 					style={styles.map}
+					ref={mapRef}
 					initialRegion={{
-						latitude: mapPosition.latitude,
-						longitude: mapPosition.longitude,
+						latitude: user.city.latitude,
+						longitude: user.city.longitude,
 						latitudeDelta: 0.0922,
 						longitudeDelta: 0.0421,
 					}}>
@@ -103,12 +104,12 @@ const HomeScreen = ({ navigation }) => {
 						usersAroundDestination.map((user, i) => {
 							let distance = city
 								? convertCoordsToKm(
-										{ latitude: city.latitude, longitude: city.longitude },
-										{
-											latitude: user.city.latitude,
-											longitude: user.city.longitude,
-										}
-								  )
+									{ latitude: city.latitude, longitude: city.longitude },
+									{
+										latitude: user.city.latitude,
+										longitude: user.city.longitude,
+									}
+								)
 								: 0;
 
 							return (
@@ -132,7 +133,7 @@ const HomeScreen = ({ navigation }) => {
 					<ButtonIcon
 						type="results"
 						name="arrow-undo-outline"
-						onpress={() => {}}
+						onpress={() => { }}
 					/>
 				</View>
 			</KeyboardAwareScrollView>
