@@ -44,7 +44,7 @@ const SettingsScreen = ({ navigation }) => {
 			<View style={STYLES_GLOBAL.container}>
 				<View style={styles.container}>
 					<Text style={STYLES_GLOBAL.subTitle}>PROFIL</Text>
-					<View style={styles.linkContainer}>
+					<View style={[styles.linkContainer]}>
 						<Image
 							source={{
 								uri: user.avatarUrl,
@@ -52,9 +52,9 @@ const SettingsScreen = ({ navigation }) => {
 							style={styles.image}
 						/>
 						<TouchableOpacity
-							onPress={() => {}}
+							onPress={() => { }}
 							activeOpacity={0.8}
-							style={styles.linkContainer}>
+							style={styles.profilLinkContainer}>
 							<Text style={[STYLES_GLOBAL.textDark, styles.link]}>
 								Voir mon profil
 							</Text>
@@ -68,18 +68,21 @@ const SettingsScreen = ({ navigation }) => {
 				</View>
 
 				<View style={styles.container}>
-					<Text style={STYLES_GLOBAL.subTitle}>PARAMETRES</Text>
+					<Text style={[STYLES_GLOBAL.subTitle, styles.settingContainer]}>PARAMETRES</Text>
 					<View>
 						{links.map((link, i) => (
 							<TouchableOpacity
 								onPress={() => navigation.navigate(link.page)}
 								activeOpacity={0.8}
 								style={styles.linkContainer}>
-								<Ionicons name={link.icon} size={20} style={styles.icon} />
-								<Text style={[STYLES_GLOBAL.textDark]}>
-									{link.label}
-									{link.page}
-								</Text>
+
+								<View style={styles.iconLink}>
+									<Ionicons name={link.icon} size={20} style={styles.icon} />
+									<Text style={[STYLES_GLOBAL.textDark]}>
+										{link.label}
+									</Text>
+								</View>
+
 								<Ionicons
 									name="chevron-forward-outline"
 									size={20}
@@ -106,9 +109,22 @@ const styles = StyleSheet.create({
 		width: '100%',
 		alignItems: 'flex-start',
 	},
-	linkContainer: {
+
+	settingContainer: {
+		marginBottom: 20,
+	},
+
+	profilLinkContainer: {
 		flexDirection: 'row',
 		alignItems: 'center',
+		justifyContent: 'space-between',
+	},
+
+	linkContainer: {
+		width: '90%',
+		flexDirection: 'row',
+		alignItems: 'center',
+		justifyContent: 'space-between',
 	},
 	image: {
 		width: 120,
@@ -123,6 +139,12 @@ const styles = StyleSheet.create({
 	link: {
 		textDecorationLine: 'underline',
 	},
+
+	iconLink: {
+		flexDirection: 'row',
+		alignItems: 'center',
+
+	}
 });
 
 export default SettingsScreen;
