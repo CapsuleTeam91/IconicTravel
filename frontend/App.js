@@ -29,7 +29,6 @@ import ProfileStepFourScreen from './screens/ProfileStepFourScreen';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { COLORS } from './utils/styles';
 
-import HomeScreen from './screens/HomeScreen';
 import SettingsScreen from './screens/SettingsScreen';
 import LegalScreen from './screens/LegalScreen';
 import NotificationsScreen from './screens/NotificationsScreen';
