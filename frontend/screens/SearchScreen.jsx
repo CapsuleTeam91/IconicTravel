@@ -11,6 +11,7 @@ import ButtonIcon from '../components/ButtonIcon';
 import MapView, { Marker } from 'react-native-maps';
 import { ERRORS, URL_EXPO } from '../utils/constants';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import Sort from '../components/sort';
 
 const SearchScreen = ({ navigation }) => {
 	const dispatch = useDispatch();
@@ -85,7 +86,25 @@ const SearchScreen = ({ navigation }) => {
 			});
 	}, []);
 
-	const usersList = usersAroundDestination.map((user, i) => {
+	let sortedUsers = usersAroundDestination;
+
+	if(city) {
+		for (let i = 0; i < sortedUsers.length; i++) {
+			let distance = convertCoordsToKm(
+				{ latitude: city.latitude, longitude: city.longitude },
+				{
+					latitude: sortedUsers[i].city.latitude,
+					longitude: sortedUsers[i].city.longitude,
+				}
+			)
+			Object.assign(sortedUsers[i], {distance})
+			
+		}
+		sortedUsers = sortedUsers.sort(
+			(p1, p2) => (Number(p1.distance) < Number(p2.distance)) ? -1 : (Number(p1.distance) > Number(p2.distance)) ? 1 : 0);
+	}
+
+	const usersList = sortedUsers.map((user, i) => {
 
 		var ageDate = new Date(Date.now() - new Date(user.dateOfBirth));
 		const age = Math.abs(ageDate.getUTCFullYear() - 1970);
@@ -95,18 +114,27 @@ const SearchScreen = ({ navigation }) => {
 		}
 
 		
-		if(distanceSelected) {
-			const distanceToDest = convertCoordsToKm(
-				{ latitude: city.latitude, longitude: city.longitude },
-				{
-					latitude: user.city.latitude,
-					longitude: user.city.longitude,
+		if(city) {
+
+			if(distanceSelected) {
+				const distSearched = Number(distanceSelected.label.match(/\d+/)[0])
+
+				if(user.distance <= distSearched) {
+					return (
+						<View key={i} style={styles.userContainer}>
+							<Image source={{ uri: user.avatarUrl }} style={styles.avatar} />
+							<View style={styles.userDetailsContainer}>
+								<Text style={{fontWeight: 600}}>{`${user.firstname} • ${user.city.name}`}</Text>
+								<Text style={{fontSize: 12}}>{newDesc}</Text>
+							</View>
+							<View style={styles.userDetailsContainer2}>
+								<Text>{`${age} ans`}</Text>
+								<Text>{`${Math.round(user.distance)}km`}</Text>
+							</View>
+						</View>
+					)
 				}
-			)
-
-			const distSearched = Number(distanceSelected.label.match(/\d+/)[0])
-
-			if(distanceToDest <= distSearched) {
+			}else {
 				return (
 					<View key={i} style={styles.userContainer}>
 						<Image source={{ uri: user.avatarUrl }} style={styles.avatar} />
@@ -116,10 +144,12 @@ const SearchScreen = ({ navigation }) => {
 						</View>
 						<View style={styles.userDetailsContainer2}>
 							<Text>{`${age} ans`}</Text>
+							<Text>{`${Math.round(user.distance)}km`}</Text>
 						</View>
 					</View>
 				)
 			}
+			
 
 		} else {
 			return (
