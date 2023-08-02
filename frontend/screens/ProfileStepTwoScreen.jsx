@@ -42,6 +42,10 @@ const ProfileStepTwoScreen = ({ navigation }) => {
 		});
 	};
 
+	const clear = () => {
+		setCity('')
+	}
+
 	return (
 		<SafeAreaView style={{ flex: 1 }}>
 			<StatusBar backgroundColor={'white'} />
@@ -73,6 +77,7 @@ const ProfileStepTwoScreen = ({ navigation }) => {
 						addCity={addCity}
 						label="Ville de Résidence"
 						ligthTheme={false}
+						clear={clear}
 					/>
 					<DropdownLanguage
 						spokenLanguages={spokenLanguages}
