@@ -1,5 +1,7 @@
 import { SafeAreaView, StyleSheet, View } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
+import { Platform, NativeModules } from 'react-native';
+const { StatusBarManager } = NativeModules;
 
 // Navigation
 import { NavigationContainer } from '@react-navigation/native';
@@ -94,13 +96,15 @@ const TabNavigator = () => {
 	);
 };
 
+const STATUSBAR_HEIGHT = Platform.OS === 'ios' ? 50 : StatusBarManager.HEIGHT;
+
 export default function App() {
 	return (
 		<Provider store={store}>
 			<PersistGate persistor={persistor}>
 				<NavigationContainer>
-					<StatusBar barStyle={styles.statusBar} />
-					<View style={{ flex: 1, paddingTop: 40 }}>
+					<StatusBar barStyle={Platform.OS === 'ios' ? 'black' : ''} />
+					<View style={{ flex: 1, paddingTop: STATUSBAR_HEIGHT }}>
 
 						<Stack.Navigator screenOptions={{ headerShown: false }}>
 							<Stack.Screen name="Login" component={LoginScreen} />
@@ -142,6 +146,7 @@ export default function App() {
 
 const styles = StyleSheet.create({
 	statusBar: {
+
 		backgroundColor: 'black'
 	},
 });
