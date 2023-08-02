@@ -98,7 +98,6 @@ const SearchScreen = ({ navigation }) => {
 				}
 			)
 			sortedUsers[i]['distance'] = distance;
-			console.log(sortedUsers[i].distance)
 			
 		}
 		
@@ -126,11 +125,12 @@ const SearchScreen = ({ navigation }) => {
 						<View key={i} style={styles.userContainer}>
 							<Image source={{ uri: user.avatarUrl }} style={styles.avatar} />
 							<View style={styles.userDetailsContainer}>
-								<Text style={{fontWeight: 600}}>{`${user.firstname} • ${user.city.name} • ${Math.round(user.distance)}km`}</Text>
+								<Text style={{fontWeight: 600}}>{`${user.firstname} • ${user.city.name}`}</Text>
 								<Text style={{fontSize: 12}}>{newDesc}</Text>
 							</View>
 							<View style={styles.userDetailsContainer2}>
 								<Text>{`${age} ans`}</Text>
+								<Text>{`${Math.round(user.distance)}km`}</Text>
 							</View>
 						</View>
 					)
@@ -140,11 +140,12 @@ const SearchScreen = ({ navigation }) => {
 					<View key={i} style={styles.userContainer}>
 						<Image source={{ uri: user.avatarUrl }} style={styles.avatar} />
 						<View style={styles.userDetailsContainer}>
-							<Text style={{fontWeight: 600}}>{`${user.firstname} • ${user.city.name} • ${Math.round(user.distance)}km`}</Text>
+							<Text style={{fontWeight: 600}}>{`${user.firstname} • ${user.city.name}`}</Text>
 							<Text style={{fontSize: 12}}>{newDesc}</Text>
 						</View>
 						<View style={styles.userDetailsContainer2}>
 							<Text>{`${age} ans`}</Text>
+							<Text>{`${Math.round(user.distance)}km`}</Text>
 						</View>
 					</View>
 				)
