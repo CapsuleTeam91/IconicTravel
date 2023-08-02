@@ -10,7 +10,7 @@ import { Dropdown } from 'react-native-element-dropdown';
 import ButtonIcon from '../components/ButtonIcon';
 import MapView, { Marker } from 'react-native-maps';
 import { ERRORS, URL_EXPO } from '../utils/constants';
-import { Entypo } from '@expo/vector-icons';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 const SearchScreen = ({ navigation }) => {
 	const dispatch = useDispatch();
@@ -18,7 +18,7 @@ const SearchScreen = ({ navigation }) => {
 	const [city, setCity] = useState(null);
 	const [usersAroundDestination, setUsersAroundDestination] = useState([]);
 	const [error, setError] = useState('');
-	const [distanceSelected, setDistanceSelected] = useState("");
+	const [distanceSelected, setDistanceSelected] = useState({ "_index": 5, "label": "Illimité", "value": "6" });
 
 	const distances = [
 		{ label: '10km', value: '1' },
@@ -26,6 +26,7 @@ const SearchScreen = ({ navigation }) => {
 		{ label: '50km', value: '3' },
 		{ label: '100km', value: '4' },
 		{ label: '200km', value: '5' },
+		{ label: 'Illimité', value: '6' },
 	]
 
 	const mapRef = useRef(null)
@@ -102,7 +103,7 @@ const SearchScreen = ({ navigation }) => {
 							addCity={addCity}
 							label="Destination"
 							ligthTheme={true}
-							width={200}
+							width={230}
 						/>
 						<Dropdown
 							style={styles.dropdown}
@@ -118,10 +119,11 @@ const SearchScreen = ({ navigation }) => {
 							searchPlaceholder="Search..."
 							value={distanceSelected}
 							onChange={item => {
-								setDistanceSelected(item.value);
+								setDistanceSelected(item);
 							}}
+							mode='default'
 							renderLeftIcon={() => (
-								<Entypo name="magnifying-glass" size={24} color="black" />
+								<MaterialCommunityIcons name="map-marker-distance" size={24} color="black" />
 							)}
 						/>
 					</View>
