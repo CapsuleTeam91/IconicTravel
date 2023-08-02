@@ -1,72 +1,25 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, View, Image } from 'react-native';
+import { SafeAreaView, ScrollView, StyleSheet, Text, View, Image } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { addData } from '../reducers/user';
 import { RemoteDataSet } from '../components/RemoteDataSet';
 import { COLORS, COLORS_THEME, STYLES_GLOBAL } from '../utils/styles';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { AutocompleteDropdownContextProvider } from 'react-native-autocomplete-dropdown';
 import { Dropdown } from 'react-native-element-dropdown';
-import ButtonIcon from '../components/ButtonIcon';
 import MapView, { Marker } from 'react-native-maps';
 import { ERRORS, URL_EXPO } from '../utils/constants';
+import { DISTANCES } from '../utils/data';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import Sort from '../components/sort';
+import {convertCoordsToKm} from '../utils/helper'
 
 const SearchScreen = ({ navigation }) => {
-	const dispatch = useDispatch();
 	const user = useSelector((state) => state.user.value);
 	const [city, setCity] = useState(null);
 	const [usersAroundDestination, setUsersAroundDestination] = useState([]);
 	const [error, setError] = useState('');
 	const [distanceSelected, setDistanceSelected] = useState(null);
 
-	const distances = [
-		{ label: '10km', value: '1' },
-		{ label: '20km', value: '2' },
-		{ label: '50km', value: '3' },
-		{ label: '100km', value: '4' },
-		{ label: '200km', value: '5' },
-		{ label: 'Illimité', value: '6' },
-	]
-
 	const mapRef = useRef(null)
-
-	const toRadius = (deg) => {
-		return deg * (Math.PI / 180);
-	};
-
-	const convertCoordsToKm = (origin, target) => {
-		const R = 6371;
-
-		const latRadians = toRadius(target.latitude - origin.latitude) / 2;
-		const longRadians = toRadius(target.longitude - origin.longitude) / 2;
-
-		const a =
-			Math.pow(Math.sin(latRadians), 2) +
-			Math.cos(toRadius(origin.latitude)) *
-			Math.cos(toRadius(target.latitude)) *
-			Math.pow(Math.sin(longRadians), 2);
-		const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-
-		return (R * c).toFixed(2);
-	};
-
-	const addCity = (newCity) => {
-		if (!newCity) return;
-
-		setCity({
-			name: newCity.name,
-			latitude: newCity.latitude,
-			longitude: newCity.longitude,
-		});
-		mapRef.current.animateToRegion({
-			latitude: newCity.latitude,
-			longitude: newCity.longitude,
-			latitudeDelta: 0.2,
-			longitudeDelta: 0.2,
-		})
-	};
 
 	useEffect(() => {
 		fetch(`${URL_EXPO}:3000/users`)
@@ -90,6 +43,7 @@ const SearchScreen = ({ navigation }) => {
 
 	if(city) {
 		for (let i = 0; i < sortedUsers.length; i++) {
+			
 			let distance = convertCoordsToKm(
 				{ latitude: city.latitude, longitude: city.longitude },
 				{
@@ -149,7 +103,6 @@ const SearchScreen = ({ navigation }) => {
 					</View>
 				)
 			}
-			
 
 		} else {
 			return (
@@ -165,11 +118,23 @@ const SearchScreen = ({ navigation }) => {
 				</View>
 			)
 		}
-
-		
-		
-		
 	})
+
+	const addCity = (newCity) => {
+		if (!newCity) return;
+
+		setCity({
+			name: newCity.name,
+			latitude: newCity.latitude,
+			longitude: newCity.longitude,
+		});
+		mapRef.current.animateToRegion({
+			latitude: newCity.latitude,
+			longitude: newCity.longitude,
+			latitudeDelta: 0.2,
+			longitudeDelta: 0.2,
+		})
+	};
 
 	const clear = () => {
 		setCity(null)
@@ -181,8 +146,6 @@ const SearchScreen = ({ navigation }) => {
 			longitudeDelta: 0.2,
 		})
 	}
-
-	//console.log("Utilisateurs trouvés : ", usersAroundDestination);
 
 	return (
 		<SafeAreaView style={{ flex: 1 }}>
@@ -203,7 +166,7 @@ const SearchScreen = ({ navigation }) => {
 					selectedTextStyle={styles.selectedTextStyle}
 					inputSearchStyle={styles.inputSearchStyle}
 					iconStyle={styles.iconStyle}
-					data={distances}
+					data={DISTANCES}
 					maxHeight={300}
 					labelField="label"
 					valueField="value"
@@ -286,6 +249,11 @@ const styles = StyleSheet.create({
 		zIndex: -1,
 		width: '100%',
 		height: '50%',
+		shadowColor: 'black',
+		shadowOffset: {width: 20, height: 40},
+		shadowOpacity: 0.2,
+		shadowRadius: 3,
+		elevation: 20,
 	},
 	dropdown: {
 		justifyContent: 'center',
