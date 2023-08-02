@@ -34,6 +34,11 @@ export const RemoteDataSet = memo((props) => {
 		setLoading(false);
 	}, []);
 
+	const clear = () => {
+		props.clear();
+		setRemoteDataSet(null);
+	}
+
 	return (
 		<AutocompleteDropdown
 			dataSet={remoteDataSet}
@@ -42,6 +47,7 @@ export const RemoteDataSet = memo((props) => {
 			clearOnFocus={false}
 			onSelectItem={props.addCity}
 			loading={loading}
+			onClear={() => clear()}
 			onChangeText={getSuggestions}
 			textInputProps={{
 				color: props.ligthTheme ? COLORS.pink : COLORS.bg,
