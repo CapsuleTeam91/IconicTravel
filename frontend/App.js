@@ -27,6 +27,7 @@ import TraductionScreen from './screens/Traduction';
 import SettingsScreen from './screens/SettingsScreen';
 import MessagesScreen from './screens/MessagesScreen';
 import AdventuresScreen from './screens/AdventuresScreen';
+import UserProfileScreen from './screens/UserProfileScreen';
 import NotificationsScreen from './screens/NotificationsScreen';
 import ProfileStepOneScreen from './screens/ProfileStepOneScreen';
 import ProfileStepTwoScreen from './screens/ProfileStepTwoScreen';
@@ -127,6 +128,7 @@ export default function App() {
 						/>
 						<Stack.Screen name="Traduction" component={TraductionScreen} />
 						<Stack.Screen name="Safety" component={SafetyScreen} />
+						<Stack.Screen name="UserProfile" component={UserProfileScreen} />
 						<Stack.Screen name="TabNavigator" component={TabNavigator} />
 					</Stack.Navigator>
 				</NavigationContainer>

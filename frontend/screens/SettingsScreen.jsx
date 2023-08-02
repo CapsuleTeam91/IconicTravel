@@ -52,7 +52,9 @@ const SettingsScreen = ({ navigation }) => {
 							style={styles.image}
 						/>
 						<TouchableOpacity
-							onPress={() => {}}
+							onPress={() => {
+								navigation.navigate('UserProfile');
+							}}
 							activeOpacity={0.8}
 							style={styles.linkContainer}>
 							<Text style={[STYLES_GLOBAL.textDark, styles.link]}>
