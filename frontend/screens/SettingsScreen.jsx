@@ -70,21 +70,18 @@ const SettingsScreen = ({ navigation }) => {
 				</View>
 
 				<View style={styles.container}>
-					<Text style={[STYLES_GLOBAL.subTitle, styles.settingContainer]}>PARAMETRES</Text>
+					<Text style={[STYLES_GLOBAL.subTitle, styles.settingContainer]}>
+						PARAMETRES
+					</Text>
 					<View>
 						{links.map((link, i) => (
 							<TouchableOpacity
+								key={i}
 								onPress={() => navigation.navigate(link.page)}
 								activeOpacity={0.8}
 								style={styles.linkContainer}>
-
-								<View style={styles.iconLink}>
-									<Ionicons name={link.icon} size={20} style={styles.icon} />
-									<Text style={[STYLES_GLOBAL.textDark]}>
-										{link.label}
-									</Text>
-								</View>
-
+								<Ionicons name={link.icon} size={20} style={styles.icon} />
+								<Text style={[STYLES_GLOBAL.textDark]}>{link.label}</Text>
 								<Ionicons
 									name="chevron-forward-outline"
 									size={20}
@@ -145,8 +142,7 @@ const styles = StyleSheet.create({
 	iconLink: {
 		flexDirection: 'row',
 		alignItems: 'center',
-
-	}
+	},
 });
 
 export default SettingsScreen;

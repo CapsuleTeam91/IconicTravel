@@ -1,10 +1,29 @@
-import { Image, SafeAreaView, StyleSheet, Text, View } from 'react-native';
+import {
+	Image,
+	SafeAreaView,
+	StyleSheet,
+	Switch,
+	Text,
+	View,
+} from 'react-native';
 import ButtonIcon from '../components/ButtonIcon';
-import { STYLES_GLOBAL } from '../utils/styles';
+import { COLORS, STYLES_GLOBAL } from '../utils/styles';
 import { useSelector } from 'react-redux';
+import { useState } from 'react';
 
 const UserProfileScreen = ({ navigation }) => {
 	const user = useSelector((state) => state.user.value);
+	const [isEnabled, setIsEnabled] = useState(false);
+
+	const getAge = (dob) => {
+		var ageDifMs = Date.now() - new Date(dob);
+		var ageDate = new Date(ageDifMs);
+		return Math.abs(ageDate.getUTCFullYear() - 1970);
+	};
+
+	const toggleSwitch = () => {
+		setIsEnabled(!isEnabled);
+	};
 
 	return (
 		<SafeAreaView style={styles.container}>
@@ -34,15 +53,65 @@ const UserProfileScreen = ({ navigation }) => {
 					}}
 					style={styles.image}
 				/>
-				<View>
+				<View style={styles.switchContainer}>
 					<Text style={STYLES_GLOBAL.subTitle}>Iconic Host</Text>
+					<Switch
+						trackColor={{ false: COLORS.lightBlue, true: COLORS.pink }}
+						thumbColor={isEnabled ? COLORS.bg : COLORS.darkBlue}
+						style={{
+							marginTop: 10,
+							transform: [{ scaleX: 1.7 }, { scaleY: 1.7 }],
+						}}
+						ios_backgroundColor={COLORS.lightBlue}
+						onValueChange={toggleSwitch}
+						value={isEnabled}
+					/>
 				</View>
 			</View>
-			<View style={styles.optionsBtnContainer}>
-				<Text style={STYLES_GLOBAL.subTitle}>
-					{user.firstname} {user.lastname}
-				</Text>
-				<Text>{user.dateOfBirth}</Text>
+
+			<View style={styles.detailsContainer}>
+				<View style={styles.optionsContainer}>
+					<Text style={styles.name}>
+						{user.firstname} {user.lastname}
+					</Text>
+					<Text style={styles.age}>{getAge(user.dateOfBirth)} ans</Text>
+				</View>
+				<View style={styles.optionsContainer}>
+					<Text style={STYLES_GLOBAL.textDark}>{user.description}</Text>
+				</View>
+			</View>
+
+			<View style={styles.detailsContainer}>
+				<Text style={styles.subTitle}>Informations</Text>
+				<View style={styles.optionsContainer}>
+					<Text style={[STYLES_GLOBAL.textDark, styles.details]}>
+						Lieu de résidence
+					</Text>
+					<Text style={[STYLES_GLOBAL.textDark, styles.details]}>
+						{user.city.name}
+					</Text>
+				</View>
+				<View style={styles.optionsContainer}>
+					<Text style={[STYLES_GLOBAL.textDark, styles.details]}>
+						Langues parlées
+					</Text>
+					<View style={styles.languagesContainer}>
+						{user.spokenLanguages.map((language, i) => (
+							<Text style={[STYLES_GLOBAL.textDark, styles.details]}>
+								{language}
+							</Text>
+						))}
+					</View>
+				</View>
+			</View>
+
+			<View style={styles.detailsContainer}>
+				<Text style={styles.subTitle}>Passions</Text>
+				<View style={styles.optionsContainer}>
+					{user.hobbies.map((h, i) => (
+						<Text style={styles.hobby}>{h}</Text>
+					))}
+				</View>
 			</View>
 		</SafeAreaView>
 	);
@@ -54,12 +123,11 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		paddingVertical: 40,
 		paddingHorizontal: 20,
-		justifyContent: 'space-between',
-		borderWidth: 2,
-		borderColor: 'red',
+		justifyContent: 'space-around',
 	},
 	optionsContainer: {
 		width: '100%',
+		flexWrap: 'wrap',
 		flexDirection: 'row',
 		alignItems: 'center',
 		justifyContent: 'space-between',
@@ -70,6 +138,18 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		justifyContent: 'space-between',
 	},
+	switchContainer: {
+		alignItems: 'center',
+	},
+	detailsContainer: {
+		width: '100%',
+	},
+	languagesContainer: {
+		flex: 1,
+		flexDirection: 'row',
+		flexWrap: 'wrap',
+		justifyContent: 'flex-end',
+	},
 	imageContainer: {
 		padding: 20,
 	},
@@ -77,8 +157,31 @@ const styles = StyleSheet.create({
 		width: 120,
 		height: 120,
 		borderRadius: 250,
-		// margin: 20,
-		// marginRight: 10,
+	},
+	age: {
+		marginRight: 20,
+	},
+	name: {
+		fontSize: 24,
+		letterSpacing: 1,
+		color: COLORS.darkBlue,
+		textTransform: 'capitalize',
+	},
+	subTitle: {
+		fontSize: 24,
+		color: COLORS.darkBlue,
+		textTransform: 'uppercase',
+	},
+	hobby: {
+		paddingVertical: 5,
+		paddingHorizontal: 7,
+		margin: 5,
+		color: COLORS.bg,
+		borderRadius: 25,
+		backgroundColor: COLORS.lightBlue,
+	},
+	details: {
+		paddingVertical: 2,
 	},
 });
 
