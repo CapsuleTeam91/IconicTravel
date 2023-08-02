@@ -43,9 +43,8 @@ const ProfileStepOneScreen = ({ navigation }) => {
 
 	const handleRegister = () => {
 		if (!image) {
-			setImage(DEFAULT_AVATAR);
-			dispatch(addAvatar(image));
 			navigation.navigate('ProfileStepTwo');
+			return;
 		}
 
 		const formData = new FormData();

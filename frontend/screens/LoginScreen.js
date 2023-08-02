@@ -1,8 +1,18 @@
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { clearData } from '../reducers/user';
 import { StyleSheet, Text, View } from "react-native";
-import StrokeAnimation from "../components/StrokeAnimation";
 import Button from "../components/Button";
+import StrokeAnimation from "../components/StrokeAnimation";
 
 export default function LoginScreen({ navigation }) {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(clearData())
+  }, [])
+
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Iconic Travel</Text>
@@ -18,13 +28,13 @@ export default function LoginScreen({ navigation }) {
         onpress={() => navigation.navigate("Signup")}
       />
 
-<Button
-				type="secondary"
-				label="Créer un compte"
-				onpress={() => navigation.navigate('ProfileStepFour')}
-			/>
-		</View>
-	);
+      <Button
+        type="secondary"
+        label="Créer un compte"
+        onpress={() => navigation.navigate('ProfileStepFour')}
+      />
+    </View>
+  );
 }
 const styles = StyleSheet.create({
   container: {

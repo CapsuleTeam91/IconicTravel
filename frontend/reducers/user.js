@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { DEFAULT_AVATAR } from '../utils/constants';
 
 const initialState = {
 	value: {
@@ -7,7 +8,7 @@ const initialState = {
 		dateOfBirth: null,
 		email: null,
 		token: null,
-		avatarUrl: null,
+		avatarUrl: DEFAULT_AVATAR,
 		description: null,
 		city: { name: null, latitude: null, longitude: null },
 		spokenLanguages: [],
@@ -24,12 +25,28 @@ export const userSlice = createSlice({
 			state.value = { ...state.value, ...action.payload };
 		},
 		addAvatar: (state, action) => {
+			console.log("Image envoyé au reducer : ", action.payload)
 			state.value.avatarUrl = action.payload;
+		},
+		clearData: (state, action) => {
+			state.value = {
+				firstname: null,
+				lastname: null,
+				dateOfBirth: null,
+				email: null,
+				token: null,
+				avatarUrl: null,
+				description: null,
+				city: { name: null, latitude: null, longitude: null },
+				spokenLanguages: [],
+				hobbies: [],
+				travels: [],
+			}
 		},
 	},
 });
 
-export const { addData, addAvatar } = userSlice.actions;
+export const { addData, addAvatar, clearData } = userSlice.actions;
 export default userSlice.reducer;
 
 /* REMINDER */
