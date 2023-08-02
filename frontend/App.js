@@ -28,7 +28,13 @@ import ProfileStepFourScreen from './screens/ProfileStepFourScreen';
 // Utils
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { COLORS } from './utils/styles';
+
 import HomeScreen from './screens/HomeScreen';
+import SettingsScreen from './screens/SettingsScreen';
+import LegalScreen from './screens/LegalScreen';
+import NotificationsScreen from './screens/NotificationsScreen';
+import TraductionScreen from './screens/Traduction';
+import SafetyScreen from './screens/SafetyScreen';
 
 // Store
 const reducers = combineReducers({ user });
@@ -86,9 +92,9 @@ const TabNavigator = () => {
 			})}>
 			<Tab.Screen name="History" component={SearchScreen} />
 			<Tab.Screen name="Adventures" component={SearchScreen} />
-			<Tab.Screen name="Search" component={HomeScreen} />
+			<Tab.Screen name="Search" component={SearchScreen} />
 			<Tab.Screen name="Messages" component={SearchScreen} />
-			<Tab.Screen name="Settings" component={SearchScreen} />
+			<Tab.Screen name="Settings" component={SettingsScreen} />
 		</Tab.Navigator>
 	);
 };
@@ -120,7 +126,13 @@ export default function App() {
 							component={ProfileStepFourScreen}
 						/>
 						<Stack.Screen name="About" component={AboutScreen} />
-
+						<Stack.Screen name="Legal" component={LegalScreen} />
+						<Stack.Screen
+							name="Notifications"
+							component={NotificationsScreen}
+						/>
+						<Stack.Screen name="Traduction" component={TraductionScreen} />
+						<Stack.Screen name="Safety" component={SafetyScreen} />
 						<Stack.Screen name="TabNavigator" component={TabNavigator} />
 					</Stack.Navigator>
 				</NavigationContainer>

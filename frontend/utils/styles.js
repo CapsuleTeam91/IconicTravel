@@ -14,6 +14,12 @@ export const COLORS_THEME = {
 };
 
 export const STYLES_GLOBAL = StyleSheet.create({
+	container: {
+		flex: 1,
+		alignItems: 'center',
+		justifyContent: 'center',
+		backgroundColor: COLORS.bg,
+	},
 	title: {
 		color: COLORS.darkBlue,
 		fontSize: 32,
@@ -39,6 +45,11 @@ export const STYLES_GLOBAL = StyleSheet.create({
 		fontSize: 18,
 		color: COLORS.bg,
 	},
+	textDark: {
+		padding: 15,
+		fontSize: 18,
+		color: COLORS.darkBlue,
+	},
 	error: {
 		fontSize: 12,
 		color: 'red',
@@ -49,6 +60,6 @@ export const STYLES_GLOBAL = StyleSheet.create({
 		flexDirection: 'row',
 		alignItems: 'center',
 		justifyContent: 'space-between',
-		marginBottom: 10
+		marginBottom: 10,
 	},
 });
