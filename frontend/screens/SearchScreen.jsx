@@ -39,37 +39,19 @@ const SearchScreen = ({ navigation }) => {
 			});
 	}, []);
 
-	let sortedUsers = usersAroundDestination;
+	const sortedUsers = usersAroundDestination;
 
-	if(city) {
+	if(usersAroundDestination.length > 0) {
 		for (let i = 0; i < sortedUsers.length; i++) {
+			const localCoords = { latitude: city ? city.latitude : user.city.latitude, longitude: city ? city.longitude : user.city.longitude }
+			const destCoords = {latitude: sortedUsers[i].city.latitude, longitude: sortedUsers[i].city.longitude}
 			
-			let distance = convertCoordsToKm(
-				{ latitude: city.latitude, longitude: city.longitude },
-				{
-					latitude: sortedUsers[i].city.latitude,
-					longitude: sortedUsers[i].city.longitude,
-				}
-			)
+			let distance = convertCoordsToKm(localCoords, destCoords)
+			
 			Object.assign(sortedUsers[i], {distance})
 			
 		}
-		sortedUsers = sortedUsers.sort(
-			(p1, p2) => (Number(p1.distance) < Number(p2.distance)) ? -1 : (Number(p1.distance) > Number(p2.distance)) ? 1 : 0);
-	}else{
-		for (let i = 0; i < sortedUsers.length; i++) {
-			
-			let distance = convertCoordsToKm(
-				{ latitude: user.city.latitude, longitude: user.city.longitude },
-				{
-					latitude: sortedUsers[i].city.latitude,
-					longitude: sortedUsers[i].city.longitude,
-				}
-			)
-			Object.assign(sortedUsers[i], {distance})
-			
-		}
-		sortedUsers = sortedUsers.sort(
+		sortedUsers.sort(
 			(p1, p2) => (Number(p1.distance) < Number(p2.distance)) ? -1 : (Number(p1.distance) > Number(p2.distance)) ? 1 : 0);
 	}
 
