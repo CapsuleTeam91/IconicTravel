@@ -14,7 +14,6 @@ const fs = require('fs');
 
 /* POST /signup*/
 router.post('/signup', async (req, res) => {
-	console.log(req.body);
 	const {
 		firstname,
 		lastname,
@@ -102,12 +101,35 @@ router.post('/signin', (req, res) => {
 
 	User.findOne({ email: { $regex: new RegExp(email, 'i') } }).then((data) => {
 		if (data && bcrypt.compareSync(password, data.password)) {
-			console.log(data)
 			res.json({ result: true, data });
 		} else {
 			res
 				.status(404)
 				.json({ result: false, error: 'User not found or wrong password' });
+		}
+	});
+});
+
+/* GET / - return all users */
+router.get('/', (req, res) => {
+	User.find().then((data) => {
+		if (data) {
+			const filteredData = data.map((user) => ({
+				firstname: user.firstname,
+				lastname: user.lastname,
+				dateOfBirth: user.dateOfBirth,
+				avatarUrl: user.avatarUrl,
+				description: user.description,
+				city: user.city,
+				spokenLanguages: user.spokenLanguages,
+				hobbies: user.hobbies,
+				canHost: user.canHost,
+				travels: user.travels,
+			}));
+
+			res.json({ result: true, data: filteredData });
+		} else {
+			res.status(404).json({ result: false, error: 'No user' });
 		}
 	});
 });

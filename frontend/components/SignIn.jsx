@@ -1,13 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Easing } from 'react-native-reanimated';
 import { useDispatch } from 'react-redux';
+import { addData } from '../reducers/user';
 import { StyleSheet, Text, Animated, View } from 'react-native';
 import { COLORS, COLORS_THEME, STYLES_GLOBAL } from '../utils/styles';
 import { EMAIL_REGEX, ERRORS, SIGN_VIEW, URL_EXPO } from '../utils/constants';
 import Input from './Input';
 import Button from './Button';
 import PasswordInput from './PasswordInput';
-import { addData } from '../reducers/user';
 
 const SignIn = (props) => {
 	const dispatch = useDispatch();
@@ -41,7 +41,6 @@ const SignIn = (props) => {
 				response.status > 400 ? response.status : response.json()
 			)
 			.then((userFound) => {
-				console.log('résultat du fetch de connexion : ', userFound);
 				if (typeof userFound === 'number') {
 					setError(ERRORS[`err${userFound}`]);
 					return;
