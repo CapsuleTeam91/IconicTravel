@@ -17,23 +17,25 @@ import user from './reducers/user';
 // Screens
 import LoginScreen from './screens/LoginScreen';
 import AboutScreen from './screens/AboutScreen';
+import LegalScreen from './screens/LegalScreen';
 import SigninScreen from './screens/SigninScreen';
 import SignupScreen from './screens/SignupScreen';
 import SearchScreen from './screens/SearchScreen';
+import SafetyScreen from './screens/SafetyScreen';
+import HistoryScreen from './screens/HistoryScreen';
+import TraductionScreen from './screens/Traduction';
+import SettingsScreen from './screens/SettingsScreen';
+import MessagesScreen from './screens/MessagesScreen';
+import AdventuresScreen from './screens/AdventuresScreen';
+import NotificationsScreen from './screens/NotificationsScreen';
 import ProfileStepOneScreen from './screens/ProfileStepOneScreen';
 import ProfileStepTwoScreen from './screens/ProfileStepTwoScreen';
-import ProfileStepThreeScreen from './screens/ProfileStepThreeScreen';
 import ProfileStepFourScreen from './screens/ProfileStepFourScreen';
+import ProfileStepThreeScreen from './screens/ProfileStepThreeScreen';
 
 // Utils
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import { COLORS } from './utils/styles';
-
-import SettingsScreen from './screens/SettingsScreen';
-import LegalScreen from './screens/LegalScreen';
-import NotificationsScreen from './screens/NotificationsScreen';
-import TraductionScreen from './screens/Traduction';
-import SafetyScreen from './screens/SafetyScreen';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 // Store
 const reducers = combineReducers({ user });
@@ -76,23 +78,16 @@ const TabNavigator = () => {
 							break;
 					}
 
-					return (
-						<Ionicons
-							name={iconName}
-							// name={isSelected ? `${iconName}` : `${iconName}-outline`}
-							size={size}
-							color={color}
-						/>
-					);
+					return <Ionicons name={iconName} size={size} color={color} />;
 				},
 				tabBarActiveTintColor: COLORS.pink,
 				tabBarInactiveTintColor: COLORS.darkBlue,
 				headerShown: false,
 			})}>
-			<Tab.Screen name="History" component={SearchScreen} />
-			<Tab.Screen name="Adventures" component={SearchScreen} />
+			<Tab.Screen name="History" component={HistoryScreen} />
+			<Tab.Screen name="Adventures" component={AdventuresScreen} />
 			<Tab.Screen name="Search" component={SearchScreen} />
-			<Tab.Screen name="Messages" component={SearchScreen} />
+			<Tab.Screen name="Messages" component={MessagesScreen} />
 			<Tab.Screen name="Settings" component={SettingsScreen} />
 		</Tab.Navigator>
 	);

@@ -104,10 +104,7 @@ const styles = StyleSheet.create({
 	container: {
 		padding: 20,
 		width: '100%',
-		borderColor: 'red',
-		borderWidth: 2,
 		alignItems: 'flex-start',
-		// justifyContent: 'flex-start',
 	},
 	linkContainer: {
 		flexDirection: 'row',
