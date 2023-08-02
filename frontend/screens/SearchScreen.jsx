@@ -97,10 +97,9 @@ const SearchScreen = ({ navigation }) => {
 					longitude: sortedUsers[i].city.longitude,
 				}
 			)
-			sortedUsers[i]['distance'] = distance;
+			Object.assign(sortedUsers[i], {distance})
 			
 		}
-		
 		sortedUsers = sortedUsers.sort(
 			(p1, p2) => (Number(p1.distance) < Number(p2.distance)) ? -1 : (Number(p1.distance) > Number(p2.distance)) ? 1 : 0);
 	}
