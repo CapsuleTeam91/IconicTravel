@@ -146,8 +146,26 @@ router.get('/:token', (req, res) => {
 });
 
 /* PUT /update/:token - update only some datas ? how to filter well ? */
-router.put('/update/:token', async (req, res) => {
-	// TODO : USING UPDATEONE(FILTER, PROPERTY TO UPDATE)
+router.put('/hosting/:token', async (req, res) => {
+	// User.updateOne({ token: req.params.token }, {canHost:}).then((data) => {
+	// 	if (data) {
+	// 		res.json({ result: true, data }); //TODO : CHOSE DATA TO RETURN
+	// 	} else {
+	// 		res.json({ result: false, error: 'User not found' });
+	// 	}
+	// });
+	const user = await User.findOne({ token: req.params.token });
+
+	user.canHost = !user.canHost;
+	console.log(user);
+	const newUser = await user.save();
+
+	if (!newUser)
+		return res
+			.status(409)
+			.json({ result: false, error: 'Can not update hosting property' });
+
+	res.json({ result: true });
 });
 
 /* DELETE /delete/:token - remove all data from user in db/cloudinary/pusher ? */
