@@ -1,18 +1,18 @@
-import { StyleSheet } from "react-native";
-import { StatusBar } from "expo-status-bar";
+import { StyleSheet } from 'react-native';
+import { StatusBar } from 'expo-status-bar';
 
 // Navigation
-import { NavigationContainer } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 // Redux + Persist
-import { Provider } from "react-redux";
-import { persistStore, persistReducer } from "redux-persist";
-import { PersistGate } from "redux-persist/integration/react";
-import { combineReducers, configureStore } from "@reduxjs/toolkit";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import user from "./reducers/user";
+import { Provider } from 'react-redux';
+import { persistStore, persistReducer } from 'redux-persist';
+import { PersistGate } from 'redux-persist/integration/react';
+import { combineReducers, configureStore } from '@reduxjs/toolkit';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import user from './reducers/user';
 
 // Screens
 import LoginScreen from './screens/LoginScreen';
@@ -26,16 +26,17 @@ import ProfileStepThreeScreen from './screens/ProfileStepThreeScreen';
 import ProfileStepFourScreen from './screens/ProfileStepFourScreen';
 
 // Utils
-import Ionicons from "react-native-vector-icons/Ionicons";
-import { COLORS } from "./utils/styles";
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import { COLORS } from './utils/styles';
+import HomeScreen from './screens/HomeScreen';
 
 // Store
 const reducers = combineReducers({ user });
-const persistConfig = { key: "iconic", storage: AsyncStorage };
+const persistConfig = { key: 'iconic', storage: AsyncStorage };
 const store = configureStore({
-  reducer: persistReducer(persistConfig, reducers),
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware({ serializableCheck: false }),
+	reducer: persistReducer(persistConfig, reducers),
+	middleware: (getDefaultMiddleware) =>
+		getDefaultMiddleware({ serializableCheck: false }),
 });
 const persistor = persistStore(store);
 
@@ -44,53 +45,52 @@ const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
 const TabNavigator = () => {
-  return (
-    <Tab.Navigator
-      screenOptions={({ route }) => ({
-        tabBarIcon: ({ color, size }) => {
-          let iconName = "";
+	return (
+		<Tab.Navigator
+			screenOptions={({ route }) => ({
+				tabBarIcon: ({ color, size }) => {
+					let iconName = '';
 
-          switch (route.name) {
-            case "History":
-              iconName = "earth";
-              break;
-            case "Adventures":
-              iconName = "airplane";
-              break;
-            case "Search":
-              iconName = "search";
-              break;
-            case "Messages":
-              iconName = "chatbox-ellipses";
-              break;
-            case "Settings":
-              iconName = "person-circle";
-              break;
-            default:
-              break;
-          }
+					switch (route.name) {
+						case 'History':
+							iconName = 'earth';
+							break;
+						case 'Adventures':
+							iconName = 'airplane';
+							break;
+						case 'Search':
+							iconName = 'search';
+							break;
+						case 'Messages':
+							iconName = 'chatbox-ellipses';
+							break;
+						case 'Settings':
+							iconName = 'person-circle';
+							break;
+						default:
+							break;
+					}
 
-          return (
-            <Ionicons
-              name={iconName}
-              // name={isSelected ? `${iconName}` : `${iconName}-outline`}
-              size={size}
-              color={color}
-            />
-          );
-        },
-        tabBarActiveTintColor: COLORS.pink,
-        tabBarInactiveTintColor: COLORS.darkBlue,
-        headerShown: false,
-      })}
-    >
-      <Tab.Screen name="History" component={SearchScreen} />
-      <Tab.Screen name="Adventures" component={SearchScreen} />
-      <Tab.Screen name="Search" component={SearchScreen} />
-      <Tab.Screen name="Messages" component={SearchScreen} />
-      <Tab.Screen name="Settings" component={SearchScreen} />
-    </Tab.Navigator>
-  );
+					return (
+						<Ionicons
+							name={iconName}
+							// name={isSelected ? `${iconName}` : `${iconName}-outline`}
+							size={size}
+							color={color}
+						/>
+					);
+				},
+				tabBarActiveTintColor: COLORS.pink,
+				tabBarInactiveTintColor: COLORS.darkBlue,
+				headerShown: false,
+			})}>
+			<Tab.Screen name="History" component={SearchScreen} />
+			<Tab.Screen name="Adventures" component={SearchScreen} />
+			<Tab.Screen name="Search" component={HomeScreen} />
+			<Tab.Screen name="Messages" component={SearchScreen} />
+			<Tab.Screen name="Settings" component={SearchScreen} />
+		</Tab.Navigator>
+	);
 };
 
 export default function App() {
@@ -119,10 +119,8 @@ export default function App() {
 							name="ProfileStepFour"
 							component={ProfileStepFourScreen}
 						/>
-						<Stack.Screen
-							name="About"
-							component={AboutScreen}
-						/>
+						<Stack.Screen name="About" component={AboutScreen} />
+
 						<Stack.Screen name="TabNavigator" component={TabNavigator} />
 					</Stack.Navigator>
 				</NavigationContainer>
@@ -132,7 +130,7 @@ export default function App() {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    backgroundColor: "black",
-  },
+	container: {
+		backgroundColor: 'black',
+	},
 });

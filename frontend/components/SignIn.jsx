@@ -41,7 +41,6 @@ const SignIn = (props) => {
 				response.status > 400 ? response.status : response.json()
 			)
 			.then((userFound) => {
-				console.log('résultat du fetch de connexion : ', userFound);
 				if (typeof userFound === 'number') {
 					setError(ERRORS[`err${userFound}`]);
 					return;

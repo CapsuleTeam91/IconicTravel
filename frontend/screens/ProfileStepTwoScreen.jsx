@@ -36,14 +36,13 @@ const ProfileStepTwoScreen = ({ navigation }) => {
 	const addCity = (newCity) => {
 		if (!newCity) return;
 		setCity({
-			name: newCity.title,
+			name: newCity.name,
 			latitude: newCity.latitude,
 			longitude: newCity.longitude,
 		});
 	};
 
 	return (
-
 		<SafeAreaView style={{ flex: 1 }}>
 			<StatusBar backgroundColor={'white'} />
 			<KeyboardAwareScrollView
@@ -70,7 +69,11 @@ const ProfileStepTwoScreen = ({ navigation }) => {
 				/>
 
 				<AutocompleteDropdownContextProvider>
-					<RemoteDataSet addCity={addCity} />
+					<RemoteDataSet
+						addCity={addCity}
+						label="Ville de Résidence"
+						ligthTheme={false}
+					/>
 					<DropdownLanguage
 						spokenLanguages={spokenLanguages}
 						setSpokenLanguages={setSpokenLanguages}
@@ -79,8 +82,7 @@ const ProfileStepTwoScreen = ({ navigation }) => {
 
 				{error && <Text style={STYLES_GLOBAL.error}>{error}</Text>}
 
-				<View
-					style={STYLES_GLOBAL.btnBottomContainer}>
+				<View style={STYLES_GLOBAL.btnBottomContainer}>
 					<ButtonIcon
 						type="secondary"
 						name="arrow-undo-outline"
@@ -98,7 +100,7 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 		alignItems: 'center',
 		backgroundColor: COLORS.darkBlue,
-	}
+	},
 });
 
 export default ProfileStepTwoScreen;

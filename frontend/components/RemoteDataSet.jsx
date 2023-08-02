@@ -29,8 +29,8 @@ export const RemoteDataSet = memo((props) => {
 
 		const suggestions = detailedCities.map((city, i) => ({
 			id: i,
-			title: city.adminArea5,
-			county: city.adminArea4,
+			title: `${city.adminArea5}, ${city.adminArea4}`,
+			name: city.adminArea5,
 			latitude: city.displayLatLng.lat,
 			longitude: city.displayLatLng.lng,
 		}));
@@ -49,21 +49,22 @@ export const RemoteDataSet = memo((props) => {
 			loading={loading}
 			onChangeText={getSuggestions}
 			textInputProps={{
-				color: COLORS.bg,
-				placeholder: 'Ville de Résidence',
+				color: props.ligthTheme ? COLORS.pink : COLORS.bg,
+				placeholder: props.label,
 			}}
 			inputContainerStyle={{
 				width: '70%',
 				margin: 10,
-				color: COLORS.bg,
 				borderRadius: 8,
-				backgroundColor: COLORS.bgDark,
+				backgroundColor: props.ligthTheme ? COLORS.bg : COLORS.bgDark,
+				borderWidth: 1,
+				borderColor: props.ligthTheme ? COLORS.pink : COLORS.bg,
 			}}
 			suggestionsListContainerStyle={{
-				backgroundColor: COLORS.lightBlue,
+				backgroundColor: props.ligthTheme ? COLORS.pink : COLORS.lightBlue,
 			}}
 			suggestionsListTextStyle={{
-				color: COLORS.bgDark,
+				color: props.ligthTheme ? COLORS.bg : COLORS.bgDark,
 				fontWeight: '700',
 				letterSpacing: 1,
 			}}

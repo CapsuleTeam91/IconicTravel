@@ -102,12 +102,23 @@ router.post('/signin', (req, res) => {
 
 	User.findOne({ email: { $regex: new RegExp(email, 'i') } }).then((data) => {
 		if (data && bcrypt.compareSync(password, data.password)) {
-			console.log(data)
+			console.log(data);
 			res.json({ result: true, data });
 		} else {
 			res
 				.status(404)
 				.json({ result: false, error: 'User not found or wrong password' });
+		}
+	});
+});
+
+/* GET / - return all users */
+router.get('/', (req, res) => {
+	User.find().then((data) => {
+		if (data) {
+			res.json({ result: true, data });
+		} else {
+			res.status(404).json({ result: false, error: 'No user' });
 		}
 	});
 });
