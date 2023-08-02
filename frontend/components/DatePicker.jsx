@@ -17,13 +17,7 @@ const DatePicker = (props) => {
 
 	return (
 		<View style={styles.container}>
-			<Text
-				style={[
-					styles.label,
-					props.label === 'Date de naissance' && styles.italic,
-				]}>
-				{props.label}
-			</Text>
+			<Text style={styles.label}>{props.label}</Text>
 			<TouchableOpacity
 				onPress={showDatePicker}
 				activeOpacity={0.8}
@@ -32,7 +26,7 @@ const DatePicker = (props) => {
 			</TouchableOpacity>
 			<DateTimePickerModal
 				date={props.date}
-				display='spinner'
+				display="spinner"
 				isVisible={datePickerVisible}
 				mode="date"
 				onConfirm={(date) => {
@@ -56,7 +50,7 @@ const styles = StyleSheet.create({
 		borderRadius: 8,
 		paddingVertical: 10,
 		paddingHorizontal: 20,
-		marginVertical: 20,
+		marginVertical: 10,
 	},
 	btnContainer: {
 		...StyleSheet.absoluteFillObject,
@@ -67,9 +61,6 @@ const styles = StyleSheet.create({
 	},
 	label: {
 		color: COLORS.bg,
-	},
-	italic: {
-		fontStyle: 'italic',
 	},
 });
 
