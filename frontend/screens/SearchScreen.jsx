@@ -18,7 +18,7 @@ const SearchScreen = ({ navigation }) => {
 	const [city, setCity] = useState(null);
 	const [usersAroundDestination, setUsersAroundDestination] = useState([]);
 	const [error, setError] = useState('');
-	const [distanceSelected, setDistanceSelected] = useState({});
+	const [distanceSelected, setDistanceSelected] = useState(null);
 
 	const distances = [
 		{ label: '10km', value: '1' },
@@ -86,26 +86,64 @@ const SearchScreen = ({ navigation }) => {
 	}, []);
 
 	const usersList = usersAroundDestination.map((user, i) => {
+
 		var ageDate = new Date(Date.now() - new Date(user.dateOfBirth));
 		const age = Math.abs(ageDate.getUTCFullYear() - 1970);
 		let newDesc = user.description;
 		if(newDesc.length >= 80) {
 			newDesc = newDesc.slice(0 , newDesc.indexOf(' ', 79)) + '...'
 		}
+
 		
-		return (
-			<View key={i} style={styles.userContainer}>
-				<Image source={{ uri: user.avatarUrl }} style={styles.avatar} />
-				<View style={styles.userDetailsContainer}>
-					<Text style={{fontWeight: 600}}>{`${user.firstname} • ${user.city.name}`}</Text>
-					<Text style={{fontSize: 12}}>{newDesc}</Text>
+		if(distanceSelected) {
+			const distanceToDest = convertCoordsToKm(
+				{ latitude: city.latitude, longitude: city.longitude },
+				{
+					latitude: user.city.latitude,
+					longitude: user.city.longitude,
+				}
+			)
+
+			const distSearched = distanceSelected.label.match(/\d+/)[0]
+
+			if(distanceToDest <= Number(distSearched)) {
+				return (
+					<View key={i} style={styles.userContainer}>
+						<Image source={{ uri: user.avatarUrl }} style={styles.avatar} />
+						<View style={styles.userDetailsContainer}>
+							<Text style={{fontWeight: 600}}>{`${user.firstname} • ${user.city.name}`}</Text>
+							<Text style={{fontSize: 12}}>{newDesc}</Text>
+						</View>
+						<View style={styles.userDetailsContainer2}>
+							<Text>{`${age} ans`}</Text>
+						</View>
+					</View>
+				)
+			}
+
+		} else {
+			return (
+				<View key={i} style={styles.userContainer}>
+					<Image source={{ uri: user.avatarUrl }} style={styles.avatar} />
+					<View style={styles.userDetailsContainer}>
+						<Text style={{fontWeight: 600}}>{`${user.firstname} • ${user.city.name}`}</Text>
+						<Text style={{fontSize: 12}}>{newDesc}</Text>
+					</View>
+					<View style={styles.userDetailsContainer2}>
+						<Text>{`${age} ans`}</Text>
+					</View>
 				</View>
-				<View style={styles.userDetailsContainer2}>
-					<Text>{`${age} ans`}</Text>
-				</View>
-			</View>
-		)
+			)
+		}
+
+		
+		
+		
 	})
+
+	const clear = () => {
+		setCity(null)
+	}
 
 	//console.log("Utilisateurs trouvés : ", usersAroundDestination);
 
@@ -119,9 +157,10 @@ const SearchScreen = ({ navigation }) => {
 						label="Destination"
 						ligthTheme={true}
 						width={230}
+						clear={clear}
 					/>
 				</AutocompleteDropdownContextProvider>
-				<Dropdown
+				{city ? <Dropdown
 					style={styles.dropdown}
 					placeholderStyle={styles.placeholderStyle}
 					selectedTextStyle={styles.selectedTextStyle}
@@ -134,13 +173,16 @@ const SearchScreen = ({ navigation }) => {
 					placeholder="Distance"
 					value={distanceSelected}
 					onChange={item => {
+						item.label === 'Illimité' ? setDistanceSelected(null) :
 						setDistanceSelected(item);
+
+						console.log("et là ? : ", distanceSelected)
 					}}
 					mode='default'
 					renderLeftIcon={() => (
 						<MaterialCommunityIcons name="map-marker-distance" size={24} color="black" />
 					)}
-				/>
+				/> : <></>}
 			</View>
 			{error && <Text style={STYLES_GLOBAL.error}>{error}</Text>}
 
