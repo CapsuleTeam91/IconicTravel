@@ -6,13 +6,6 @@ const SafetyScreen = ({ navigation }) => {
 	return (
 		<SafeAreaView style={styles.container}>
 			<Text style={STYLES_GLOBAL.subTitle}>Safety</Text>
-			<ButtonIcon
-				type="secondary"
-				name="arrow-undo-outline"
-				onpress={() => {
-					navigation.navigate('TabNavigator', { screen: 'Settings' });
-				}}
-			/>
 		</SafeAreaView>
 	);
 };
