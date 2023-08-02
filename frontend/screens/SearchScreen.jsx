@@ -144,6 +144,12 @@ const SearchScreen = ({ navigation }) => {
 	const clear = () => {
 		setCity(null)
 		setDistanceSelected(null)
+		mapRef.current.animateToRegion({
+			latitude: user.city.latitude,
+			longitude: user.city.longitude,
+			latitudeDelta: 0.2,
+			longitudeDelta: 0.2,
+		})
 	}
 
 	//console.log("Utilisateurs trouvés : ", usersAroundDestination);
