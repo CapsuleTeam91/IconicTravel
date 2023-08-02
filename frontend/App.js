@@ -29,6 +29,7 @@ import ProfileStepFourScreen from './screens/ProfileStepFourScreen';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { COLORS } from './utils/styles';
 import HomeScreen from './screens/HomeScreen';
+import SettingsScreen from './screens/SettingsScreen';
 
 // Store
 const reducers = combineReducers({ user });
@@ -88,7 +89,7 @@ const TabNavigator = () => {
 			<Tab.Screen name="Adventures" component={SearchScreen} />
 			<Tab.Screen name="Search" component={HomeScreen} />
 			<Tab.Screen name="Messages" component={SearchScreen} />
-			<Tab.Screen name="Settings" component={SearchScreen} />
+			<Tab.Screen name="Settings" component={SettingsScreen} />
 		</Tab.Navigator>
 	);
 };

@@ -1,6 +1,6 @@
 import React from 'react';
 import { COLORS } from '../utils/styles';
-import { StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { StyleSheet, TouchableOpacity } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const ButtonIcon = (props) => {
