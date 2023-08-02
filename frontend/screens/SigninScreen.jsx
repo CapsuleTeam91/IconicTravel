@@ -4,15 +4,13 @@ import {
 	Text,
 	TouchableOpacity,
 	View,
-	KeyboardAvoidingView,
 	TouchableWithoutFeedback,
 	Keyboard,
-	ScrollView,
 } from 'react-native';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { SIGN_VIEW } from '../utils/constants';
 import { COLORS, STYLES_GLOBAL } from '../utils/styles';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import SignIn from '../components/SignIn';
 import SignUp from '../components/SignUp';
 
@@ -56,7 +54,7 @@ const SigninScreen = ({ navigation, view = SIGN_VIEW.in }) => {
 							}
 							activeOpacity={0.8}>
 							<Text style={styles.link}>
-								{signView === SIGN_VIEW.in ? 'Créer compte' : 'Se connecter'}
+								{signView === SIGN_VIEW.in ? 'Créer un compte' : 'Se connecter'}
 							</Text>
 						</TouchableOpacity>
 					</View>
@@ -75,6 +73,7 @@ const styles = StyleSheet.create({
 	},
 	link: {
 		fontSize: 20,
+		letterSpacing: 1,
 		fontWeight: '700',
 		color: COLORS.pink,
 		textAlign: 'center',

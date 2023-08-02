@@ -7,12 +7,14 @@ import {
 	View,
 } from 'react-native';
 import { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { ERRORS, URL_EXPO } from '../utils/constants';
 import { COLORS, STYLES_GLOBAL } from '../utils/styles';
 import ButtonIcon from '../components/ButtonIcon';
+import { addData } from '../reducers/user';
 
 const UserProfileScreen = ({ navigation }) => {
+	const dispatch = useDispatch();
 	const user = useSelector((state) => state.user.value);
 	const [isEnabled, setIsEnabled] = useState(user.canHost);
 
@@ -23,13 +25,12 @@ const UserProfileScreen = ({ navigation }) => {
 	};
 
 	const toggleSwitch = () => {
-		setIsEnabled(!isEnabled);
-
 		fetch(`${URL_EXPO}:3000/users/hosting/${user.token}`, { method: 'PUT' })
 			.then((response) => response.json())
 			.then((data) => {
 				if (data.result) {
-					console.log(data.canHost);
+					setIsEnabled(data.canHost);
+					dispatch(addData({ canHost: data.canHost }));
 				} else {
 					setError(ERRORS[`err${data.status}`]);
 				}
@@ -57,6 +58,7 @@ const UserProfileScreen = ({ navigation }) => {
 					/>
 				</View>
 			</View>
+
 			<View style={[styles.optionsContainer, styles.imageContainer]}>
 				<Image
 					source={{
@@ -67,8 +69,8 @@ const UserProfileScreen = ({ navigation }) => {
 				<View style={styles.switchContainer}>
 					<Text style={STYLES_GLOBAL.subTitle}>Iconic Host</Text>
 					<Switch
-						trackColor={{ false: COLORS.lightBlue, true: COLORS.pink }}
-						thumbColor={isEnabled ? COLORS.bg : COLORS.darkBlue}
+						trackColor={{ false: COLORS.darkBlue, true: COLORS.pink }}
+						thumbColor={isEnabled ? COLORS.bg : COLORS.lightBlue}
 						style={{
 							marginTop: 10,
 							transform: [{ scaleX: 1.7 }, { scaleY: 1.7 }],
@@ -108,7 +110,7 @@ const UserProfileScreen = ({ navigation }) => {
 					</Text>
 					<View style={styles.languagesContainer}>
 						{user.spokenLanguages.map((language, i) => (
-							<Text style={[STYLES_GLOBAL.textDark, styles.details]}>
+							<Text key={i} style={[STYLES_GLOBAL.textDark, styles.details]}>
 								{language}
 							</Text>
 						))}
@@ -120,7 +122,9 @@ const UserProfileScreen = ({ navigation }) => {
 				<Text style={styles.subTitle}>Passions</Text>
 				<View style={styles.optionsContainer}>
 					{user.hobbies.map((h, i) => (
-						<Text style={styles.hobby}>{h}</Text>
+						<Text key={i} style={styles.hobby}>
+							{h}
+						</Text>
 					))}
 				</View>
 			</View>

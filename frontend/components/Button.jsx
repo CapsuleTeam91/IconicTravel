@@ -2,26 +2,32 @@ import React from 'react';
 import { COLORS } from '../utils/styles';
 import { StyleSheet, Text, TouchableOpacity } from 'react-native';
 
-const Button = (props) => {
+const Button = ({ type, label, onpress, size = 'small' }) => {
 	return (
 		<TouchableOpacity
-			onPress={props.onpress}
-			style={[styles.btn, styles[`${props.type}Btn`]]}
+			onPress={onpress}
+			style={[styles.btn, styles[`${type}Btn`], styles[`${size}Btn`]]}
 			activeOpacity={0.8}>
-			<Text style={[styles.textBtn, styles[`${props.type}TextBtn`]]}>
-				{props.label}
-			</Text>
+			<Text style={[styles.textBtn, styles[`${type}TextBtn`]]}>{label}</Text>
 		</TouchableOpacity>
 	);
 };
 
 const styles = StyleSheet.create({
 	btn: {
-		width: '70%',
+		// width: '70%',
+		// maxWidth: '70%',
 		alignItems: 'center',
 		borderRadius: 30,
-		paddingVertical: 15,
+		paddingVertical: 10,
+		// paddingHorizontal: 25,
 		marginVertical: 20,
+	},
+	smallBtn: {
+		paddingHorizontal: 25,
+	},
+	bigBtn: {
+		width: '70%',
 	},
 	primaryBtn: {
 		backgroundColor: COLORS.darkBlue,
@@ -42,7 +48,8 @@ const styles = StyleSheet.create({
 	textBtn: {
 		fontSize: 18,
 		fontWeight: '700',
-		textTransform: 'capitalize',
+		letterSpacing: 1,
+		// textTransform: 'capitalize',
 	},
 	primaryTextBtn: {
 		color: COLORS.bg,
