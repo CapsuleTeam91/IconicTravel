@@ -15,6 +15,10 @@ const HomeScreen = ({ navigation }) => {
 	const dispatch = useDispatch();
 	const user = useSelector((state) => state.user.value);
 	const [city, setCity] = useState(null);
+	const [mapPosition, setMapPosition] = useState({
+		latitude: user.city.latitude,
+		longitude: user.city.longitude,
+	});
 	const [usersAroundDestination, setUsersAroundDestination] = useState([]);
 	const [error, setError] = useState('');
 
@@ -40,13 +44,16 @@ const HomeScreen = ({ navigation }) => {
 
 	const addCity = (newCity) => {
 		if (!newCity) return;
-		console.log(newCity);
+
 		setCity({
 			name: newCity.name,
 			latitude: newCity.latitude,
 			longitude: newCity.longitude,
 		});
-		console.log('City', city);
+		setMapPosition({
+			latitude: newCity.latitude,
+			longitude: newCity.longitude,
+		});
 	};
 
 	useEffect(() => {
@@ -60,8 +67,6 @@ const HomeScreen = ({ navigation }) => {
 					return;
 				}
 				if (users.result) {
-					console.log('Users reçus :', users.data);
-
 					setUsersAroundDestination(users.data);
 				} else {
 					setError(ERRORS[`err${users.status}`]);
@@ -69,6 +74,7 @@ const HomeScreen = ({ navigation }) => {
 			});
 	}, []);
 
+	console.log(mapPosition);
 	return (
 		<SafeAreaView style={{ flex: 1 }}>
 			<StatusBar backgroundColor={'white'} />
@@ -84,44 +90,43 @@ const HomeScreen = ({ navigation }) => {
 						ligthTheme={true}
 					/>
 				</AutocompleteDropdownContextProvider>
-				{city && (
-					<MapView
-						style={styles.map}
-						initialRegion={{
-							latitude: city.latitude,
-							longitude: city.longitude,
-							latitudeDelta: 0.0922,
-							longitudeDelta: 0.0421,
-						}}>
-						{usersAroundDestination.length > 0 &&
-							usersAroundDestination.map((place, i) => {
-								let distance = convertCoordsToKm(
-									{ latitude: city.latitude, longitude: city.longitude },
-									{
-										latitude: place.city.latitude,
-										longitude: place.city.longitude,
-									}
-								);
 
-								return (
-									<Marker
-										key={i}
-										coordinate={{
-											latitude: place.city.latitude,
-											longitude: place.city.longitude,
-										}}
-										title={place.firstname}
-										pinColor="#fecb2d"
-										// icon={icons[place.type]}
-										description={`${distance}km`}
-									/>
-								);
-							})}
-					</MapView>
-				)}
-				{/* // : ( //{' '}
-				<Image style={styles.map} source={require('../assets/logo_bg.png')} />
-				// )} */}
+				<MapView
+					style={styles.map}
+					initialRegion={{
+						latitude: mapPosition.latitude,
+						longitude: mapPosition.longitude,
+						latitudeDelta: 0.0922,
+						longitudeDelta: 0.0421,
+					}}>
+					{usersAroundDestination.length > 0 &&
+						usersAroundDestination.map((user, i) => {
+							let distance = city
+								? convertCoordsToKm(
+										{ latitude: city.latitude, longitude: city.longitude },
+										{
+											latitude: user.city.latitude,
+											longitude: user.city.longitude,
+										}
+								  )
+								: 0;
+
+							return (
+								<Marker
+									key={i}
+									coordinate={{
+										latitude: user.city.latitude,
+										longitude: user.city.longitude,
+									}}
+									title={user.firstname}
+									pinColor="#fecb2d"
+									// icon={icons[user.type]}
+									description={city && `${distance}km`}
+								/>
+							);
+						})}
+				</MapView>
+
 				{error && <Text style={STYLES_GLOBAL.error}>{error}</Text>}
 				<View style={STYLES_GLOBAL.btnBottomContainer}>
 					<ButtonIcon
@@ -143,6 +148,7 @@ const styles = StyleSheet.create({
 		backgroundColor: COLORS.bg,
 	},
 	map: {
+		zIndex: -1,
 		width: '100%',
 		height: '50%',
 	},
