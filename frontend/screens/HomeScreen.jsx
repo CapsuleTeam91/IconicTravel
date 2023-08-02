@@ -1,12 +1,5 @@
-import React, { useState } from 'react';
-import {
-	Image,
-	SafeAreaView,
-	StatusBar,
-	StyleSheet,
-	Text,
-	View,
-} from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { SafeAreaView, StatusBar, StyleSheet, Text, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { addData } from '../reducers/user';
 import { RemoteDataSet } from '../components/RemoteDataSet';
@@ -24,15 +17,6 @@ const HomeScreen = ({ navigation }) => {
 	const [city, setCity] = useState(null);
 	const [usersAroundDestination, setUsersAroundDestination] = useState([]);
 	const [error, setError] = useState('');
-
-	const handleRegister = () => {
-		if (!city) {
-			setError('Vous devez sélectionner une ville');
-			return;
-		}
-		// dispatch(addData({ description, city, spokenLanguages }));
-		// navigation.navigate('ProfileStepThree');
-	};
 
 	const toRadius = (deg) => {
 		return deg * (Math.PI / 180);
@@ -63,7 +47,9 @@ const HomeScreen = ({ navigation }) => {
 			longitude: newCity.longitude,
 		});
 		console.log('City', city);
+	};
 
+	useEffect(() => {
 		fetch(`${URL_EXPO}:3000/users`)
 			.then((response) =>
 				response.status > 400 ? response.status : response.json()
@@ -74,18 +60,14 @@ const HomeScreen = ({ navigation }) => {
 					return;
 				}
 				if (users.result) {
-					console.log('Users reçu :', users.data[0]);
+					console.log('Users reçus :', users.data);
 
-					const usersAround = users.data.filter(
-						(el) => el.city.name === city.name
-					);
-					console.log(usersAround);
-					setUsersAroundDestination(usersAround);
+					setUsersAroundDestination(users.data);
 				} else {
 					setError(ERRORS[`err${users.status}`]);
 				}
 			});
-	};
+	}, []);
 
 	return (
 		<SafeAreaView style={{ flex: 1 }}>
