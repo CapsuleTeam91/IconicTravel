@@ -119,12 +119,14 @@ const SignUp = (props) => {
 				/>
 				<PasswordInput
 					label="Mot de passe"
+					width="100%"
 					theme={COLORS_THEME.dark}
 					onchangetext={(value) => setPassword(value)}
 					value={password}
 				/>
 				<PasswordInput
 					label="Confirmer le mot de passe"
+					width="100%"
 					theme={COLORS_THEME.dark}
 					onchangetext={(value) => setConfirmedPassword(value)}
 					value={confirmedPassword}
