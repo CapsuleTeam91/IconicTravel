@@ -14,7 +14,30 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const SettingsScreen = ({ navigation }) => {
 	const user = useSelector((state) => state.user.value);
-	console.log(user);
+
+	const links = [
+		{
+			icon: 'shield-outline',
+			label: 'Connexion et sécurité',
+			page: 'Safety',
+		},
+		{
+			icon: 'notifications-outline',
+			label: 'Notifications',
+			page: 'Notifications',
+		},
+		{
+			icon: 'language-outline',
+			label: 'Traduction',
+			page: 'Traduction',
+		},
+		{
+			icon: 'warning-outline',
+			label: 'Juridique',
+			page: 'Legal',
+		},
+	];
+
 	return (
 		<SafeAreaView style={{ flex: 1 }}>
 			<StatusBar backgroundColor={'white'} />
@@ -46,17 +69,31 @@ const SettingsScreen = ({ navigation }) => {
 
 				<View style={styles.container}>
 					<Text style={STYLES_GLOBAL.subTitle}>PARAMETRES</Text>
+					<View>
+						{links.map((link, i) => (
+							<TouchableOpacity
+								onpress={() => navigation.navigate(link.page)}
+								activeOpacity={0.8}
+								style={styles.linkContainer}>
+								<Ionicons name={link.icon} size={20} style={styles.icon} />
+								<Text style={[STYLES_GLOBAL.textDark]}>
+									{link.label}
+									{link.page}
+								</Text>
+								<Ionicons
+									name="chevron-forward-outline"
+									size={20}
+									style={styles.icon}
+								/>
+							</TouchableOpacity>
+						))}
+					</View>
 				</View>
 
 				<Button
-					type="primary"
-					label="Se connecter"
-					onpress={() => navigation.navigate('Signin')}
-				/>
-				<Button
 					type="secondary"
-					label="Créer un compte"
-					onpress={() => navigation.navigate('Signup')}
+					label="Se déconnecter"
+					onpress={() => navigation.navigate('LoginScreen')}
 				/>
 			</View>
 		</SafeAreaView>
@@ -81,10 +118,13 @@ const styles = StyleSheet.create({
 		height: 120,
 		borderRadius: 250,
 		margin: 20,
+		marginRight: 10,
 	},
 	icon: {
-		marginHorizontal: 10,
 		color: COLORS.darkBlue,
+	},
+	link: {
+		textDecorationLine: 'underline',
 	},
 });
 
