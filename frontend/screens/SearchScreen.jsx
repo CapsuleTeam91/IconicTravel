@@ -86,18 +86,28 @@ const SearchScreen = ({ navigation }) => {
 	}, []);
 
 	const usersList = usersAroundDestination.map((user, i) => {
+		var ageDate = new Date(Date.now() - new Date(user.dateOfBirth));
+		const age = Math.abs(ageDate.getUTCFullYear() - 1970);
+		let newDesc = user.description;
+		if(newDesc.length >= 80) {
+			newDesc = newDesc.slice(0 , newDesc.indexOf(' ', 79)) + '...'
+		}
+		
 		return (
 			<View key={i} style={styles.userContainer}>
 				<Image source={{ uri: user.avatarUrl }} style={styles.avatar} />
 				<View style={styles.userDetailsContainer}>
-					<Text>{`${user.firstname} • ${user.city.name}`}</Text>
-					<Text>{user.description}</Text>
+					<Text style={{fontWeight: 600}}>{`${user.firstname} • ${user.city.name}`}</Text>
+					<Text style={{fontSize: 12}}>{newDesc}</Text>
+				</View>
+				<View style={styles.userDetailsContainer2}>
+					<Text>{`${age} ans`}</Text>
 				</View>
 			</View>
 		)
 	})
 
-	console.log("Utilisateurs trouvés : ", usersAroundDestination);
+	//console.log("Utilisateurs trouvés : ", usersAroundDestination);
 
 	return (
 		<SafeAreaView style={{ flex: 1 }}>
@@ -233,7 +243,7 @@ const styles = StyleSheet.create({
 	},
 	scrollViewItems: {
 		width: '100%',
-		padding: 15
+		padding: 15,
 	},
 	userContainer: {
 		flexDirection: 'row',
@@ -246,7 +256,7 @@ const styles = StyleSheet.create({
 		borderWidth: 0.5,
 		borderRadius: 10,
 		padding: 10,
-		marginBottom: 10
+		marginBottom: 15
 	},
 	avatar: {
 		width: "17%",
@@ -257,7 +267,12 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 		alignItems: 'flex-start',
 		paddingLeft: 20,
-		width: '80%'
+		width: '64%'
+	},
+	userDetailsContainer2: {
+		justifyContent: 'center',
+		alignItems: 'center',
+		width: '19%'
 	}
 });
 
