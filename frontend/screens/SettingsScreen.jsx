@@ -74,14 +74,12 @@ const SettingsScreen = ({ navigation }) => {
 					<View>
 						{links.map((link, i) => (
 							<TouchableOpacity
+								key={i}
 								onPress={() => navigation.navigate(link.page)}
 								activeOpacity={0.8}
 								style={styles.linkContainer}>
 								<Ionicons name={link.icon} size={20} style={styles.icon} />
-								<Text style={[STYLES_GLOBAL.textDark]}>
-									{link.label}
-									{link.page}
-								</Text>
+								<Text style={[STYLES_GLOBAL.textDark]}>{link.label}</Text>
 								<Ionicons
 									name="chevron-forward-outline"
 									size={20}
