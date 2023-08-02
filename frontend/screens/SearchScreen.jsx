@@ -87,7 +87,7 @@ const SearchScreen = ({ navigation }) => {
 
 	const usersList = usersAroundDestination.map((user, i) => {
 		return (
-			<View style={styles.userContainer}>
+			<View key={i} style={styles.userContainer}>
 				<Image source={{ uri: user.avatarUrl }} style={styles.avatar} />
 				<View style={styles.userDetailsContainer}>
 					<Text>{`${user.firstname} • ${user.city.name}`}</Text>
@@ -101,39 +101,39 @@ const SearchScreen = ({ navigation }) => {
 
 	return (
 		<SafeAreaView style={{ flex: 1 }}>
-			<StatusBar style={styles.statusBar} />
-			<AutocompleteDropdownContextProvider>
-				<View style={styles.searchContainer}>
 
+			<View style={styles.searchContainer}>
+				<AutocompleteDropdownContextProvider>
 					<RemoteDataSet
 						addCity={addCity}
 						label="Destination"
 						ligthTheme={true}
 						width={230}
 					/>
-					<Dropdown
-						style={styles.dropdown}
-						placeholderStyle={styles.placeholderStyle}
-						selectedTextStyle={styles.selectedTextStyle}
-						inputSearchStyle={styles.inputSearchStyle}
-						iconStyle={styles.iconStyle}
-						data={distances}
-						maxHeight={300}
-						labelField="label"
-						valueField="value"
-						placeholder="Distance"
-						value={distanceSelected}
-						onChange={item => {
-							setDistanceSelected(item);
-						}}
-						mode='default'
-						renderLeftIcon={() => (
-							<MaterialCommunityIcons name="map-marker-distance" size={24} color="black" />
-						)}
-					/>
-				</View>
-				{error && <Text style={STYLES_GLOBAL.error}>{error}</Text>}
-			</AutocompleteDropdownContextProvider>
+				</AutocompleteDropdownContextProvider>
+				<Dropdown
+					style={styles.dropdown}
+					placeholderStyle={styles.placeholderStyle}
+					selectedTextStyle={styles.selectedTextStyle}
+					inputSearchStyle={styles.inputSearchStyle}
+					iconStyle={styles.iconStyle}
+					data={distances}
+					maxHeight={300}
+					labelField="label"
+					valueField="value"
+					placeholder="Distance"
+					value={distanceSelected}
+					onChange={item => {
+						setDistanceSelected(item);
+					}}
+					mode='default'
+					renderLeftIcon={() => (
+						<MaterialCommunityIcons name="map-marker-distance" size={24} color="black" />
+					)}
+				/>
+			</View>
+			{error && <Text style={STYLES_GLOBAL.error}>{error}</Text>}
+
 			<MapView
 				style={styles.map}
 				ref={mapRef}

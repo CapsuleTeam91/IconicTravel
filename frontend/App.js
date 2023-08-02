@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native';
+import { SafeAreaView, StyleSheet, View } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 
 // Navigation
@@ -99,46 +99,49 @@ export default function App() {
 		<Provider store={store}>
 			<PersistGate persistor={persistor}>
 				<NavigationContainer>
-					<StatusBar style={styles.container} />
-					<Stack.Navigator screenOptions={{ headerShown: false }}>
-						<Stack.Screen name="Login" component={LoginScreen} />
-						<Stack.Screen name="Signin" component={SigninScreen} />
-						<Stack.Screen name="Signup" component={SignupScreen} />
-						<Stack.Screen
-							name="ProfileStepOne"
-							component={ProfileStepOneScreen}
-						/>
-						<Stack.Screen
-							name="ProfileStepTwo"
-							component={ProfileStepTwoScreen}
-						/>
-						<Stack.Screen
-							name="ProfileStepThree"
-							component={ProfileStepThreeScreen}
-						/>
-						<Stack.Screen
-							name="ProfileStepFour"
-							component={ProfileStepFourScreen}
-						/>
-						<Stack.Screen name="About" component={AboutScreen} />
-						<Stack.Screen name="Legal" component={LegalScreen} />
-						<Stack.Screen
-							name="Notifications"
-							component={NotificationsScreen}
-						/>
-						<Stack.Screen name="Traduction" component={TraductionScreen} />
-						<Stack.Screen name="Safety" component={SafetyScreen} />
-						<Stack.Screen name="UserProfile" component={UserProfileScreen} />
-						<Stack.Screen name="TabNavigator" component={TabNavigator} />
-					</Stack.Navigator>
+					<StatusBar barStyle={styles.statusBar} />
+					<View style={{ flex: 1, paddingTop: 40 }}>
+
+						<Stack.Navigator screenOptions={{ headerShown: false }}>
+							<Stack.Screen name="Login" component={LoginScreen} />
+							<Stack.Screen name="Signin" component={SigninScreen} />
+							<Stack.Screen name="Signup" component={SignupScreen} />
+							<Stack.Screen
+								name="ProfileStepOne"
+								component={ProfileStepOneScreen}
+							/>
+							<Stack.Screen
+								name="ProfileStepTwo"
+								component={ProfileStepTwoScreen}
+							/>
+							<Stack.Screen
+								name="ProfileStepThree"
+								component={ProfileStepThreeScreen}
+							/>
+							<Stack.Screen
+								name="ProfileStepFour"
+								component={ProfileStepFourScreen}
+							/>
+							<Stack.Screen name="About" component={AboutScreen} />
+							<Stack.Screen name="Legal" component={LegalScreen} />
+							<Stack.Screen
+								name="Notifications"
+								component={NotificationsScreen}
+							/>
+							<Stack.Screen name="Traduction" component={TraductionScreen} />
+							<Stack.Screen name="Safety" component={SafetyScreen} />
+							<Stack.Screen name="UserProfile" component={UserProfileScreen} />
+							<Stack.Screen name="TabNavigator" component={TabNavigator} />
+						</Stack.Navigator>
+					</View>
 				</NavigationContainer>
 			</PersistGate>
-		</Provider>
+		</Provider >
 	);
 }
 
 const styles = StyleSheet.create({
-	container: {
-		backgroundColor: 'black',
+	statusBar: {
+		backgroundColor: 'black'
 	},
 });
