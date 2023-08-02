@@ -104,9 +104,9 @@ const SearchScreen = ({ navigation }) => {
 				}
 			)
 
-			const distSearched = distanceSelected.label.match(/\d+/)[0]
+			const distSearched = Number(distanceSelected.label.match(/\d+/)[0])
 
-			if(distanceToDest <= Number(distSearched)) {
+			if(distanceToDest <= distSearched) {
 				return (
 					<View key={i} style={styles.userContainer}>
 						<Image source={{ uri: user.avatarUrl }} style={styles.avatar} />
@@ -175,8 +175,6 @@ const SearchScreen = ({ navigation }) => {
 					onChange={item => {
 						item.label === 'Illimité' ? setDistanceSelected(null) :
 						setDistanceSelected(item);
-
-						console.log("et là ? : ", distanceSelected)
 					}}
 					mode='default'
 					renderLeftIcon={() => (
