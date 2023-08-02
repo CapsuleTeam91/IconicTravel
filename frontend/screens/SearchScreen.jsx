@@ -120,6 +120,34 @@ const SearchScreen = ({ navigation }) => {
 		}
 	})
 
+	const markersList = [];
+	if(usersAroundDestination.length > 0) {
+		usersAroundDestination.map((user, i) => {
+			let distance = city
+				? convertCoordsToKm(
+					{ latitude: city.latitude, longitude: city.longitude },
+					{
+						latitude: user.city.latitude,
+						longitude: user.city.longitude,
+					}
+				)
+				: 0;
+			
+				markersList.push(<Marker
+					key={i}
+					coordinate={{
+						latitude: user.city.latitude,
+						longitude: user.city.longitude,
+					}}
+					title={user.firstname}
+					pinColor="#fecb2d"
+					// icon={icons[user.type]}
+					description={city && `${distance}km`}
+				/>)
+			;
+		})
+	}
+
 	const addCity = (newCity) => {
 		if (!newCity) return;
 
@@ -160,7 +188,7 @@ const SearchScreen = ({ navigation }) => {
 						clear={clear}
 					/>
 				</AutocompleteDropdownContextProvider>
-				{city ? <Dropdown
+				{city && <Dropdown
 					style={styles.dropdown}
 					placeholderStyle={styles.placeholderStyle}
 					selectedTextStyle={styles.selectedTextStyle}
@@ -180,7 +208,7 @@ const SearchScreen = ({ navigation }) => {
 					renderLeftIcon={() => (
 						<MaterialCommunityIcons name="map-marker-distance" size={24} color="black" />
 					)}
-				/> : <></>}
+				/>}
 			</View>
 			{error && <Text style={STYLES_GLOBAL.error}>{error}</Text>}
 
@@ -193,34 +221,8 @@ const SearchScreen = ({ navigation }) => {
 					latitudeDelta: 0.0922,
 					longitudeDelta: 0.0421,
 				}}>
-				{usersAroundDestination.length > 0 &&
-					usersAroundDestination.map((user, i) => {
-						let distance = city
-							? convertCoordsToKm(
-								{ latitude: city.latitude, longitude: city.longitude },
-								{
-									latitude: user.city.latitude,
-									longitude: user.city.longitude,
-								}
-							)
-							: 0;
-
-						return (
-							<Marker
-								key={i}
-								coordinate={{
-									latitude: user.city.latitude,
-									longitude: user.city.longitude,
-								}}
-								title={user.firstname}
-								pinColor="#fecb2d"
-								// icon={icons[user.type]}
-								description={city && `${distance}km`}
-							/>
-						);
-					})}
+				{markersList}
 			</MapView>
-
 
 			<ScrollView contentContainerStyle={styles.resultsContainer} style={styles.scrollViewItems}>
 				{usersList}
