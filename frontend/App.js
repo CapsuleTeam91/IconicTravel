@@ -36,6 +36,7 @@ import ProfileStepOneScreen from './screens/ProfileStepOneScreen';
 import ProfileStepTwoScreen from './screens/ProfileStepTwoScreen';
 import ProfileStepFourScreen from './screens/ProfileStepFourScreen';
 import ProfileStepThreeScreen from './screens/ProfileStepThreeScreen';
+import ProfileScreen from './screens/ProfileScreen';
 
 // Utils
 import { COLORS } from './utils/styles';
@@ -138,7 +139,7 @@ export default function App() {
 							<Stack.Screen name="Traduction" component={TraductionScreen} />
 							<Stack.Screen name="Safety" component={SafetyScreen} />
 							<Stack.Screen name="UserProfile" component={UserProfileScreen} />
-
+							<Stack.Screen name="Profile" component={ProfileScreen} />
 							<Stack.Screen name="TabNavigator" component={TabNavigator} />
 						</Stack.Navigator>
 					</View>
