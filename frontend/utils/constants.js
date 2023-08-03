@@ -1,12 +1,3 @@
-/* ENV */
-// export const URL_EXPO = 'http://10.9.1.4';
-
-// Dadoo URL
-export const URL_EXPO = 'http://172.16.0.120';
-
-// Johanna URL
-//export const URL_EXPO = 'http://192.168.1.17';
-
 /* DATA */
 export const DEFAULT_AVATAR =
 	'https://res.cloudinary.com/dvmipcwy7/image/upload/v1690571975/cld-sample.jpg';
