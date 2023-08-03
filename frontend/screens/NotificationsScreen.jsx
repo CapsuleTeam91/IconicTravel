@@ -1,8 +1,12 @@
-import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
+import { SafeAreaView, StyleSheet, Text, View, Switch} from 'react-native';
 import ButtonIcon from '../components/ButtonIcon';
-import { STYLES_GLOBAL } from '../utils/styles';
+import { COLORS, STYLES_GLOBAL } from '../utils/styles';
+import { useState } from 'react';
 
 const NotificationsScreen = ({ navigation }) => {
+
+	const [isEnabled, setIsEnabled] = useState(false);
+
 	return (
 		<SafeAreaView style={styles.container}>
 			<Text style={[STYLES_GLOBAL.subTitl, styles.title]}>Notifications</Text>
@@ -14,9 +18,31 @@ const NotificationsScreen = ({ navigation }) => {
 				<Text style={styles.téléphone}>
 					Téléphone
 				</Text>
+				<Switch
+						trackColor={{ false: COLORS.darkBlue, true: COLORS.pink }}
+						thumbColor={isEnabled ? COLORS.bg : COLORS.lightBlue}
+						style={{
+							marginTop: 10,
+							transform: [{ scaleX: Platform.OS === 'ios' ? 1 : 1.7 }, { scaleY: Platform.OS === 'ios' ? 1 : 1.7}],
+						}}
+						ios_backgroundColor={COLORS.lightBlue}
+						onValueChange={()=> setIsEnabled(!isEnabled)}
+						value={isEnabled}
+					/>
 				<Text style={styles.sms}>
 					SMS
 				</Text>
+				<Switch
+						trackColor={{ false: COLORS.darkBlue, true: COLORS.pink }}
+						thumbColor={isEnabled ? COLORS.bg : COLORS.lightBlue}
+						style={{
+							marginTop: 10,
+							transform: [{ scaleX: Platform.OS === 'ios' ? 1 : 1.7 }, { scaleY: Platform.OS === 'ios' ? 1 : 1.7}],
+						}}
+						ios_backgroundColor={COLORS.lightBlue}
+						onValueChange={()=> setIsEnabled(!isEnabled)}
+						value={isEnabled}
+					/>
 			</View>
 
 
@@ -43,6 +69,10 @@ const styles = StyleSheet.create({
 		marginTop: 70,
 	},
 
+	switchContainer: {
+		alignItems: 'center',
+	},
+	
 	notificationsContainer: {
 		
 	}
