@@ -1,7 +1,6 @@
 import {
 	Image,
 	SafeAreaView,
-	StatusBar,
 	StyleSheet,
 	Text,
 	TouchableOpacity,
@@ -40,7 +39,6 @@ const SettingsScreen = ({ navigation }) => {
 
 	return (
 		<SafeAreaView style={{ flex: 1 }}>
-			<StatusBar backgroundColor={'white'} />
 			<View style={STYLES_GLOBAL.container}>
 				<View style={styles.container}>
 					<Text style={STYLES_GLOBAL.subTitle}>PROFIL</Text>
@@ -80,8 +78,10 @@ const SettingsScreen = ({ navigation }) => {
 								onPress={() => navigation.navigate(link.page)}
 								activeOpacity={0.8}
 								style={styles.linkContainer}>
-								<Ionicons name={link.icon} size={20} style={styles.icon} />
-								<Text style={[STYLES_GLOBAL.textDark]}>{link.label}</Text>
+								<View style={styles.linkWrapper}>
+									<Ionicons name={link.icon} size={20} style={styles.icon} />
+									<Text style={[STYLES_GLOBAL.textDark]}>{link.label}</Text>
+								</View>
 								<Ionicons
 									name="chevron-forward-outline"
 									size={20}
@@ -92,11 +92,13 @@ const SettingsScreen = ({ navigation }) => {
 					</View>
 				</View>
 
-				<Button
-					type="secondary"
-					label="Se déconnecter"
-					onpress={() => navigation.navigate('Login')}
-				/>
+				<View style={styles.btnContainer}>
+					<Button
+						type="secondary"
+						label="Se déconnecter"
+						onpress={() => navigation.navigate('Login')}
+					/>
+				</View>
 			</View>
 		</SafeAreaView>
 	);
@@ -108,22 +110,26 @@ const styles = StyleSheet.create({
 		width: '100%',
 		alignItems: 'flex-start',
 	},
-
 	settingContainer: {
 		marginBottom: 20,
 	},
-
 	profilLinkContainer: {
 		flexDirection: 'row',
 		alignItems: 'center',
 		justifyContent: 'space-between',
 	},
-
+	btnContainer: {
+		marginVertical: 20,
+	},
 	linkContainer: {
 		width: '90%',
 		flexDirection: 'row',
 		alignItems: 'center',
 		justifyContent: 'space-between',
+	},
+	linkWrapper: {
+		flexDirection: 'row',
+		alignItems: 'center',
 	},
 	image: {
 		width: 120,
@@ -138,7 +144,6 @@ const styles = StyleSheet.create({
 	link: {
 		textDecorationLine: 'underline',
 	},
-
 	iconLink: {
 		flexDirection: 'row',
 		alignItems: 'center',
