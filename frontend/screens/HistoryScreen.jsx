@@ -35,6 +35,7 @@ const HistoryScreen = ({ navigation }) => {
     },
   ];
 
+  // Affichage de l'historique avec fakeData
   const renderItem = ({ item }) => (
     <View style={styles.voyage}>
       <Image source={{ uri: item.avatar }} style={styles.avatar} />
@@ -123,6 +124,7 @@ const styles = StyleSheet.create({
   destination: {
     fontSize: 18,
     fontWeight: "bold",
+    color: COLORS.darkBlue,
   },
   date: {
     fontSize: 16,
