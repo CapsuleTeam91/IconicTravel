@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { SafeAreaView, ScrollView, StyleSheet, Text, View, Image } from 'react-native';
+import { SafeAreaView, ScrollView, StyleSheet, Text, View, Image, TouchableOpacity, TouchableWithoutFeedback } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { addData } from '../reducers/user';
 import { RemoteDataSet } from '../components/RemoteDataSet';
@@ -7,10 +7,11 @@ import { COLORS, COLORS_THEME, STYLES_GLOBAL } from '../utils/styles';
 import { AutocompleteDropdownContextProvider } from 'react-native-autocomplete-dropdown';
 import { Dropdown } from 'react-native-element-dropdown';
 import MapView, { Marker } from 'react-native-maps';
-import { ERRORS, URL_EXPO } from '../utils/constants';
+import { ERRORS } from '../utils/constants';
+import { URL_EXPO } from '../environnement';
 import { DISTANCES } from '../utils/data';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import {convertCoordsToKm} from '../utils/helper'
+import { convertCoordsToKm } from '../utils/helper'
 
 const SearchScreen = ({ navigation }) => {
 	const user = useSelector((state) => state.user.value);
@@ -18,8 +19,12 @@ const SearchScreen = ({ navigation }) => {
 	const [usersAroundDestination, setUsersAroundDestination] = useState([]);
 	const [error, setError] = useState('');
 	const [distanceSelected, setDistanceSelected] = useState(null);
+	const [userSelected, setUserSelected] = useState(null);
 
 	const mapRef = useRef(null)
+	const svRef = useRef(null)
+	const markersRef = useRef([]);
+
 
 	useEffect(() => {
 		fetch(`${URL_EXPO}:3000/users`)
@@ -41,87 +46,106 @@ const SearchScreen = ({ navigation }) => {
 
 	const sortedUsers = usersAroundDestination;
 
-	if(usersAroundDestination.length > 0) {
+
+
+	if (usersAroundDestination.length > 0) {
 		for (let i = 0; i < sortedUsers.length; i++) {
 			const localCoords = { latitude: city ? city.latitude : user.city.latitude, longitude: city ? city.longitude : user.city.longitude }
-			const destCoords = {latitude: sortedUsers[i].city.latitude, longitude: sortedUsers[i].city.longitude}
-			
+			const destCoords = { latitude: sortedUsers[i].city.latitude, longitude: sortedUsers[i].city.longitude }
+
 			let distance = convertCoordsToKm(localCoords, destCoords)
-			
-			Object.assign(sortedUsers[i], {distance})
-			
+
+			Object.assign(sortedUsers[i], { distance })
+
+
 		}
 		sortedUsers.sort(
 			(p1, p2) => (Number(p1.distance) < Number(p2.distance)) ? -1 : (Number(p1.distance) > Number(p2.distance)) ? 1 : 0);
 	}
+
+
+
+	for (let i = 0; i < sortedUsers.length; i++) {
+		Object.assign(sortedUsers[i], { index: i })
+	}
+
 
 	const usersList = sortedUsers.map((user, i) => {
 
 		var ageDate = new Date(Date.now() - new Date(user.dateOfBirth));
 		const age = Math.abs(ageDate.getUTCFullYear() - 1970);
 		let newDesc = user.description;
-		if(newDesc.length >= 80) {
-			newDesc = newDesc.slice(0 , newDesc.indexOf(' ', 79)) + '...'
+		if (newDesc.length >= 80) {
+			newDesc = newDesc.slice(0, newDesc.indexOf(' ', 79)) + '...'
 		}
 
-		
-		if(city) {
 
-			if(distanceSelected) {
+		if (city) {
+
+			if (distanceSelected) {
 				const distSearched = Number(distanceSelected.label.match(/\d+/)[0])
 
-				if(user.distance <= distSearched) {
+
+				if (user.distance <= distSearched) {
 					return (
-						<View key={i} style={styles.userContainer}>
+						<TouchableWithoutFeedback key={i} onPress={() => displayUserOnMap(user)}>
+							<View key={i} style={userSelected?.index === user.index ? styles.userContainerSelected : styles.userContainer}>
+								<Image source={{ uri: user.avatarUrl }} style={styles.avatar} />
+								<View style={styles.userDetailsContainer}>
+									<Text style={{ fontWeight: 600 }}>{`${user.firstname} • ${user.city.name}`}</Text>
+									<Text style={{ fontSize: 12 }}>{newDesc}</Text>
+								</View>
+								<View style={styles.userDetailsContainer2}>
+									<Text>{`${age} ans`}</Text>
+									<Text>{`${Math.round(user.distance)}km`}</Text>
+								</View>
+							</View>
+						</TouchableWithoutFeedback>
+					)
+				}
+			} else {
+				return (
+					<TouchableWithoutFeedback key={i} onPress={() => displayUserOnMap(user)}>
+						<View key={i} style={userSelected?.index === user.index ? styles.userContainerSelected : styles.userContainer}>
 							<Image source={{ uri: user.avatarUrl }} style={styles.avatar} />
 							<View style={styles.userDetailsContainer}>
-								<Text style={{fontWeight: 600}}>{`${user.firstname} • ${user.city.name}`}</Text>
-								<Text style={{fontSize: 12}}>{newDesc}</Text>
+								<Text style={{ fontWeight: 600 }}>{`${user.firstname} • ${user.city.name}`}</Text>
+								<Text style={{ fontSize: 12 }}>{newDesc}</Text>
 							</View>
 							<View style={styles.userDetailsContainer2}>
 								<Text>{`${age} ans`}</Text>
 								<Text>{`${Math.round(user.distance)}km`}</Text>
 							</View>
 						</View>
-					)
-				}
-			}else {
-				return (
-					<View key={i} style={styles.userContainer}>
-						<Image source={{ uri: user.avatarUrl }} style={styles.avatar} />
-						<View style={styles.userDetailsContainer}>
-							<Text style={{fontWeight: 600}}>{`${user.firstname} • ${user.city.name}`}</Text>
-							<Text style={{fontSize: 12}}>{newDesc}</Text>
-						</View>
-						<View style={styles.userDetailsContainer2}>
-							<Text>{`${age} ans`}</Text>
-							<Text>{`${Math.round(user.distance)}km`}</Text>
-						</View>
-					</View>
+					</TouchableWithoutFeedback>
 				)
 			}
 
 		} else {
 			return (
-				<View key={i} style={styles.userContainer}>
-					<Image source={{ uri: user.avatarUrl }} style={styles.avatar} />
-					<View style={styles.userDetailsContainer}>
-						<Text style={{fontWeight: 600}}>{`${user.firstname} • ${user.city.name}`}</Text>
-						<Text style={{fontSize: 12}}>{newDesc}</Text>
+				<TouchableWithoutFeedback key={i} onPress={() => displayUserOnMap(user)}>
+					<View style={userSelected?.index === user.index ? styles.userContainerSelected : styles.userContainer}>
+						<Image source={{ uri: user.avatarUrl }} style={styles.avatar} />
+						<View style={styles.userDetailsContainer}>
+							<Text style={{ fontWeight: 600 }}>{`${user.firstname} • ${user.city.name}`}</Text>
+							<Text style={{ fontSize: 12 }}>{newDesc}</Text>
+						</View>
+						<View style={styles.userDetailsContainer2}>
+							<Text>{`${age} ans`}</Text>
+						</View>
 					</View>
-					<View style={styles.userDetailsContainer2}>
-						<Text>{`${age} ans`}</Text>
-					</View>
-				</View>
+				</TouchableWithoutFeedback>
 			)
 		}
 	})
 
 	const markersList = [];
-	if(usersAroundDestination.length > 0) {
+	if (usersAroundDestination.length > 0) {
 		usersAroundDestination.map((user, i) => {
-				markersList.push(<Marker
+			markersList.push(
+				<Marker
 					key={i}
+					ref={(ref) => (markersRef.current[i] = ref)}
 					coordinate={{
 						latitude: user.city.latitude,
 						longitude: user.city.longitude,
@@ -130,8 +154,10 @@ const SearchScreen = ({ navigation }) => {
 					pinColor="#fecb2d"
 					// icon={icons[user.type]}
 					description={`${user.distance}km`}
+					onPress={() => displayUser(user)}
+					onCalloutPress={() => navigation.navigate('Profile', { user })}
 				/>)
-			;
+				;
 		})
 	}
 
@@ -154,6 +180,24 @@ const SearchScreen = ({ navigation }) => {
 	const clear = () => {
 		setCity(null)
 		setDistanceSelected(null)
+		mapRef.current.animateToRegion({
+			latitude: user.city.latitude,
+			longitude: user.city.longitude,
+			latitudeDelta: 0.2,
+			longitudeDelta: 0.2,
+		})
+		setUserSelected(null)
+	}
+
+	const displayUser = (user) => {
+		setUserSelected({ index: user.index })
+		svRef.current.scrollTo({ x: 0, y: 96 * user.index, animated: true })
+	}
+
+	const displayUserOnMap = (user) => {
+		setUserSelected({ index: user.index })
+		svRef.current.scrollTo({ x: 0, y: 96 * user.index, animated: true })
+		markersRef.current[user.index].showCallout()
 		mapRef.current.animateToRegion({
 			latitude: user.city.latitude,
 			longitude: user.city.longitude,
@@ -189,7 +233,7 @@ const SearchScreen = ({ navigation }) => {
 					value={distanceSelected}
 					onChange={item => {
 						item.label === 'Illimité' ? setDistanceSelected(null) :
-						setDistanceSelected(item);
+							setDistanceSelected(item);
 					}}
 					mode='default'
 					renderLeftIcon={() => (
@@ -202,6 +246,7 @@ const SearchScreen = ({ navigation }) => {
 			<MapView
 				style={styles.map}
 				ref={mapRef}
+				onPress={() => setUserSelected(null)}
 				initialRegion={{
 					latitude: user.city.latitude,
 					longitude: user.city.longitude,
@@ -211,7 +256,7 @@ const SearchScreen = ({ navigation }) => {
 				{markersList}
 			</MapView>
 
-			<ScrollView contentContainerStyle={styles.resultsContainer} style={styles.scrollViewItems}>
+			<ScrollView ref={svRef} contentContainerStyle={styles.resultsContainer} style={styles.scrollViewItems}>
 				{usersList}
 			</ScrollView>
 		</SafeAreaView>
@@ -239,7 +284,7 @@ const styles = StyleSheet.create({
 		width: '100%',
 		height: '50%',
 		shadowColor: 'black',
-		shadowOffset: {width: 20, height: 40},
+		shadowOffset: { width: 20, height: 40 },
 		shadowOpacity: 0.2,
 		shadowRadius: 3,
 		elevation: 20,
@@ -284,6 +329,19 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 		alignItems: 'center',
 		backgroundColor: '#E3E8ED',
+		width: '100%',
+		height: 80,
+		borderColor: 'black',
+		borderWidth: 0.5,
+		borderRadius: 10,
+		padding: 10,
+		marginBottom: 15
+	},
+	userContainerSelected: {
+		flexDirection: 'row',
+		justifyContent: 'center',
+		alignItems: 'center',
+		backgroundColor: '#95B8D1',
 		width: '100%',
 		height: 80,
 		borderColor: 'black',

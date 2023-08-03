@@ -1,12 +1,12 @@
 import {
 	Image,
 	SafeAreaView,
-	StatusBar,
 	StyleSheet,
 	Text,
 	TouchableOpacity,
 	View,
 } from 'react-native';
+import { LINKS } from '../utils/data';
 import { useSelector } from 'react-redux';
 import { COLORS, STYLES_GLOBAL } from '../utils/styles';
 import Button from '../components/Button';
@@ -15,32 +15,8 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 const SettingsScreen = ({ navigation }) => {
 	const user = useSelector((state) => state.user.value);
 
-	const links = [
-		{
-			icon: 'shield-outline',
-			label: 'Connexion et sécurité',
-			page: 'Safety',
-		},
-		{
-			icon: 'notifications-outline',
-			label: 'Notifications',
-			page: 'Notifications',
-		},
-		{
-			icon: 'language-outline',
-			label: 'Traduction',
-			page: 'Traduction',
-		},
-		{
-			icon: 'warning-outline',
-			label: 'Juridique',
-			page: 'Legal',
-		},
-	];
-
 	return (
 		<SafeAreaView style={{ flex: 1 }}>
-			<StatusBar backgroundColor={'white'} />
 			<View style={STYLES_GLOBAL.container}>
 				<View style={styles.container}>
 					<Text style={STYLES_GLOBAL.subTitle}>PROFIL</Text>
@@ -74,14 +50,16 @@ const SettingsScreen = ({ navigation }) => {
 						PARAMETRES
 					</Text>
 					<View>
-						{links.map((link, i) => (
+						{LINKS.map((link, i) => (
 							<TouchableOpacity
 								key={i}
 								onPress={() => navigation.navigate(link.page)}
 								activeOpacity={0.8}
 								style={styles.linkContainer}>
-								<Ionicons name={link.icon} size={20} style={styles.icon} />
-								<Text style={[STYLES_GLOBAL.textDark]}>{link.label}</Text>
+								<View style={styles.linkWrapper}>
+									<Ionicons name={link.icon} size={20} style={styles.icon} />
+									<Text style={[STYLES_GLOBAL.textDark]}>{link.label}</Text>
+								</View>
 								<Ionicons
 									name="chevron-forward-outline"
 									size={20}
@@ -92,11 +70,13 @@ const SettingsScreen = ({ navigation }) => {
 					</View>
 				</View>
 
-				<Button
-					type="secondary"
-					label="Se déconnecter"
-					onpress={() => navigation.navigate('Login')}
-				/>
+				<View style={styles.btnContainer}>
+					<Button
+						type="secondary"
+						label="Se déconnecter"
+						onpress={() => navigation.navigate('Login')}
+					/>
+				</View>
 			</View>
 		</SafeAreaView>
 	);
@@ -108,22 +88,26 @@ const styles = StyleSheet.create({
 		width: '100%',
 		alignItems: 'flex-start',
 	},
-
 	settingContainer: {
 		marginBottom: 20,
 	},
-
 	profilLinkContainer: {
 		flexDirection: 'row',
 		alignItems: 'center',
 		justifyContent: 'space-between',
 	},
-
+	btnContainer: {
+		marginVertical: 20,
+	},
 	linkContainer: {
 		width: '90%',
 		flexDirection: 'row',
 		alignItems: 'center',
 		justifyContent: 'space-between',
+	},
+	linkWrapper: {
+		flexDirection: 'row',
+		alignItems: 'center',
 	},
 	image: {
 		width: 120,
@@ -138,7 +122,6 @@ const styles = StyleSheet.create({
 	link: {
 		textDecorationLine: 'underline',
 	},
-
 	iconLink: {
 		flexDirection: 'row',
 		alignItems: 'center',
