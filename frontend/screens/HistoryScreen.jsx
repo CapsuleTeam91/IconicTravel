@@ -4,10 +4,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { ERRORS, URL_EXPO } from "../utils/constants";
 
 const HistoryScreen = ({ navigation }) => {
-  // Variable d'états
-  const [voyages, setVoyages] = useState([]);
-
-  // Fake Date
+  // Fausse donnée pour tester la fonctionnalité du code
   const fakeData = [
     {
       destination: "Paris",
@@ -27,10 +24,8 @@ const HistoryScreen = ({ navigation }) => {
     },
   ];
 
-  const addVoyage = (destination, date) => {
-    const newVoyage = { destination, date };
-    setVoyages([...voyages, nouveauVoyage]);
-  };
+  // Variable d'états
+  const [voyages, setVoyages] = useState(fakeData);
 
   // Message d'erreur / conditions
   const afficherHistorique = () => {
