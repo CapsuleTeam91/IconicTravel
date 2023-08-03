@@ -2,10 +2,11 @@ import {
 	Image,
 	SafeAreaView,
 	StyleSheet,
-	Switch,
+	Modal,
 	Text,
 	TouchableOpacity,
 	View,
+	Pressable
 } from 'react-native';
 import { useState } from 'react';
 import { getAge } from '../utils/helper';
@@ -17,8 +18,8 @@ import { COLORS, STYLES_GLOBAL } from '../utils/styles';
 import ButtonIcon from '../components/ButtonIcon';
 
 const UserProfileScreen = ({ route, navigation }) => {
-
 	const user = route.params.user;
+	const [modalVisible, setModalVisible] = useState(false);
 
 	return (
 		<SafeAreaView style={styles.container}>
@@ -31,7 +32,24 @@ const UserProfileScreen = ({ route, navigation }) => {
 					}}
 					style={styles.image}
 				/>
-				<TouchableOpacity style={styles.hostingBtn}>
+				<Modal
+					
+					animationType="fade"
+					transparent={true}
+					visible={modalVisible}
+					onRequestClose={() => {setModalVisible(!modalVisible)}}>
+					<View style={styles.centeredView}>
+						<View style={styles.modalView}>
+							<Text style={styles.modalText}>Hello World!</Text>
+							<Pressable
+							style={[styles.button, styles.buttonClose]}
+							onPress={() => setModalVisible(!modalVisible)}>
+							<Text style={styles.textStyle}>Hide Modal</Text>
+							</Pressable>
+						</View>
+					</View>
+				</Modal>
+				<TouchableOpacity style={styles.hostingBtn} onPress={() => setModalVisible(true)}>
 					<Text style={styles.hostingTxt}>Contact</Text>
 				</TouchableOpacity>
 			</View>
@@ -181,6 +199,52 @@ const styles = StyleSheet.create({
 	details: {
 		paddingVertical: 2,
 	},
+	modale: {
+		width:'50%',
+		height: '50%',
+		backgroundColor: 'blue'
+	},
+	centeredView: {
+		flex: 1,
+		justifyContent: 'center',
+		alignItems: 'center',
+		marginTop: 22,
+	  },
+	  modalView: {
+		margin: 20,
+		backgroundColor: 'white',
+		borderRadius: 20,
+		padding: 35,
+		alignItems: 'center',
+		shadowColor: '#000',
+		shadowOffset: {
+		  width: 0,
+		  height: 2,
+		},
+		shadowOpacity: 0.25,
+		shadowRadius: 4,
+		elevation: 5,
+	  },
+	  button: {
+		borderRadius: 20,
+		padding: 10,
+		elevation: 2,
+	  },
+	  buttonOpen: {
+		backgroundColor: '#F194FF',
+	  },
+	  buttonClose: {
+		backgroundColor: '#2196F3',
+	  },
+	  textStyle: {
+		color: 'white',
+		fontWeight: 'bold',
+		textAlign: 'center',
+	  },
+	  modalText: {
+		marginBottom: 15,
+		textAlign: 'center',
+	  },
 });
 
 export default UserProfileScreen;
