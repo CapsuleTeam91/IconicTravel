@@ -9,7 +9,7 @@ import {
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { ERRORS } from '../utils/constants';
-import { URL_EXPO } from '../../environnement';
+import { URL_EXPO } from '../environnement';
 import { COLORS, STYLES_GLOBAL } from '../utils/styles';
 import ButtonIcon from '../components/ButtonIcon';
 import { addData } from '../reducers/user';

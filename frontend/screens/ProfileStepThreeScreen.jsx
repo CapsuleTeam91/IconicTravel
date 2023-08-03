@@ -7,7 +7,7 @@ import React, { useEffect, useState } from 'react';
 import { addData } from '../reducers/user';
 import { useDispatch, useSelector } from 'react-redux';
 import { ERRORS } from '../utils/constants';
-import { URL_EXPO } from '../../environnement';
+import { URL_EXPO } from '../environnement';
 import Input from '../components/Input';
 
 const ProfileStepThreeScreen = ({ navigation }) => {

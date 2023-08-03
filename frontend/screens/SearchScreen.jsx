@@ -8,7 +8,7 @@ import { AutocompleteDropdownContextProvider } from 'react-native-autocomplete-d
 import { Dropdown } from 'react-native-element-dropdown';
 import MapView, { Marker } from 'react-native-maps';
 import { ERRORS } from '../utils/constants';
-import { URL_EXPO } from '../../environnement';
+import { URL_EXPO } from '../environnement';
 import { DISTANCES } from '../utils/data';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { convertCoordsToKm } from '../utils/helper'

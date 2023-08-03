@@ -9,7 +9,7 @@ import * as ImagePicker from 'expo-image-picker';
 import Button from '../components/Button';
 import ButtonIcon from '../components/ButtonIcon';
 import { DEFAULT_AVATAR } from '../utils/constants';
-import { URL_EXPO } from '../../environnement';
+import { URL_EXPO } from '../environnement';
 
 const ProfileStepOneScreen = ({ navigation }) => {
 	const dispatch = useDispatch();
