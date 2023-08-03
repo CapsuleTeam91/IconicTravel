@@ -106,13 +106,12 @@ export default function App() {
 
 	// Theme du téléphone
 	const colorScheme = useColorScheme();
-	console.log(colorScheme)
 
 	return (
 		<Provider store={store}>
 			<PersistGate persistor={persistor}>
 				<NavigationContainer>
-					<StatusBar backgroundColor={colorScheme === 'dark' ? 'white' : 'black'} />
+					<StatusBar backgroundColor={colorScheme === 'dark' ? 'black' : 'white'} />
 					<View style={{ flex: 1, paddingTop: STATUSBAR_HEIGHT }}>
 
 						<Stack.Navigator screenOptions={{ headerShown: false }}>
