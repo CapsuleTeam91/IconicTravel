@@ -145,19 +145,12 @@ router.get('/:token', (req, res) => {
 	});
 });
 
-/* PUT /update/:token - update only some datas ? how to filter well ? */
+/* PUT /hosting/:token - update only canHost property*/
 router.put('/hosting/:token', async (req, res) => {
-	// User.updateOne({ token: req.params.token }, {canHost:}).then((data) => {
-	// 	if (data) {
-	// 		res.json({ result: true, data }); //TODO : CHOSE DATA TO RETURN
-	// 	} else {
-	// 		res.json({ result: false, error: 'User not found' });
-	// 	}
-	// });
 	const user = await User.findOne({ token: req.params.token });
 
 	user.canHost = !user.canHost;
-	console.log(user);
+
 	const newUser = await user.save();
 
 	if (!newUser)
@@ -165,27 +158,29 @@ router.put('/hosting/:token', async (req, res) => {
 			.status(409)
 			.json({ result: false, error: 'Can not update hosting property' });
 
+	res.json({ result: true, canHost: newUser.canHost });
+});
+
+/* PUT /password/:token - update only canHost property*/
+router.put('/password/:token', async (req, res) => {
+	const { password } = req.body;
+	const user = await User.findOne({ token: req.params.token });
+
+	user.password = bcrypt.hashSync(password, 10);
+
+	const newUser = await user.save();
+
+	if (!newUser)
+		return res
+			.status(409)
+			.json({ result: false, error: 'Can not update password' });
+
 	res.json({ result: true });
 });
 
-/* DELETE /delete/:token - remove all data from user in db/cloudinary/pusher ? */
+/* DELETE /delete/:token - remove all data from user in db (pusher ?) */
 router.delete('/delete/:token', (req, res) => {
-	const regex = /\/v\d+\/([^/]+)\.\w{3,4}$/;
-
 	//TODO : DELETE FOREIGN KEY OR NOT ?
-
-	//TODO : DELETE PICTURE FROM CLOUDINARY
-	User.findOne({ token: req.params.token }).then((data) => {
-		if (data) {
-			const publicId = data.avatar.match(regex);
-
-			// check that publicId is not the default one before removing from cloudinary
-			publicId !== 'cld-sample' &&
-				cloudinary.uploader.destroy(publicId, (result) => console.log(result));
-		} else {
-			res.json({ result: false, error: 'User not found' });
-		}
-	});
 
 	// DELETE USER FROM DB
 	User.deleteOne({ token: req.params.token }).then((deletedDoc) => {
@@ -193,6 +188,30 @@ router.delete('/delete/:token', (req, res) => {
 			res.json({ result: true });
 		} else {
 			res.json({ result: false });
+		}
+	});
+});
+
+/* DELETE /deletepicture/:token - remove avatar from cloudinary */
+router.delete('/deletepicture/:token', (req, res) => {
+	const regex = /\/v\d+\/([^/]+)\.\w{3,4}$/;
+
+	User.findOne({ token: req.params.token }).then((user) => {
+		if (user) {
+			const publicId = user.avatarUrl.match(regex);
+
+			// check that publicId is not the default one before removing from cloudinary
+			publicId !== 'cld-sample' &&
+				cloudinary.api
+					.delete_resources([publicId[1]], {
+						type: 'upload',
+						resource_type: 'image',
+					})
+					.then(console.log);
+
+			res.json({ result: true });
+		} else {
+			res.json({ result: false, error: 'User not found' });
 		}
 	});
 });

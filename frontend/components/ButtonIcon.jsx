@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		borderRadius: 30,
 		paddingVertical: 15,
-		marginVertical: 20,
+
 		shadowColor: COLORS.bg,
 		shadowOffset: {
 			width: 0,
@@ -32,20 +32,27 @@ const styles = StyleSheet.create({
 		},
 		shadowOpacity: 0.2,
 		shadowRadius: 1.41,
-
 		elevation: 2,
 	},
 	primaryBtn: {
+		marginVertical: 20,
 		backgroundColor: COLORS.darkBlue,
 	},
 	secondaryBtn: {
 		borderWidth: 1,
+		marginVertical: 20,
 		borderColor: COLORS.darkBlue,
 		backgroundColor: COLORS.bg,
 	},
 	tertiaryBtn: {
 		margin: 5,
+		marginVertical: 20,
 		backgroundColor: COLORS.bgDark,
+	},
+	transparentBtn: {
+		borderWidth: 0,
+		borderColor: 'transparent',
+		backgroundColor: COLORS.bg,
 	},
 	primaryTextBtn: {
 		color: COLORS.bg,
@@ -55,6 +62,9 @@ const styles = StyleSheet.create({
 	},
 	tertiaryTextBtn: {
 		color: COLORS.bg,
+	},
+	transparentTextBtn: {
+		color: COLORS.darkBlue,
 	},
 });
 

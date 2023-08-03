@@ -86,7 +86,7 @@ const SignIn = (props) => {
 
 	useEffect(() => {
 		Animated.timing(translateAnim, {
-			toValue: props.signView === SIGN_VIEW.up ? -700 : -10,
+			toValue: props.signView === SIGN_VIEW.up ? -700 : 0,
 			duration: 1000,
 			easing: Easing.bounce,
 			useNativeDriver: true, //makes animations run on the UI thread
@@ -117,13 +117,19 @@ const SignIn = (props) => {
 				/>
 				<PasswordInput
 					label="Mot de passe"
+					width="100%"
 					theme={COLORS_THEME.light}
 					onchangetext={(value) => setPassword(value)}
 					value={password}
 				/>
 			</View>
 			{error && <Text style={STYLES_GLOBAL.error}>{error}</Text>}
-			<Button type="primary" label="Se connecter" onpress={handleConnection} />
+			<Button
+				type="primary"
+				size="big"
+				label="Se connecter"
+				onpress={handleConnection}
+			/>
 		</Animated.View>
 	);
 };

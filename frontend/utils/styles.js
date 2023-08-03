@@ -3,6 +3,7 @@ import { StyleSheet } from 'react-native';
 export const COLORS = {
 	bg: '#F8F9FA',
 	bgDark: '#1E4F61',
+	bgModal: 'rgba(7,59,76,0.8)',
 	pink: '#F87575',
 	darkBlue: '#073B4C',
 	lightBlue: '#95B8D1',
@@ -23,6 +24,7 @@ export const STYLES_GLOBAL = StyleSheet.create({
 	title: {
 		color: COLORS.darkBlue,
 		fontSize: 32,
+		letterSpacing: 1.2,
 		fontWeight: '700',
 		textAlign: 'center',
 		textTransform: 'uppercase',

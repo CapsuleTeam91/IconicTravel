@@ -19,11 +19,13 @@ const LoginScreen = ({ navigation }) => {
 			<StrokeAnimation />
 			<Button
 				type="primary"
+				size="big"
 				label="Se connecter"
 				onpress={() => navigation.navigate('Signin')}
 			/>
 			<Button
 				type="secondary"
+				size="big"
 				label="Créer un compte"
 				onpress={() => navigation.navigate('Signup')}
 			/>

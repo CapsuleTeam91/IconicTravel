@@ -25,7 +25,6 @@ export const userSlice = createSlice({
 			state.value = { ...state.value, ...action.payload };
 		},
 		addAvatar: (state, action) => {
-			console.log("Image envoyé au reducer : ", action.payload)
 			state.value.avatarUrl = action.payload;
 		},
 		clearData: (state, action) => {
@@ -41,7 +40,7 @@ export const userSlice = createSlice({
 				spokenLanguages: [],
 				hobbies: [],
 				travels: [],
-			}
+			};
 		},
 	},
 });

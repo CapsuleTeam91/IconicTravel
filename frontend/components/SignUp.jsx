@@ -75,7 +75,9 @@ const SignUp = (props) => {
 
 	return (
 		<View style={styles.signContainer}>
-			<Text style={[STYLES_GLOBAL.title, styles.titleLight]}>INSCRIPTION</Text>
+			<Text style={[STYLES_GLOBAL.title, STYLES_GLOBAL.titleLight]}>
+				INSCRIPTION
+			</Text>
 
 			<View style={styles.inputContainer}>
 				<Input
@@ -117,12 +119,14 @@ const SignUp = (props) => {
 				/>
 				<PasswordInput
 					label="Mot de passe"
+					width="100%"
 					theme={COLORS_THEME.dark}
 					onchangetext={(value) => setPassword(value)}
 					value={password}
 				/>
 				<PasswordInput
 					label="Confirmer le mot de passe"
+					width="100%"
 					theme={COLORS_THEME.dark}
 					onchangetext={(value) => setConfirmedPassword(value)}
 					value={confirmedPassword}
@@ -132,6 +136,7 @@ const SignUp = (props) => {
 
 			<Button
 				type="secondary"
+				size="big"
 				label="Créer un compte"
 				onpress={handleRegister}
 			/>
@@ -148,13 +153,9 @@ const styles = StyleSheet.create({
 	},
 	inputContainer: {
 		width: '100%',
-		marginVertical: 20,
+		marginTop: 20,
 		alignItems: 'center',
-	},
-	titleLight: {
-		color: COLORS.bg,
-		marginTop: 80,
-		marginBottom: 20,
+		justifyContent: 'center',
 	},
 });
 
