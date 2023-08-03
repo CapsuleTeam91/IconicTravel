@@ -37,9 +37,12 @@ const HistoryScreen = ({ navigation }) => {
       );
     } else {
       return (
+        // FlatList qui affiche une liste des voyages effectués
         <FlatList
           data={voyages}
+          // keyExtractor  utilisée pour attribuer une clé unique pour chaque élément de la liste.
           keyExtractor={(item, index) => index.toString()}
+          // renderItem définit la maniere dont chaque élément de la liste sera rendu à l'écran
           renderItem={({ item }) => (
             <View style={styles.voyage}>
               <Text style={styles.destination}>
