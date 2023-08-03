@@ -139,7 +139,8 @@ const SearchScreen = ({ navigation }) => {
 					pinColor="#fecb2d"
 					// icon={icons[user.type]}
 					description={`${user.distance}km`}
-					onCalloutPress={() => displayUser(user)}
+					onPress={() => displayUser(user)}
+					onCalloutPress={() => console.log(`Envoyer vers le profil de ${user.firstname}`)}
 				/>)
 				;
 		})
