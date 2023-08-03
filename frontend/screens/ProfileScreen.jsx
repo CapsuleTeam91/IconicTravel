@@ -59,7 +59,7 @@ const UserProfileScreen = ({ route, navigation }) => {
 					</Text>
 					<View style={styles.languagesContainer}>
 						{user.spokenLanguages.map((language, i) => (
-							<Text key={i} style={[STYLES_GLOBAL.textDark, styles.details]}>
+							<Text key={i} style={[STYLES_GLOBAL.textDark, styles.details, styles.hobby]}>
 								{language}
 							</Text>
 						))}
