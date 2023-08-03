@@ -1,4 +1,5 @@
-import { SafeAreaView, StyleSheet, View, Appearance } from 'react-native';
+import { SafeAreaView, StyleSheet, View, useColorScheme } from 'react-native';
+import { useState, useEffect } from 'react'
 import { StatusBar } from 'expo-status-bar';
 import { Platform, NativeModules } from 'react-native';
 const { StatusBarManager } = NativeModules;
@@ -54,10 +55,10 @@ const persistor = persistStore(store);
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
-// Theme du téléphone
-const colorScheme = Appearance.getColorScheme();
+
 
 const TabNavigator = () => {
+
 	return (
 		<Tab.Navigator
 			screenOptions={({ route }) => ({
@@ -102,6 +103,11 @@ const TabNavigator = () => {
 const STATUSBAR_HEIGHT = Platform.OS === 'ios' ? 50 : StatusBarManager.HEIGHT;
 
 export default function App() {
+
+	// Theme du téléphone
+	const colorScheme = useColorScheme();
+	console.log(colorScheme)
+
 	return (
 		<Provider store={store}>
 			<PersistGate persistor={persistor}>
