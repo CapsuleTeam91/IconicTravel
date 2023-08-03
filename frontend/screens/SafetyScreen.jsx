@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
-import { ERRORS, URL_EXPO } from '../utils/constants';
+import { ERRORS } from '../utils/constants';
+import { URL_EXPO } from '../../environnement';
 import { COLORS, COLORS_THEME, STYLES_GLOBAL } from '../utils/styles';
 import { SafeAreaView, StyleSheet, Text, View, Modal } from 'react-native';
 import Button from '../components/Button';
@@ -87,7 +88,7 @@ const SafetyScreen = ({ navigation }) => {
 					<Button
 						type="primary"
 						label="Désactiver le compte"
-						onpress={() => {}}
+						onpress={() => { }}
 					/>
 					<Button
 						type="secondary"
