@@ -106,7 +106,6 @@ export default function App() {
 
 	// Theme du téléphone
 	const colorScheme = useColorScheme();
-	console.log(colorScheme)
 
 	return (
 		<Provider store={store}>

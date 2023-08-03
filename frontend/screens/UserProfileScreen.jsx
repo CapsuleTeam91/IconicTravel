@@ -8,7 +8,8 @@ import {
 } from 'react-native';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { ERRORS, URL_EXPO } from '../utils/constants';
+import { ERRORS } from '../utils/constants';
+import { URL_EXPO } from '../environnement';
 import { COLORS, STYLES_GLOBAL } from '../utils/styles';
 import ButtonIcon from '../components/ButtonIcon';
 import { addData } from '../reducers/user';
@@ -122,9 +123,9 @@ const UserProfileScreen = ({ navigation }) => {
 				<Text style={styles.subTitle}>Passions</Text>
 				<View style={styles.optionsContainer}>
 					{user.hobbies.map((h, i) => (
-						<Text key={i} style={styles.hobby}>
-							{h}
-						</Text>
+						<View key={i} style={styles.hobbyContainer}>
+							<Text style={styles.hobby}>{h}</Text>
+						</View>
 					))}
 				</View>
 			</View>
@@ -135,13 +136,13 @@ const UserProfileScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		alignItems: 'center',
 		paddingVertical: 40,
 		paddingHorizontal: 20,
+		alignItems: 'center',
 		justifyContent: 'space-around',
 	},
 	optionsContainer: {
-		width: '100%',
+		width: Platform.OS === 'ios' ? '90%' : '100%',
 		flexWrap: 'wrap',
 		flexDirection: 'row',
 		alignItems: 'center',
@@ -157,12 +158,12 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 	},
 	detailsContainer: {
-		width: '100%',
+		width: Platform.OS === 'ios' ? '90%' : '100%',
 	},
 	languagesContainer: {
 		flex: 1,
-		flexDirection: 'row',
 		flexWrap: 'wrap',
+		flexDirection: 'row',
 		justifyContent: 'flex-end',
 	},
 	imageContainer: {
@@ -187,12 +188,15 @@ const styles = StyleSheet.create({
 		color: COLORS.darkBlue,
 		textTransform: 'uppercase',
 	},
+	hobbyContainer: {
+		margin: 5,
+		borderRadius: 25,
+		overflow: 'hidden',
+	},
 	hobby: {
+		color: COLORS.bg,
 		paddingVertical: 5,
 		paddingHorizontal: 7,
-		margin: 5,
-		color: COLORS.bg,
-		borderRadius: 25,
 		backgroundColor: COLORS.lightBlue,
 	},
 	details: {

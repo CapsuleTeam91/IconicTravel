@@ -6,7 +6,8 @@ import ButtonIcon from '../components/ButtonIcon';
 import React, { useEffect, useState } from 'react';
 import { addData } from '../reducers/user';
 import { useDispatch, useSelector } from 'react-redux';
-import { ERRORS, URL_EXPO } from '../utils/constants';
+import { ERRORS } from '../utils/constants';
+import { URL_EXPO } from '../environnement';
 import Input from '../components/Input';
 
 const ProfileStepThreeScreen = ({ navigation }) => {
