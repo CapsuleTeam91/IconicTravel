@@ -178,6 +178,27 @@ router.put('/password/:token', async (req, res) => {
 	res.json({ result: true });
 });
 
+/* PUT /update/:token - update all */
+router.put('/update/:token', async (req, res) => {
+	const user = await User.findOne({ token: req.params.token });
+	const keys = Object.keys(req.body);
+
+	keys.forEach((key) => {
+		user[key] = req.body[key];
+	});
+
+	const newUser = await user.save();
+
+	console.log('NewUser:', newUser);
+
+	if (!newUser)
+		return res
+			.status(409)
+			.json({ result: false, error: 'Can not update user' });
+
+	res.json({ result: true, data: newUser });
+});
+
 /* DELETE /delete/:token - remove all data from user in db (pusher ?) */
 router.delete('/delete/:token', (req, res) => {
 	//TODO : DELETE FOREIGN KEY OR NOT ?
