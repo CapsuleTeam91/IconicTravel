@@ -66,6 +66,7 @@ const SearchScreen = ({ navigation }) => {
 		Object.assign(sortedUsers[i], { index: i })
 	}
 
+
 	const usersList = sortedUsers.map((user, i) => {
 
 		var ageDate = new Date(Date.now() - new Date(user.dateOfBirth));
@@ -81,8 +82,27 @@ const SearchScreen = ({ navigation }) => {
 			if (distanceSelected) {
 				const distSearched = Number(distanceSelected.label.match(/\d+/)[0])
 
+
 				if (user.distance <= distSearched) {
 					return (
+						<TouchableWithoutFeedback key={i} onPress={() => displayUserOnMap(user)}>
+							<View key={i} style={userSelected?.index === user.index ? styles.userContainerSelected : styles.userContainer}>
+								<Image source={{ uri: user.avatarUrl }} style={styles.avatar} />
+								<View style={styles.userDetailsContainer}>
+									<Text style={{ fontWeight: 600 }}>{`${user.firstname} • ${user.city.name}`}</Text>
+									<Text style={{ fontSize: 12 }}>{newDesc}</Text>
+								</View>
+								<View style={styles.userDetailsContainer2}>
+									<Text>{`${age} ans`}</Text>
+									<Text>{`${Math.round(user.distance)}km`}</Text>
+								</View>
+							</View>
+						</TouchableWithoutFeedback>
+					)
+				}
+			} else {
+				return (
+					<TouchableWithoutFeedback key={i} onPress={() => displayUserOnMap(user)}>
 						<View key={i} style={userSelected?.index === user.index ? styles.userContainerSelected : styles.userContainer}>
 							<Image source={{ uri: user.avatarUrl }} style={styles.avatar} />
 							<View style={styles.userDetailsContainer}>
@@ -94,21 +114,7 @@ const SearchScreen = ({ navigation }) => {
 								<Text>{`${Math.round(user.distance)}km`}</Text>
 							</View>
 						</View>
-					)
-				}
-			} else {
-				return (
-					<View key={i} style={userSelected?.index === user.index ? styles.userContainerSelected : styles.userContainer}>
-						<Image source={{ uri: user.avatarUrl }} style={styles.avatar} />
-						<View style={styles.userDetailsContainer}>
-							<Text style={{ fontWeight: 600 }}>{`${user.firstname} • ${user.city.name}`}</Text>
-							<Text style={{ fontSize: 12 }}>{newDesc}</Text>
-						</View>
-						<View style={styles.userDetailsContainer2}>
-							<Text>{`${age} ans`}</Text>
-							<Text>{`${Math.round(user.distance)}km`}</Text>
-						</View>
-					</View>
+					</TouchableWithoutFeedback>
 				)
 			}
 
@@ -136,7 +142,7 @@ const SearchScreen = ({ navigation }) => {
 			markersList.push(
 				<Marker
 					key={i}
-					ref={(el) => (markersRef.current[i] = el)}
+					ref={(ref) => (markersRef.current[i] = ref)}
 					coordinate={{
 						latitude: user.city.latitude,
 						longitude: user.city.longitude,
@@ -177,6 +183,7 @@ const SearchScreen = ({ navigation }) => {
 			latitudeDelta: 0.2,
 			longitudeDelta: 0.2,
 		})
+		setUserSelected(null)
 	}
 
 	const displayUser = (user) => {
