@@ -80,7 +80,7 @@ const SearchScreen = ({ navigation }) => {
 
 				if (user.distance <= distSearched) {
 					return (
-						<View key={i} style={styles.userContainer}>
+						<View key={i} style={userSelected?.index === user.index ? styles.userContainerSelected : styles.userContainer}>
 							<Image source={{ uri: user.avatarUrl }} style={styles.avatar} />
 							<View style={styles.userDetailsContainer}>
 								<Text style={{ fontWeight: 600 }}>{`${user.firstname} • ${user.city.name}`}</Text>
@@ -95,7 +95,7 @@ const SearchScreen = ({ navigation }) => {
 				}
 			} else {
 				return (
-					<View key={i} style={styles.userContainer}>
+					<View key={i} style={userSelected?.index === user.index ? styles.userContainerSelected : styles.userContainer}>
 						<Image source={{ uri: user.avatarUrl }} style={styles.avatar} />
 						<View style={styles.userDetailsContainer}>
 							<Text style={{ fontWeight: 600 }}>{`${user.firstname} • ${user.city.name}`}</Text>
