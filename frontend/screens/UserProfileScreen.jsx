@@ -1,13 +1,17 @@
 import {
+	FlatList,
 	Image,
+	KeyboardAvoidingView,
 	SafeAreaView,
+	ScrollView,
 	StyleSheet,
 	Switch,
 	Text,
+	TouchableOpacity,
 	View,
 } from 'react-native';
-import { useEffect, useState } from 'react';
-import { getAge } from '../utils/helper';
+import { useCallback, useEffect, useState } from 'react';
+import { checkDOB, getAge } from '../utils/helper';
 import { addData } from '../reducers/user';
 import { ERRORS } from '../utils/constants';
 import { URL_EXPO } from '../environnement';
@@ -27,20 +31,27 @@ import { RemoteDataSet } from '../components/RemoteDataSet';
 import DropdownLanguage from '../components/DropdownLanguage';
 import Snap from './Snap';
 import { useIsFocused } from '@react-navigation/native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+
+const EDITABLES = {
+	city: 'city',
+	languages: 'spokenLanguages',
+};
 
 const UserProfileScreen = ({ navigation }) => {
 	const dispatch = useDispatch();
 	const isFocused = useIsFocused();
 	const user = useSelector((state) => state.user.value);
 	const [isEnabled, setIsEnabled] = useState(user.canHost);
-	const [isEditable, setIsEditable] = useState(false);
+	const [isEditable, setIsEditable] = useState('');
 
-	const [firstname, setFirstname] = useState('');
-	const [lastname, setLastname] = useState('');
+	const [firstname, setFirstname] = useState(null);
+	const [lastname, setLastname] = useState(null);
 	const [dateOfBirth, setDateOfBirth] = useState(new Date());
-	const [description, setDescription] = useState('');
+	const [description, setDescription] = useState(null);
+	const [newCity, setNewCity] = useState('');
 	const [city, setCity] = useState('');
-	const [spokenLanguages, setSpokenLanguages] = useState([]);
+	const [spokenLanguages, setSpokenLanguages] = useState(user.spokenLanguages);
 
 	const [error, setError] = useState('');
 
@@ -52,6 +63,7 @@ const UserProfileScreen = ({ navigation }) => {
 	const [hasCameraPermission, setHasCameraPermission] = useState(false);
 	const [cameraOpen, setCameraOpen] = useState(false);
 	const [image, setImage] = useState(null);
+	const [hobbies, setHobbies] = useState([]);
 
 	const toggleSwitch = () => {
 		fetch(`${URL_EXPO}:3000/users/hosting/${user.token}`, { method: 'PUT' })
@@ -80,13 +92,98 @@ const UserProfileScreen = ({ navigation }) => {
 		}
 	};
 
-	const addCity = (newCity) => {
-		if (!newCity) return;
-		setCity({
-			name: newCity.name,
-			latitude: newCity.latitude,
-			longitude: newCity.longitude,
+	// REQUESTS
+	const handleAvatarUpdate = () => {
+		// if no image selected close modal
+		if (!image) {
+			setUpdateAvatarVisible(false);
+			return;
+		}
+		// delete previous avatar
+		fetch(`${URL_EXPO}:3000/users/deletepicture/${user.token}`, {
+			method: 'DELETE',
+		})
+			.then((response) => response.json())
+			.then((data) => {
+				if (data.result) {
+					console.log('Image suprimée');
+				} else {
+					console.log('Image non suprimée !');
+				}
+			});
+
+		// create new avatar url
+		const formData = new FormData();
+
+		formData.append('avatar', {
+			uri: image,
+			name: 'photo.jpg',
+			type: 'image/jpeg',
 		});
+
+		fetch(`${URL_EXPO}:3000/users/upload`, {
+			method: 'POST',
+			body: formData,
+		})
+			.then((response) => response.json())
+			.then((data) => {
+				if (data.result) {
+					handleUpdate({ avatarUrl: data.url });
+					setImage(null);
+					setUpdateAvatarVisible(false);
+				}
+			});
+	};
+
+	const handleUpdate = (data) => {
+		console.log(data);
+		fetch(`${URL_EXPO}:3000/users/update/${user.token}`, {
+			method: 'PUT',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify(data),
+		})
+			.then((response) =>
+				response.status > 400 ? response.status : response.json()
+			)
+			.then((userFound) => {
+				if (typeof userFound === 'number') {
+					setError(ERRORS[`err${userFound}`]);
+					return;
+				}
+				if (userFound.result) {
+					console.log('User updated reçu avant dispatch:', userFound.data);
+					const {
+						firstname,
+						lastname,
+						dateOfBirth,
+						email,
+						token,
+						avatarUrl,
+						description,
+						city,
+						spokenLanguages,
+						hobbies,
+						travels,
+					} = userFound.data;
+					dispatch(
+						addData({
+							firstname,
+							lastname,
+							dateOfBirth,
+							email,
+							token,
+							avatarUrl,
+							description,
+							city,
+							spokenLanguages,
+							hobbies,
+							travels,
+						})
+					);
+				} else {
+					setError(ERRORS[`err${userFound.status}`]);
+				}
+			});
 	};
 
 	useEffect(() => {
@@ -104,6 +201,37 @@ const UserProfileScreen = ({ navigation }) => {
 		})();
 	}, []);
 
+	const [remoteDataSet, setRemoteDataSet] = useState([]);
+
+	const getSuggestions = useCallback(async (q) => {
+		setNewCity(q);
+		const filterToken = q.toLowerCase();
+
+		if (typeof q !== 'string' || q.length < 3) {
+			setRemoteDataSet([]);
+			return;
+		}
+
+		// setLoading(true);
+
+		const URL = `https://www.mapquestapi.com/geocoding/v1/address?key=WvE5tMdxgRUWtFIPcZXO1qITivOTwk7V&location=${filterToken}`;
+		const response = await fetch(URL);
+		const items = await response.json();
+		const detailedCities = items.results[0].locations;
+
+		const suggestions = detailedCities.map((city, i) => ({
+			id: i,
+			title: `${city.adminArea5}, ${city.adminArea4}`,
+			name: city.adminArea5,
+			latitude: city.displayLatLng.lat,
+			longitude: city.displayLatLng.lng,
+		}));
+
+		setRemoteDataSet(suggestions);
+		// setLoading(false);
+	}, []);
+
+	// TODO style
 	const updateAvatar = (
 		<View
 			style={{
@@ -153,7 +281,7 @@ const UserProfileScreen = ({ navigation }) => {
 					type="primary"
 					size={18}
 					name="checkmark-outline"
-					onpress={() => console.log(image)}
+					onpress={handleAvatarUpdate}
 				/>
 			</View>
 		</View>
@@ -197,13 +325,18 @@ const UserProfileScreen = ({ navigation }) => {
 				onChangeText={(value) => setDescription(value)}
 				value={description}
 			/>
-
+			{error && <Text style={STYLES_GLOBAL.error}>{error}</Text>}
 			<View style={styles.optionsContainer}>
 				<ButtonIcon
 					type="secondary"
 					size={18}
 					name="arrow-undo-outline"
 					onpress={() => {
+						setError('');
+						setFirstname(null);
+						setLastname(null);
+						setDateOfBirth(new Date());
+						setDescription(null);
 						setUpdateDetailsVisible(false);
 					}}
 				/>
@@ -211,26 +344,84 @@ const UserProfileScreen = ({ navigation }) => {
 					type="primary"
 					size={18}
 					name="checkmark-outline"
-					onpress={() => {}}
+					onpress={() => {
+						setError('');
+						if (checkDOB(dateOfBirth)) {
+							setError('18 ans ou plus');
+							return;
+						}
+						handleUpdate({
+							firstname: firstname?.trim() || user.firstname,
+							lastname: lastname?.trim() || user.lastname,
+							dateOfBirth,
+							description: description || user.description,
+						});
+						setFirstname(null);
+						setLastname(null);
+						setDateOfBirth(new Date());
+						setDescription(null);
+						setUpdateDetailsVisible(false);
+					}}
 				/>
 			</View>
 		</View>
 	);
 
+	// TODO opti création component +style
 	const updateInfo = (
 		<View style={styles.inputContainer}>
-			<AutocompleteDropdownContextProvider>
-				<RemoteDataSet
-					addCity={addCity}
-					label="Ville de Résidence"
-					ligthTheme={false}
-					clear={() => setCity('')}
+			<View
+				style={{
+					width: '100%',
+					alignItems: 'center',
+				}}>
+				<Input
+					label={city.latitude ? 'Ville sélectionnée' : user.city.name}
+					theme={COLORS_THEME.light}
+					autoFocus={false}
+					autoCapitalize="none"
+					keyboardType="default"
+					onChangeText={(value) => getSuggestions(value)}
+					value={newCity}
 				/>
-				<DropdownLanguage
-					spokenLanguages={spokenLanguages}
-					setSpokenLanguages={setSpokenLanguages}
-				/>
-			</AutocompleteDropdownContextProvider>
+				{remoteDataSet.length > 0 && (
+					<FlatList
+						data={remoteDataSet}
+						renderItem={({ item }) => (
+							<TouchableOpacity
+								onPress={() =>
+									setCity(
+										!item?.name
+											? user.city
+											: {
+													name: item.name,
+													latitude: item.latitude,
+													longitude: item.longitude,
+											  }
+									)
+								}
+								style={{
+									paddingVertical: 5,
+									paddingHorizontal: 10,
+									margin: 2,
+									borderRadius: 8,
+									backgroundColor:
+										city.latitude === item.latitude
+											? COLORS.lightBlue
+											: COLORS.pink,
+								}}
+								activeOpacity={0.8}>
+								<Text style={{ fontSize: 16, color: COLORS.bg }}>
+									{item.title}
+								</Text>
+							</TouchableOpacity>
+						)}
+						contentContainerStyle={{
+							minWidth: '70%',
+						}}
+					/>
+				)}
+			</View>
 
 			<View style={styles.optionsContainer}>
 				<ButtonIcon
@@ -245,33 +436,21 @@ const UserProfileScreen = ({ navigation }) => {
 					type="primary"
 					size={18}
 					name="checkmark-outline"
-					onpress={() => {}}
+					onpress={() => {
+						handleUpdate({
+							city,
+						});
+						setCity('');
+						setUpdateInfoVisible(false);
+					}}
 				/>
 			</View>
 		</View>
 	);
 
+	// TODO style + meca
 	const updatePassion = (
 		<View style={styles.inputContainer}>
-			<Input
-				label={user.firstname}
-				theme={COLORS_THEME.light}
-				autoFocus={false}
-				autoCapitalize="none"
-				keyboardType="default"
-				onChangeText={(value) => setFirstname(value)}
-				value={firstname}
-			/>
-			<Input
-				label={user.lastname}
-				theme={COLORS_THEME.light}
-				autoFocus={false}
-				autoCapitalize="none"
-				keyboardType="default"
-				onChangeText={(value) => setLastname(value)}
-				value={lastname}
-			/>
-
 			<View style={styles.optionsContainer}>
 				<ButtonIcon
 					type="secondary"
@@ -306,20 +485,33 @@ const UserProfileScreen = ({ navigation }) => {
 			</View>
 
 			<View style={[styles.optionsContainer, styles.imageContainer]}>
-				<Image
-					source={{
-						uri: user.avatarUrl,
-					}}
-					style={styles.image}
-				/>
-				<ButtonIcon
-					type="transparent"
-					size={18}
-					name="camera-reverse-outline"
-					onpress={() => {
-						setUpdateAvatarVisible(true);
-					}}
-				/>
+				<View
+					style={{
+						width: 150,
+						padding: 10,
+					}}>
+					<Image
+						source={{
+							uri: user.avatarUrl,
+						}}
+						style={styles.image}
+					/>
+					<View
+						style={{
+							...StyleSheet.absoluteFillObject,
+							top: '65%',
+							left: '75%',
+							margin: -20,
+						}}>
+						<ButtonIcon
+							type="primary"
+							name="camera-reverse-outline"
+							onpress={() => {
+								setUpdateAvatarVisible(true);
+							}}
+						/>
+					</View>
+				</View>
 
 				<View style={styles.switchContainer}>
 					<Text style={STYLES_GLOBAL.subTitle}>Iconic Host</Text>
@@ -349,7 +541,7 @@ const UserProfileScreen = ({ navigation }) => {
 					<ButtonIcon
 						type="transparent"
 						size={18}
-						name={isEditable ? 'checkmark-outline' : 'pencil-outline'}
+						name="pencil-outline"
 						onpress={() => {
 							setUpdateDetailsVisible(true);
 						}}
@@ -362,37 +554,75 @@ const UserProfileScreen = ({ navigation }) => {
 			</View>
 
 			<View style={styles.detailsContainer}>
-				<View style={styles.optionsBtnContainer}>
-					<Text style={styles.subTitle}>Informations</Text>
-					<ButtonIcon
-						type="transparent"
-						size={18}
-						name="pencil-outline"
-						onpress={() => {
-							setUpdateInfoVisible(true);
-						}}
-					/>
+				<Text style={styles.subTitle}>Informations</Text>
+
+				<View style={styles.optionsContainer}>
+					<View style={styles.optionsContainer}>
+						<Text style={[STYLES_GLOBAL.textDark, styles.details]}>
+							Lieu de résidence
+						</Text>
+						<View
+							style={[styles.optionsBtnContainer, { width: 'fit-content' }]}>
+							<Text style={[STYLES_GLOBAL.textDark, styles.details]}>
+								{user.city.name}
+							</Text>
+							<ButtonIcon
+								type="transparent"
+								size={18}
+								name="pencil-outline"
+								onpress={() => {
+									setNewCity('');
+									setUpdateInfoVisible(true);
+								}}
+							/>
+						</View>
+					</View>
 				</View>
 
 				<View style={styles.optionsContainer}>
-					<Text style={[STYLES_GLOBAL.textDark, styles.details]}>
-						Lieu de résidence
-					</Text>
-					<Text style={[STYLES_GLOBAL.textDark, styles.details]}>
-						{user.city.name}
-					</Text>
-				</View>
-				<View style={styles.optionsContainer}>
-					<Text style={[STYLES_GLOBAL.textDark, styles.details]}>
-						Langues parlées
-					</Text>
-					<View style={styles.languagesContainer}>
-						{user.spokenLanguages.map((language, i) => (
-							<Text key={i} style={[STYLES_GLOBAL.textDark, styles.details]}>
-								{language}
+					{isEditable !== EDITABLES.languages ? (
+						<>
+							<Text style={[STYLES_GLOBAL.textDark, styles.details]}>
+								Langues parlées
 							</Text>
-						))}
-					</View>
+							<View style={styles.languagesContainer}>
+								{user.spokenLanguages.map((language, i) => (
+									<Text
+										key={i}
+										style={[STYLES_GLOBAL.textDark, styles.details]}>
+										{language}
+									</Text>
+								))}
+								<ButtonIcon
+									type="transparent"
+									size={18}
+									name="pencil-outline"
+									onpress={() => {
+										setIsEditable(EDITABLES.languages);
+									}}
+								/>
+							</View>
+						</>
+					) : (
+						<>
+							<View style={{ flex: 1 }}>
+								<DropdownLanguage
+									spokenLanguages={spokenLanguages}
+									setSpokenLanguages={setSpokenLanguages}
+								/>
+							</View>
+
+							<ButtonIcon
+								type="transparent"
+								size={18}
+								name="checkmark-outline"
+								onpress={() => {
+									handleUpdate({ spokenLanguages });
+									setIsEditable('');
+								}}
+							/>
+						</>
+					)}
 				</View>
 			</View>
 
@@ -434,7 +664,7 @@ const UserProfileScreen = ({ navigation }) => {
 			<ModalModel
 				visible={updateInfoVisible}
 				setVisible={setUpdateInfoVisible}
-				title="MISE A JOUR DE VOS INFORMATIONS"
+				title="MISE A JOUR DE VOS PASSIONS"
 				children={updateInfo}
 			/>
 
