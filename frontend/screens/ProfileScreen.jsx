@@ -71,12 +71,13 @@ const UserProfileScreen = ({ route, navigation }) => {
 				<View>
 					<Text style={styles.subTitle}>Passions</Text>
 				</View>
+				<View  style={styles.hobbiesContainer}>
 				{user.hobbies.map((h, i) => (
-					<View key={i} style={styles.hobbiesContainer}>
-						<Text style={styles.hobby}>{h}</Text>
-					</View>
+					<Text key={i} style={styles.hobby}>{h}</Text>
 				))}
+				</View>
 			</View>
+
 		</SafeAreaView>
 	);
 };
@@ -107,6 +108,13 @@ const styles = StyleSheet.create({
 		textAlign: 'center',
 		textAlignVertical: 'center',
 		borderRadius: 30
+	},
+	optionsContainer: {
+		width: Platform.OS === 'ios' ? '90%' : '100%',
+		flexWrap: 'wrap',
+		flexDirection: 'row',
+		alignItems: 'center',
+		justifyContent: 'space-between',
 	},
 	headerContainer: {
 		width: '100%',
@@ -153,6 +161,7 @@ const styles = StyleSheet.create({
 		textTransform: 'uppercase',
 	},
 	hobbiesContainer: {
+		width: '100%',
 		flexDirection: 'row',
 		flexWrap: 'wrap'
 	},
