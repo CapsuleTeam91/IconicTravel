@@ -57,7 +57,6 @@ const SafetyScreen = ({ navigation }) => {
 			.then((response) => response.json())
 			.then((data) => {
 				if (data.result) {
-					console.log('Profil supprimé');
 					navigation.navigate('Login');
 				} else {
 					console.log('Profil: Oh ooh !');
@@ -114,7 +113,12 @@ const SafetyScreen = ({ navigation }) => {
 						{success ? (
 							<Text>Votre mot de passe a bien été mis à jour</Text>
 						) : (
-							<View>
+							<View
+								style={{
+									borderColor: 'red',
+									borderWidth: 2,
+									justifyContent: 'space-between',
+								}}>
 								<PasswordInput
 									label="Nouveau mot de passe"
 									theme={COLORS_THEME.light}
