@@ -1,7 +1,14 @@
-import { FlatList, SafeAreaView, StyleSheet, Text, View } from "react-native";
-import { STYLES_GLOBAL } from "../utils/styles";
+import {
+  FlatList,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  View,
+  Image,
+} from "react-native";
 import React, { useEffect, useRef, useState } from "react";
 import { ERRORS, URL_EXPO } from "../utils/constants";
+import { COLORS, COLORS_THEME, STYLES_GLOBAL } from "../utils/styles";
 
 const HistoryScreen = ({ navigation }) => {
   // Fausse donnée pour tester la fonctionnalité du code
@@ -9,20 +16,34 @@ const HistoryScreen = ({ navigation }) => {
     {
       destination: "Paris",
       date: "2023-07-15",
+      avatar: "../assets/avatar.png",
     },
     {
       destination: "New York",
       date: "2023-08-05",
+      avatar: "../assets/avatar.png",
     },
     {
       destination: "Tokyo",
       date: "2024-02-20",
+      avatar: "../assets/avatar.png",
     },
     {
       destination: "Barcelone",
       date: "2024-05-10",
+      avatar: "../assets/avatar.png",
     },
   ];
+
+  const renderItem = ({ item }) => (
+    <View style={styles.voyage}>
+      <Image source={{ uri: item.avatar }} style={styles.avatar} />
+      <View style={styles.voyageInfo}>
+        <Text style={styles.destination}>Destination : {item.destination}</Text>
+        <Text style={styles.date}>Date : {item.date}</Text>
+      </View>
+    </View>
+  );
 
   // Variable d'états
   const [voyages, setVoyages] = useState(fakeData);
@@ -45,10 +66,14 @@ const HistoryScreen = ({ navigation }) => {
           // renderItem définit la maniere dont chaque élément de la liste sera rendu à l'écran
           renderItem={({ item }) => (
             <View style={styles.voyage}>
-              <Text style={styles.destination}>
-                Destination : {item.destination}
-              </Text>
-              <Text style={styles.date}>Date : {item.date}</Text>
+              <Image source={{ uri: item.avatar }} style={styles.avatar} />
+
+              <View style={styles.voyageInfo}>
+                <Text style={styles.destination}>
+                  Destination : {item.destination}
+                </Text>
+                <Text style={styles.date}>Date : {item.date}</Text>
+              </View>
             </View>
           )}
         />
@@ -59,7 +84,13 @@ const HistoryScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Mes Précédents Voyages</Text>
-      {afficherHistorique()}
+      {/* {afficherHistorique()} */}
+      <FlatList
+        data={voyages}
+        keyExtractor={(item, index) => index.toString()}
+        renderItem={renderItem}
+        contentContainerStyle={styles.listContainer}
+      />
     </View>
   );
 };
@@ -71,10 +102,12 @@ const styles = StyleSheet.create({
     backgroundColor: "#f0f0f0",
   },
   title: {
+    color: COLORS.darkBlue,
     fontSize: 20,
-    fontWeight: "bold",
-    marginBottom: 10,
-    color: "#1E4F61",
+    letterSpacing: 1.2,
+    fontWeight: "700",
+    textAlign: "center",
+    textTransform: "uppercase",
   },
   message: {
     textAlign: "center",
@@ -93,6 +126,9 @@ const styles = StyleSheet.create({
   },
   date: {
     fontSize: 16,
+  },
+  listContainer: {
+    marginTop: "50%",
   },
 });
 
