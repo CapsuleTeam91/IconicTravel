@@ -23,6 +23,7 @@ const SearchScreen = ({ navigation }) => {
 
 	const mapRef = useRef(null)
 	const svRef = useRef(null)
+	const markersRef = useRef([]);
 
 
 	useEffect(() => {
@@ -45,6 +46,8 @@ const SearchScreen = ({ navigation }) => {
 
 	const sortedUsers = usersAroundDestination;
 
+
+
 	if (usersAroundDestination.length > 0) {
 		for (let i = 0; i < sortedUsers.length; i++) {
 			const localCoords = { latitude: city ? city.latitude : user.city.latitude, longitude: city ? city.longitude : user.city.longitude }
@@ -60,7 +63,7 @@ const SearchScreen = ({ navigation }) => {
 			(p1, p2) => (Number(p1.distance) < Number(p2.distance)) ? -1 : (Number(p1.distance) > Number(p2.distance)) ? 1 : 0);
 	}
 
-	const markersRef = useRef([]);
+
 
 	for (let i = 0; i < sortedUsers.length; i++) {
 		Object.assign(sortedUsers[i], { index: i })
@@ -152,7 +155,7 @@ const SearchScreen = ({ navigation }) => {
 					// icon={icons[user.type]}
 					description={`${user.distance}km`}
 					onPress={() => displayUser(user)}
-					onCalloutPress={() => console.log(`Envoyer vers le profil de ${user.firstname}`)}
+					onCalloutPress={() => navigation.navigate('Profile', { user })}
 				/>)
 				;
 		})
@@ -338,7 +341,7 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		justifyContent: 'center',
 		alignItems: 'center',
-		backgroundColor: '#B6BABF',
+		backgroundColor: '#95B8D1',
 		width: '100%',
 		height: 80,
 		borderColor: 'black',
