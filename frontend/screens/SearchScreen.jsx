@@ -19,8 +19,10 @@ const SearchScreen = ({ navigation }) => {
 	const [usersAroundDestination, setUsersAroundDestination] = useState([]);
 	const [error, setError] = useState('');
 	const [distanceSelected, setDistanceSelected] = useState(null);
+	const [userSelected, setUserSelected] = useState(null);
 
 	const mapRef = useRef(null)
+	const svRef = useRef(null)
 
 	useEffect(() => {
 		fetch(`${URL_EXPO}:3000/users`)
@@ -51,9 +53,14 @@ const SearchScreen = ({ navigation }) => {
 
 			Object.assign(sortedUsers[i], { distance })
 
+
 		}
 		sortedUsers.sort(
 			(p1, p2) => (Number(p1.distance) < Number(p2.distance)) ? -1 : (Number(p1.distance) > Number(p2.distance)) ? 1 : 0);
+	}
+
+	for (let i = 0; i < sortedUsers.length; i++) {
+		Object.assign(sortedUsers[i], { index: i })
 	}
 
 	const usersList = sortedUsers.map((user, i) => {
@@ -104,7 +111,7 @@ const SearchScreen = ({ navigation }) => {
 
 		} else {
 			return (
-				<View key={i} style={styles.userContainer}>
+				<View key={i} style={userSelected?.index === user.index ? styles.userContainerSelected : styles.userContainer}>
 					<Image source={{ uri: user.avatarUrl }} style={styles.avatar} />
 					<View style={styles.userDetailsContainer}>
 						<Text style={{ fontWeight: 600 }}>{`${user.firstname} • ${user.city.name}`}</Text>
@@ -121,17 +128,19 @@ const SearchScreen = ({ navigation }) => {
 	const markersList = [];
 	if (usersAroundDestination.length > 0) {
 		usersAroundDestination.map((user, i) => {
-			markersList.push(<Marker
-				key={i}
-				coordinate={{
-					latitude: user.city.latitude,
-					longitude: user.city.longitude,
-				}}
-				title={user.firstname}
-				pinColor="#fecb2d"
-				// icon={icons[user.type]}
-				description={`${user.distance}km`}
-			/>)
+			markersList.push(
+				<Marker
+					key={i}
+					coordinate={{
+						latitude: user.city.latitude,
+						longitude: user.city.longitude,
+					}}
+					title={user.firstname}
+					pinColor="#fecb2d"
+					// icon={icons[user.type]}
+					description={`${user.distance}km`}
+					onCalloutPress={() => displayUser(user)}
+				/>)
 				;
 		})
 	}
@@ -161,6 +170,12 @@ const SearchScreen = ({ navigation }) => {
 			latitudeDelta: 0.2,
 			longitudeDelta: 0.2,
 		})
+	}
+
+	const displayUser = (user) => {
+		setUserSelected({ index: user.index })
+		svRef.current.scrollTo({ x: 0, y: 96 * user.index, animated: true })
+		console.log("utilisateur cliqué : ", user.firstname)
 	}
 
 	return (
@@ -212,7 +227,7 @@ const SearchScreen = ({ navigation }) => {
 				{markersList}
 			</MapView>
 
-			<ScrollView contentContainerStyle={styles.resultsContainer} style={styles.scrollViewItems}>
+			<ScrollView ref={svRef} contentContainerStyle={styles.resultsContainer} style={styles.scrollViewItems}>
 				{usersList}
 			</ScrollView>
 		</SafeAreaView>
@@ -285,6 +300,19 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 		alignItems: 'center',
 		backgroundColor: '#E3E8ED',
+		width: '100%',
+		height: 80,
+		borderColor: 'black',
+		borderWidth: 0.5,
+		borderRadius: 10,
+		padding: 10,
+		marginBottom: 15
+	},
+	userContainerSelected: {
+		flexDirection: 'row',
+		justifyContent: 'center',
+		alignItems: 'center',
+		backgroundColor: '#B6BABF',
 		width: '100%',
 		height: 80,
 		borderColor: 'black',
