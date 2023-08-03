@@ -7,10 +7,11 @@ import { COLORS, COLORS_THEME, STYLES_GLOBAL } from '../utils/styles';
 import { AutocompleteDropdownContextProvider } from 'react-native-autocomplete-dropdown';
 import { Dropdown } from 'react-native-element-dropdown';
 import MapView, { Marker } from 'react-native-maps';
-import { ERRORS, URL_EXPO } from '../utils/constants';
+import { ERRORS } from '../utils/constants';
+import { URL_EXPO } from '../../environnement';
 import { DISTANCES } from '../utils/data';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import {convertCoordsToKm} from '../utils/helper'
+import { convertCoordsToKm } from '../utils/helper'
 
 const SearchScreen = ({ navigation }) => {
 	const user = useSelector((state) => state.user.value);
@@ -41,15 +42,15 @@ const SearchScreen = ({ navigation }) => {
 
 	const sortedUsers = usersAroundDestination;
 
-	if(usersAroundDestination.length > 0) {
+	if (usersAroundDestination.length > 0) {
 		for (let i = 0; i < sortedUsers.length; i++) {
 			const localCoords = { latitude: city ? city.latitude : user.city.latitude, longitude: city ? city.longitude : user.city.longitude }
-			const destCoords = {latitude: sortedUsers[i].city.latitude, longitude: sortedUsers[i].city.longitude}
-			
+			const destCoords = { latitude: sortedUsers[i].city.latitude, longitude: sortedUsers[i].city.longitude }
+
 			let distance = convertCoordsToKm(localCoords, destCoords)
-			
-			Object.assign(sortedUsers[i], {distance})
-			
+
+			Object.assign(sortedUsers[i], { distance })
+
 		}
 		sortedUsers.sort(
 			(p1, p2) => (Number(p1.distance) < Number(p2.distance)) ? -1 : (Number(p1.distance) > Number(p2.distance)) ? 1 : 0);
@@ -60,23 +61,23 @@ const SearchScreen = ({ navigation }) => {
 		var ageDate = new Date(Date.now() - new Date(user.dateOfBirth));
 		const age = Math.abs(ageDate.getUTCFullYear() - 1970);
 		let newDesc = user.description;
-		if(newDesc.length >= 80) {
-			newDesc = newDesc.slice(0 , newDesc.indexOf(' ', 79)) + '...'
+		if (newDesc.length >= 80) {
+			newDesc = newDesc.slice(0, newDesc.indexOf(' ', 79)) + '...'
 		}
 
-		
-		if(city) {
 
-			if(distanceSelected) {
+		if (city) {
+
+			if (distanceSelected) {
 				const distSearched = Number(distanceSelected.label.match(/\d+/)[0])
 
-				if(user.distance <= distSearched) {
+				if (user.distance <= distSearched) {
 					return (
 						<View key={i} style={styles.userContainer}>
 							<Image source={{ uri: user.avatarUrl }} style={styles.avatar} />
 							<View style={styles.userDetailsContainer}>
-								<Text style={{fontWeight: 600}}>{`${user.firstname} • ${user.city.name}`}</Text>
-								<Text style={{fontSize: 12}}>{newDesc}</Text>
+								<Text style={{ fontWeight: 600 }}>{`${user.firstname} • ${user.city.name}`}</Text>
+								<Text style={{ fontSize: 12 }}>{newDesc}</Text>
 							</View>
 							<View style={styles.userDetailsContainer2}>
 								<Text>{`${age} ans`}</Text>
@@ -85,13 +86,13 @@ const SearchScreen = ({ navigation }) => {
 						</View>
 					)
 				}
-			}else {
+			} else {
 				return (
 					<View key={i} style={styles.userContainer}>
 						<Image source={{ uri: user.avatarUrl }} style={styles.avatar} />
 						<View style={styles.userDetailsContainer}>
-							<Text style={{fontWeight: 600}}>{`${user.firstname} • ${user.city.name}`}</Text>
-							<Text style={{fontSize: 12}}>{newDesc}</Text>
+							<Text style={{ fontWeight: 600 }}>{`${user.firstname} • ${user.city.name}`}</Text>
+							<Text style={{ fontSize: 12 }}>{newDesc}</Text>
 						</View>
 						<View style={styles.userDetailsContainer2}>
 							<Text>{`${age} ans`}</Text>
@@ -106,8 +107,8 @@ const SearchScreen = ({ navigation }) => {
 				<View key={i} style={styles.userContainer}>
 					<Image source={{ uri: user.avatarUrl }} style={styles.avatar} />
 					<View style={styles.userDetailsContainer}>
-						<Text style={{fontWeight: 600}}>{`${user.firstname} • ${user.city.name}`}</Text>
-						<Text style={{fontSize: 12}}>{newDesc}</Text>
+						<Text style={{ fontWeight: 600 }}>{`${user.firstname} • ${user.city.name}`}</Text>
+						<Text style={{ fontSize: 12 }}>{newDesc}</Text>
 					</View>
 					<View style={styles.userDetailsContainer2}>
 						<Text>{`${age} ans`}</Text>
@@ -118,20 +119,20 @@ const SearchScreen = ({ navigation }) => {
 	})
 
 	const markersList = [];
-	if(usersAroundDestination.length > 0) {
+	if (usersAroundDestination.length > 0) {
 		usersAroundDestination.map((user, i) => {
-				markersList.push(<Marker
-					key={i}
-					coordinate={{
-						latitude: user.city.latitude,
-						longitude: user.city.longitude,
-					}}
-					title={user.firstname}
-					pinColor="#fecb2d"
-					// icon={icons[user.type]}
-					description={`${user.distance}km`}
-				/>)
-			;
+			markersList.push(<Marker
+				key={i}
+				coordinate={{
+					latitude: user.city.latitude,
+					longitude: user.city.longitude,
+				}}
+				title={user.firstname}
+				pinColor="#fecb2d"
+				// icon={icons[user.type]}
+				description={`${user.distance}km`}
+			/>)
+				;
 		})
 	}
 
@@ -189,7 +190,7 @@ const SearchScreen = ({ navigation }) => {
 					value={distanceSelected}
 					onChange={item => {
 						item.label === 'Illimité' ? setDistanceSelected(null) :
-						setDistanceSelected(item);
+							setDistanceSelected(item);
 					}}
 					mode='default'
 					renderLeftIcon={() => (
@@ -239,7 +240,7 @@ const styles = StyleSheet.create({
 		width: '100%',
 		height: '50%',
 		shadowColor: 'black',
-		shadowOffset: {width: 20, height: 40},
+		shadowOffset: { width: 20, height: 40 },
 		shadowOpacity: 0.2,
 		shadowRadius: 3,
 		elevation: 20,

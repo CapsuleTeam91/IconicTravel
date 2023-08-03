@@ -1,7 +1,3 @@
-/* ENV */
-// export const URL_EXPO = 'http://10.9.1.4';
-export const URL_EXPO = 'http://172.16.0.140';
-
 /* DATA */
 export const DEFAULT_AVATAR =
 	'https://res.cloudinary.com/dvmipcwy7/image/upload/v1690571975/cld-sample.jpg';

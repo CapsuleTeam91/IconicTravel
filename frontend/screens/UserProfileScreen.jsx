@@ -8,7 +8,8 @@ import {
 } from 'react-native';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { ERRORS, URL_EXPO } from '../utils/constants';
+import { ERRORS } from '../utils/constants';
+import { URL_EXPO } from '../../environnement';
 import { COLORS, STYLES_GLOBAL } from '../utils/styles';
 import ButtonIcon from '../components/ButtonIcon';
 import { addData } from '../reducers/user';
