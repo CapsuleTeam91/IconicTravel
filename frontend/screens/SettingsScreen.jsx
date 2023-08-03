@@ -6,6 +6,7 @@ import {
 	TouchableOpacity,
 	View,
 } from 'react-native';
+import { LINKS } from '../utils/data';
 import { useSelector } from 'react-redux';
 import { COLORS, STYLES_GLOBAL } from '../utils/styles';
 import Button from '../components/Button';
@@ -13,29 +14,6 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const SettingsScreen = ({ navigation }) => {
 	const user = useSelector((state) => state.user.value);
-
-	const links = [
-		{
-			icon: 'shield-outline',
-			label: 'Connexion et sécurité',
-			page: 'Safety',
-		},
-		{
-			icon: 'notifications-outline',
-			label: 'Notifications',
-			page: 'Notifications',
-		},
-		{
-			icon: 'language-outline',
-			label: 'Traduction',
-			page: 'Traduction',
-		},
-		{
-			icon: 'warning-outline',
-			label: 'Juridique',
-			page: 'Legal',
-		},
-	];
 
 	return (
 		<SafeAreaView style={{ flex: 1 }}>
@@ -72,7 +50,7 @@ const SettingsScreen = ({ navigation }) => {
 						PARAMETRES
 					</Text>
 					<View>
-						{links.map((link, i) => (
+						{LINKS.map((link, i) => (
 							<TouchableOpacity
 								key={i}
 								onPress={() => navigation.navigate(link.page)}

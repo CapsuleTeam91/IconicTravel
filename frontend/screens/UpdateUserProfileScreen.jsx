@@ -7,15 +7,13 @@ import {
 	View,
 } from 'react-native';
 import { useState } from 'react';
-import { getAge } from '../utils/helper';
 import { addData } from '../reducers/user';
-import { ERRORS } from '../utils/constants';
-import { URL_EXPO } from '../environnement';
 import { useDispatch, useSelector } from 'react-redux';
+import { ERRORS, URL_EXPO } from '../utils/constants';
 import { COLORS, STYLES_GLOBAL } from '../utils/styles';
 import ButtonIcon from '../components/ButtonIcon';
 
-const UserProfileScreen = ({ navigation }) => {
+const UpdateUserProfileScreen = ({ navigation }) => {
 	const dispatch = useDispatch();
 	const user = useSelector((state) => state.user.value);
 	const [isEnabled, setIsEnabled] = useState(user.canHost);
@@ -199,4 +197,4 @@ const styles = StyleSheet.create({
 	},
 });
 
-export default UserProfileScreen;
+export default UpdateUserProfileScreen;
