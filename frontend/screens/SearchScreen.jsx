@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { SafeAreaView, ScrollView, StyleSheet, Text, View, Image } from 'react-native';
+import { SafeAreaView, ScrollView, StyleSheet, Text, View, Image, TouchableOpacity, TouchableWithoutFeedback } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { addData } from '../reducers/user';
 import { RemoteDataSet } from '../components/RemoteDataSet';
@@ -19,8 +19,11 @@ const SearchScreen = ({ navigation }) => {
 	const [usersAroundDestination, setUsersAroundDestination] = useState([]);
 	const [error, setError] = useState('');
 	const [distanceSelected, setDistanceSelected] = useState(null);
+	const [userSelected, setUserSelected] = useState(null);
 
 	const mapRef = useRef(null)
+	const svRef = useRef(null)
+
 
 	useEffect(() => {
 		fetch(`${URL_EXPO}:3000/users`)
@@ -51,9 +54,16 @@ const SearchScreen = ({ navigation }) => {
 
 			Object.assign(sortedUsers[i], { distance })
 
+
 		}
 		sortedUsers.sort(
 			(p1, p2) => (Number(p1.distance) < Number(p2.distance)) ? -1 : (Number(p1.distance) > Number(p2.distance)) ? 1 : 0);
+	}
+
+	const markersRef = useRef([]);
+
+	for (let i = 0; i < sortedUsers.length; i++) {
+		Object.assign(sortedUsers[i], { index: i })
 	}
 
 	const usersList = sortedUsers.map((user, i) => {
@@ -73,7 +83,7 @@ const SearchScreen = ({ navigation }) => {
 
 				if (user.distance <= distSearched) {
 					return (
-						<View key={i} style={styles.userContainer}>
+						<View key={i} style={userSelected?.index === user.index ? styles.userContainerSelected : styles.userContainer}>
 							<Image source={{ uri: user.avatarUrl }} style={styles.avatar} />
 							<View style={styles.userDetailsContainer}>
 								<Text style={{ fontWeight: 600 }}>{`${user.firstname} • ${user.city.name}`}</Text>
@@ -88,7 +98,7 @@ const SearchScreen = ({ navigation }) => {
 				}
 			} else {
 				return (
-					<View key={i} style={styles.userContainer}>
+					<View key={i} style={userSelected?.index === user.index ? styles.userContainerSelected : styles.userContainer}>
 						<Image source={{ uri: user.avatarUrl }} style={styles.avatar} />
 						<View style={styles.userDetailsContainer}>
 							<Text style={{ fontWeight: 600 }}>{`${user.firstname} • ${user.city.name}`}</Text>
@@ -104,16 +114,18 @@ const SearchScreen = ({ navigation }) => {
 
 		} else {
 			return (
-				<View key={i} style={styles.userContainer}>
-					<Image source={{ uri: user.avatarUrl }} style={styles.avatar} />
-					<View style={styles.userDetailsContainer}>
-						<Text style={{ fontWeight: 600 }}>{`${user.firstname} • ${user.city.name}`}</Text>
-						<Text style={{ fontSize: 12 }}>{newDesc}</Text>
+				<TouchableWithoutFeedback key={i} onPress={() => displayUserOnMap(user)}>
+					<View style={userSelected?.index === user.index ? styles.userContainerSelected : styles.userContainer}>
+						<Image source={{ uri: user.avatarUrl }} style={styles.avatar} />
+						<View style={styles.userDetailsContainer}>
+							<Text style={{ fontWeight: 600 }}>{`${user.firstname} • ${user.city.name}`}</Text>
+							<Text style={{ fontSize: 12 }}>{newDesc}</Text>
+						</View>
+						<View style={styles.userDetailsContainer2}>
+							<Text>{`${age} ans`}</Text>
+						</View>
 					</View>
-					<View style={styles.userDetailsContainer2}>
-						<Text>{`${age} ans`}</Text>
-					</View>
-				</View>
+				</TouchableWithoutFeedback>
 			)
 		}
 	})
@@ -121,17 +133,21 @@ const SearchScreen = ({ navigation }) => {
 	const markersList = [];
 	if (usersAroundDestination.length > 0) {
 		usersAroundDestination.map((user, i) => {
-			markersList.push(<Marker
-				key={i}
-				coordinate={{
-					latitude: user.city.latitude,
-					longitude: user.city.longitude,
-				}}
-				title={user.firstname}
-				pinColor="#fecb2d"
-				// icon={icons[user.type]}
-				description={`${user.distance}km`}
-			/>)
+			markersList.push(
+				<Marker
+					key={i}
+					ref={(el) => (markersRef.current[i] = el)}
+					coordinate={{
+						latitude: user.city.latitude,
+						longitude: user.city.longitude,
+					}}
+					title={user.firstname}
+					pinColor="#fecb2d"
+					// icon={icons[user.type]}
+					description={`${user.distance}km`}
+					onPress={() => displayUser(user)}
+					onCalloutPress={() => console.log(`Envoyer vers le profil de ${user.firstname}`)}
+				/>)
 				;
 		})
 	}
@@ -155,6 +171,23 @@ const SearchScreen = ({ navigation }) => {
 	const clear = () => {
 		setCity(null)
 		setDistanceSelected(null)
+		mapRef.current.animateToRegion({
+			latitude: user.city.latitude,
+			longitude: user.city.longitude,
+			latitudeDelta: 0.2,
+			longitudeDelta: 0.2,
+		})
+	}
+
+	const displayUser = (user) => {
+		setUserSelected({ index: user.index })
+		svRef.current.scrollTo({ x: 0, y: 96 * user.index, animated: true })
+	}
+
+	const displayUserOnMap = (user) => {
+		setUserSelected({ index: user.index })
+		svRef.current.scrollTo({ x: 0, y: 96 * user.index, animated: true })
+		markersRef.current[user.index].showCallout()
 		mapRef.current.animateToRegion({
 			latitude: user.city.latitude,
 			longitude: user.city.longitude,
@@ -203,6 +236,7 @@ const SearchScreen = ({ navigation }) => {
 			<MapView
 				style={styles.map}
 				ref={mapRef}
+				onPress={() => setUserSelected(null)}
 				initialRegion={{
 					latitude: user.city.latitude,
 					longitude: user.city.longitude,
@@ -212,7 +246,7 @@ const SearchScreen = ({ navigation }) => {
 				{markersList}
 			</MapView>
 
-			<ScrollView contentContainerStyle={styles.resultsContainer} style={styles.scrollViewItems}>
+			<ScrollView ref={svRef} contentContainerStyle={styles.resultsContainer} style={styles.scrollViewItems}>
 				{usersList}
 			</ScrollView>
 		</SafeAreaView>
@@ -285,6 +319,19 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 		alignItems: 'center',
 		backgroundColor: '#E3E8ED',
+		width: '100%',
+		height: 80,
+		borderColor: 'black',
+		borderWidth: 0.5,
+		borderRadius: 10,
+		padding: 10,
+		marginBottom: 15
+	},
+	userContainerSelected: {
+		flexDirection: 'row',
+		justifyContent: 'center',
+		alignItems: 'center',
+		backgroundColor: '#B6BABF',
 		width: '100%',
 		height: 80,
 		borderColor: 'black',
