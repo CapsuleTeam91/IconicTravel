@@ -67,8 +67,6 @@ const HistoryScreen = ({ navigation }) => {
           // renderItem définit la maniere dont chaque élément de la liste sera rendu à l'écran
           renderItem={({ item }) => (
             <View style={styles.voyage}>
-              <Image source={{ uri: item.avatar }} style={styles.avatar} />
-
               <View style={styles.voyageInfo}>
                 <Text style={styles.destination}>
                   Destination : {item.destination}
