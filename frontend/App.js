@@ -1,4 +1,4 @@
-import { SafeAreaView, StyleSheet, View } from 'react-native';
+import { SafeAreaView, StyleSheet, View, Appearance } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { Platform, NativeModules } from 'react-native';
 const { StatusBarManager } = NativeModules;
@@ -54,6 +54,14 @@ const persistor = persistStore(store);
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
+const colorScheme = Appearance.getColorScheme();
+if (colorScheme === 'dark') {
+	console.log('Dark theme')
+} else {
+	console.log('Light theme')
+}
+
+
 const TabNavigator = () => {
 	return (
 		<Tab.Navigator
@@ -103,7 +111,7 @@ export default function App() {
 		<Provider store={store}>
 			<PersistGate persistor={persistor}>
 				<NavigationContainer>
-					<StatusBar backgroundColor='grey' />
+					<StatusBar backgroundColor={colorScheme === 'dark' ? 'white' : 'black'} />
 					<View style={{ flex: 1, paddingTop: STATUSBAR_HEIGHT }}>
 
 						<Stack.Navigator screenOptions={{ headerShown: false }}>
