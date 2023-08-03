@@ -1,27 +1,80 @@
-import { SafeAreaView, StyleSheet, Text, View } from "react-native";
+import { FlatList, SafeAreaView, StyleSheet, Text, View } from "react-native";
 import { STYLES_GLOBAL } from "../utils/styles";
 import React, { useEffect, useRef, useState } from "react";
 import { ERRORS, URL_EXPO } from "../utils/constants";
+
 const HistoryScreen = ({ navigation }) => {
+  // Variable d'états
+  const [voyages, setVoyages] = useState([]);
+
+  const addVoyage = (destination, date) => {
+    const newVoyage = { destination, date };
+    setVoyages([...voyages, nouveauVoyage]);
+  };
+
+  // Message d'erreur / conditions
+  const afficherHistorique = () => {
+    if (voyages.length === 0) {
+      return (
+        <Text style={styles.message}>
+          Oh non mon pauvre chaton 🥹 ! Tu n’es pas encore un Iconic Traveler ...
+        </Text>
+      );
+    } else {
+      return (
+        <FlatList
+          data={voyages}
+          keyExtractor={(item, index) => index.toString()}
+          renderItem={({ item }) => (
+            <View style={styles.voyage}>
+              <Text style={styles.destination}>
+                Destination : {item.destination}
+              </Text>
+              <Text style={styles.date}>Date : {item.date}</Text>
+            </View>
+          )}
+        />
+      );
+    }
+  };
+
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <View style={styles.container}>
-        <Text style={STYLES_GLOBAL.subTitle}>Mes Précédents Voyages</Text>
-      </View>
-      <View></View>
-    </SafeAreaView>
+    <View style={styles.container}>
+      <Text style={styles.title}>Mes Précédents Voyages</Text>
+      {afficherHistorique()}
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "center",
-    paddingVertical: 40,
-    paddingHorizontal: 20,
-    justifyContent: "space-between",
-    borderWidth: 2,
-    borderColor: "red",
+    padding: 20,
+    backgroundColor: "#f0f0f0",
+  },
+  title: {
+    fontSize: 20,
+    fontWeight: "bold",
+    marginBottom: 10,
+    color: "#1E4F61",
+  },
+  message: {
+    textAlign: "center",
+    fontSize: 16,
+    fontStyle: "italic",
+    marginTop: "80%",
+  },
+  voyage: {
+    borderBottomWidth: 1,
+    borderBottomColor: "#ccc",
+    paddingVertical: 10,
+  },
+  destination: {
+    fontSize: 18,
+    fontWeight: "bold",
+  },
+  date: {
+    fontSize: 16,
   },
 });
 
