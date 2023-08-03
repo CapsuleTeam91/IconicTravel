@@ -71,15 +71,15 @@ const styles = StyleSheet.create({
 		justifyContent: 'space-between',
 	},
 
-	notificationsContainer: {
-		width: '100%',
-		alignItems: 'center',
-	},
-
 	title: {
 		fontSize: 25,
 		marginTop: 70,
 		marginBottom: 60,
+	},
+
+	notificationsContainer: {
+		width: '100%',
+		alignItems: 'center',
 	},
 
 	notifications: {
@@ -87,11 +87,6 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		marginTop: 60
 	},
-
-	switchContainer: {
-		alignItems: 'center',
-	},
-
 
 	btn: {
 		width: '80%',
