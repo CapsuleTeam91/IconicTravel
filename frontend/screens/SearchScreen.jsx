@@ -218,6 +218,7 @@ const SearchScreen = ({ navigation }) => {
 			<MapView
 				style={styles.map}
 				ref={mapRef}
+				onPress={() => setUserSelected(null)}
 				initialRegion={{
 					latitude: user.city.latitude,
 					longitude: user.city.longitude,
