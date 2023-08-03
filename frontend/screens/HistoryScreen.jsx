@@ -40,7 +40,10 @@ const HistoryScreen = ({ navigation }) => {
     <View style={styles.voyage}>
       <Image source={{ uri: item.avatar }} style={styles.avatar} />
       <View style={styles.voyageInfo}>
-        <Text style={styles.destination}>Destination : {item.destination}</Text>
+        <Text style={styles.destination}>
+          {" "}
+          ✈️ Destination : {item.destination}
+        </Text>
         <Text style={styles.date}>Date : {item.date}</Text>
       </View>
     </View>
@@ -115,7 +118,7 @@ const styles = StyleSheet.create({
     marginTop: "80%",
   },
   voyage: {
-    borderBottomWidth: 1,
+    borderBottomWidth: 1, //Bordure grisé
     borderBottomColor: "#ccc",
     paddingVertical: 10,
   },
