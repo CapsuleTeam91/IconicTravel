@@ -5,7 +5,7 @@ import { addData } from '../reducers/user';
 import { StyleSheet, Text, Animated, View } from 'react-native';
 import { COLORS, COLORS_THEME, STYLES_GLOBAL } from '../utils/styles';
 import { EMAIL_REGEX, ERRORS, SIGN_VIEW } from '../utils/constants';
-import { URL_EXPO } from '../../environnement';
+import { URL_EXPO } from '../environnement';
 import Input from './Input';
 import Button from './Button';
 import PasswordInput from './PasswordInput';
