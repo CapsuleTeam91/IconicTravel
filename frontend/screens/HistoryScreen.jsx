@@ -7,6 +7,26 @@ const HistoryScreen = ({ navigation }) => {
   // Variable d'états
   const [voyages, setVoyages] = useState([]);
 
+  // Fake Date
+  const fakeData = [
+    {
+      destination: "Paris",
+      date: "2023-07-15",
+    },
+    {
+      destination: "New York",
+      date: "2023-08-05",
+    },
+    {
+      destination: "Tokyo",
+      date: "2024-02-20",
+    },
+    {
+      destination: "Barcelone",
+      date: "2024-05-10",
+    },
+  ];
+
   const addVoyage = (destination, date) => {
     const newVoyage = { destination, date };
     setVoyages([...voyages, nouveauVoyage]);
