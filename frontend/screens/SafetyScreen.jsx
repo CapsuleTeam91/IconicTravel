@@ -115,9 +115,7 @@ const SafetyScreen = ({ navigation }) => {
 						) : (
 							<View
 								style={{
-									borderColor: 'red',
-									borderWidth: 2,
-									justifyContent: 'space-between',
+									minWidth: '105%',
 								}}>
 								<PasswordInput
 									label="Nouveau mot de passe"
@@ -125,13 +123,13 @@ const SafetyScreen = ({ navigation }) => {
 									onchangetext={(value) => setNewPassword(value)}
 									value={newPassword}
 								/>
-
 								<PasswordInput
 									label="Confirmer le mot de passe"
 									theme={COLORS_THEME.light}
 									onchangetext={(value) => setNewConfirmedPassword(value)}
 									value={newConfirmedPassword}
 								/>
+
 								{error && <Text style={STYLES_GLOBAL.error}>{error}</Text>}
 								<View style={styles.modalBtnContainer}>
 									<Button
@@ -196,8 +194,6 @@ const styles = StyleSheet.create({
 		justifyContent: 'space-between',
 	},
 	wrapper: {
-		borderColor: 'red',
-		borderWidth: 2,
 		width: '100%',
 		alignItems: 'center',
 	},
@@ -217,6 +213,7 @@ const styles = StyleSheet.create({
 		backgroundColor: COLORS.bgModal,
 	},
 	modalView: {
+		width: '100%',
 		paddingHorizontal: 20,
 		paddingVertical: 30,
 		borderRadius: 20,
@@ -232,7 +229,7 @@ const styles = StyleSheet.create({
 		backgroundColor: COLORS.bg,
 	},
 	modalBtnContainer: {
-		width: '90%',
+		width: '100%',
 		flexDirection: 'row',
 		alignItems: 'center',
 		justifyContent: 'space-evenly',
