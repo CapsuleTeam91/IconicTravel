@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { SafeAreaView, ScrollView, StyleSheet, Text, View, Image } from 'react-native';
+import { SafeAreaView, ScrollView, StyleSheet, Text, View, Image, TouchableOpacity, TouchableWithoutFeedback } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { addData } from '../reducers/user';
 import { RemoteDataSet } from '../components/RemoteDataSet';
@@ -23,6 +23,7 @@ const SearchScreen = ({ navigation }) => {
 
 	const mapRef = useRef(null)
 	const svRef = useRef(null)
+
 
 	useEffect(() => {
 		fetch(`${URL_EXPO}:3000/users`)
@@ -58,6 +59,8 @@ const SearchScreen = ({ navigation }) => {
 		sortedUsers.sort(
 			(p1, p2) => (Number(p1.distance) < Number(p2.distance)) ? -1 : (Number(p1.distance) > Number(p2.distance)) ? 1 : 0);
 	}
+
+	const markersRef = useRef([]);
 
 	for (let i = 0; i < sortedUsers.length; i++) {
 		Object.assign(sortedUsers[i], { index: i })
@@ -111,16 +114,18 @@ const SearchScreen = ({ navigation }) => {
 
 		} else {
 			return (
-				<View key={i} style={userSelected?.index === user.index ? styles.userContainerSelected : styles.userContainer}>
-					<Image source={{ uri: user.avatarUrl }} style={styles.avatar} />
-					<View style={styles.userDetailsContainer}>
-						<Text style={{ fontWeight: 600 }}>{`${user.firstname} • ${user.city.name}`}</Text>
-						<Text style={{ fontSize: 12 }}>{newDesc}</Text>
+				<TouchableWithoutFeedback key={i} onPress={() => displayUserOnMap(user)}>
+					<View style={userSelected?.index === user.index ? styles.userContainerSelected : styles.userContainer}>
+						<Image source={{ uri: user.avatarUrl }} style={styles.avatar} />
+						<View style={styles.userDetailsContainer}>
+							<Text style={{ fontWeight: 600 }}>{`${user.firstname} • ${user.city.name}`}</Text>
+							<Text style={{ fontSize: 12 }}>{newDesc}</Text>
+						</View>
+						<View style={styles.userDetailsContainer2}>
+							<Text>{`${age} ans`}</Text>
+						</View>
 					</View>
-					<View style={styles.userDetailsContainer2}>
-						<Text>{`${age} ans`}</Text>
-					</View>
-				</View>
+				</TouchableWithoutFeedback>
 			)
 		}
 	})
@@ -131,6 +136,7 @@ const SearchScreen = ({ navigation }) => {
 			markersList.push(
 				<Marker
 					key={i}
+					ref={(el) => (markersRef.current[i] = el)}
 					coordinate={{
 						latitude: user.city.latitude,
 						longitude: user.city.longitude,
@@ -176,7 +182,18 @@ const SearchScreen = ({ navigation }) => {
 	const displayUser = (user) => {
 		setUserSelected({ index: user.index })
 		svRef.current.scrollTo({ x: 0, y: 96 * user.index, animated: true })
-		console.log("utilisateur cliqué : ", user.firstname)
+	}
+
+	const displayUserOnMap = (user) => {
+		setUserSelected({ index: user.index })
+		svRef.current.scrollTo({ x: 0, y: 96 * user.index, animated: true })
+		markersRef.current[user.index].showCallout()
+		mapRef.current.animateToRegion({
+			latitude: user.city.latitude,
+			longitude: user.city.longitude,
+			latitudeDelta: 0.2,
+			longitudeDelta: 0.2,
+		})
 	}
 
 	return (
