@@ -100,6 +100,7 @@ const SignUp = (props) => {
 				/>
 				<DatePicker
 					date={dateOfBirth}
+					theme={COLORS_THEME.dark}
 					label={
 						dateOfBirth.toLocaleDateString() !== new Date().toLocaleDateString()
 							? dateOfBirth.toLocaleDateString()

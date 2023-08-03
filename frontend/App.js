@@ -1,5 +1,5 @@
 import { SafeAreaView, StyleSheet, View, useColorScheme } from 'react-native';
-import { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { Platform, NativeModules } from 'react-native';
 const { StatusBarManager } = NativeModules;
@@ -55,65 +55,60 @@ const persistor = persistStore(store);
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
+const TabNavigator = () => (
+	<Tab.Navigator
+		screenOptions={({ route }) => ({
+			tabBarIcon: ({ color, size }) => {
+				let iconName = '';
 
+				switch (route.name) {
+					case 'History':
+						iconName = 'earth';
+						break;
+					case 'Adventures':
+						iconName = 'airplane';
+						break;
+					case 'Search':
+						iconName = 'search';
+						break;
+					case 'Messages':
+						iconName = 'chatbox-ellipses';
+						break;
+					case 'Settings':
+						iconName = 'person-circle';
+						break;
+					default:
+						break;
+				}
 
-const TabNavigator = () => {
+				return <Ionicons name={iconName} size={size} color={color} />;
+			},
+			tabBarActiveTintColor: COLORS.pink,
+			tabBarInactiveTintColor: COLORS.darkBlue,
+			headerShown: false,
+		})}>
+		<Tab.Screen name="History" component={HistoryScreen} />
+		<Tab.Screen name="Adventures" component={AdventuresScreen} />
+		<Tab.Screen name="Search" component={SearchScreen} />
+		<Tab.Screen name="Messages" component={MessagesScreen} />
+		<Tab.Screen name="Settings" component={SettingsScreen} />
+	</Tab.Navigator>
+);
 
-	return (
-		<Tab.Navigator
-			screenOptions={({ route }) => ({
-				tabBarIcon: ({ color, size }) => {
-					let iconName = '';
-
-					switch (route.name) {
-						case 'History':
-							iconName = 'earth';
-							break;
-						case 'Adventures':
-							iconName = 'airplane';
-							break;
-						case 'Search':
-							iconName = 'search';
-							break;
-						case 'Messages':
-							iconName = 'chatbox-ellipses';
-							break;
-						case 'Settings':
-							iconName = 'person-circle';
-							break;
-						default:
-							break;
-					}
-
-					return <Ionicons name={iconName} size={size} color={color} />;
-				},
-				tabBarActiveTintColor: COLORS.pink,
-				tabBarInactiveTintColor: COLORS.darkBlue,
-				headerShown: false,
-			})}>
-			<Tab.Screen name="History" component={HistoryScreen} />
-			<Tab.Screen name="Adventures" component={AdventuresScreen} />
-			<Tab.Screen name="Search" component={SearchScreen} />
-			<Tab.Screen name="Messages" component={MessagesScreen} />
-			<Tab.Screen name="Settings" component={SettingsScreen} />
-		</Tab.Navigator>
-	);
-};
-
+// Theme du téléphone
 const STATUSBAR_HEIGHT = Platform.OS === 'ios' ? 50 : StatusBarManager.HEIGHT;
 
 export default function App() {
-
-	// Theme du téléphone
 	const colorScheme = useColorScheme();
 
 	return (
 		<Provider store={store}>
 			<PersistGate persistor={persistor}>
 				<NavigationContainer>
-					<StatusBar backgroundColor={colorScheme === 'dark' ? 'black' : 'white'} />
+					<StatusBar
+						backgroundColor={colorScheme === 'dark' ? 'black' : 'white'}
+					/>
 					<View style={{ flex: 1, paddingTop: STATUSBAR_HEIGHT }}>
-
 						<Stack.Navigator screenOptions={{ headerShown: false }}>
 							<Stack.Screen name="Login" component={LoginScreen} />
 							<Stack.Screen name="Signin" component={SigninScreen} />
@@ -143,17 +138,18 @@ export default function App() {
 							<Stack.Screen name="Traduction" component={TraductionScreen} />
 							<Stack.Screen name="Safety" component={SafetyScreen} />
 							<Stack.Screen name="UserProfile" component={UserProfileScreen} />
+
 							<Stack.Screen name="TabNavigator" component={TabNavigator} />
 						</Stack.Navigator>
 					</View>
 				</NavigationContainer>
 			</PersistGate>
-		</Provider >
+		</Provider>
 	);
 }
 
 const styles = StyleSheet.create({
 	statusBar: {
-		backgroundColor: 'black'
+		backgroundColor: 'black',
 	},
 });
