@@ -17,6 +17,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { COLORS, STYLES_GLOBAL } from '../utils/styles';
 import ButtonIcon from '../components/ButtonIcon';
 import DatePicker from '../components/DatePicker'
+import { AntDesign } from '@expo/vector-icons';
 
 const UserProfileScreen = ({ route, navigation }) => {
 	const user = route.params.user;
@@ -25,10 +26,11 @@ const UserProfileScreen = ({ route, navigation }) => {
 	const [endDate, setEndDate] = useState(new Date(new Date().setDate(new Date().getDate() + 1)));
 
 	const startDateValidated = (date) => {
-		if (endDate <= date) {
-			setEndDate(new Date(startDate.setDate(startDate.getDate() + 1)))
-		}
 		setStartDate(date)
+		if (endDate <= date) {
+			setEndDate(new Date(new Date().setDate(date.getDate() + 1)))
+		}
+
 	}
 
 	const calculateNextdate = (date) => {
@@ -53,7 +55,7 @@ const UserProfileScreen = ({ route, navigation }) => {
 					onRequestClose={() => { setModalVisible(!modalVisible) }}>
 					<View style={styles.centeredView}>
 						<View style={styles.modalView}>
-							<View style={styles.dateContainer}>
+							<View style={styles.categoryContainer}>
 								<Text style={styles.subTitle}>Dates</Text>
 								<View style={styles.datePickersContainer}>
 									<View style={styles.date}>
@@ -68,11 +70,50 @@ const UserProfileScreen = ({ route, navigation }) => {
 									</View>
 								</View>
 							</View>
-							<Pressable
+							<View style={styles.categoryContainer}>
+								<Text style={styles.subTitle}>Voyageurs</Text>
+
+								<View style={styles.modalDetailsContainer}>
+									<View style={styles.travelersDetailsContainer}>
+										<View style={styles.travelerDetailTitle}>
+											<Text style={{ textAlign: 'center', textAlignVertical: 'center' }}>Adultes</Text>
+										</View>
+										<View style={styles.travelerDetailParams}>
+											<AntDesign name="minuscircleo" size={24} color="black" />
+											<Text>0</Text>
+											<AntDesign name="pluscircleo" size={24} color="black" />
+										</View>
+									</View>
+
+									<View style={styles.travelersDetailsContainer}>
+										<View style={styles.travelerDetailTitle}>
+											<Text style={{ textAlign: 'center', textAlignVertical: 'center' }}>Enfants</Text>
+										</View>
+										<View style={styles.travelerDetailParams}>
+											<AntDesign name="minuscircleo" size={24} color="black" />
+											<Text>0</Text>
+											<AntDesign name="pluscircleo" size={24} color="black" />
+										</View>
+									</View>
+
+									<View style={styles.travelersDetailsContainer}>
+										<View style={styles.travelerDetailTitle}>
+											<Text style={{ textAlign: 'center', textAlignVertical: 'center' }}>Bébés</Text>
+										</View>
+										<View style={styles.travelerDetailParams}>
+											<AntDesign name="minuscircleo" size={24} color="black" />
+											<Text>0</Text>
+											<AntDesign name="pluscircleo" size={24} color="black" />
+										</View>
+									</View>
+								</View>
+
+							</View>
+							<TouchableOpacity
 								style={[styles.button, styles.buttonClose]}
 								onPress={() => setModalVisible(!modalVisible)}>
-								<Text style={styles.textStyle}>Hide Modal</Text>
-							</Pressable>
+								<Text style={styles.textStyle}>Valider</Text>
+							</TouchableOpacity>
 						</View>
 					</View>
 				</Modal>
@@ -234,7 +275,6 @@ const styles = StyleSheet.create({
 	},
 	modalView: {
 		width: '90%',
-		height: '80%',
 		margin: 20,
 		backgroundColor: 'white',
 		borderRadius: 20,
@@ -269,7 +309,7 @@ const styles = StyleSheet.create({
 		marginBottom: 15,
 		textAlign: 'center',
 	},
-	dateContainer: {
+	categoryContainer: {
 		width: '100%'
 	},
 	datePickersContainer: {
@@ -284,6 +324,26 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 		alignItems: 'center',
 		width: '50%'
+	},
+	modalDetailsContainer: {
+		marginTop: 10,
+		marginBottom: 20
+	},
+	travelersDetailsContainer: {
+		width: '100%',
+		flexDirection: 'row',
+		marginVertical: 5
+	},
+	travelerDetailTitle: {
+		paddingLeft: 10,
+		justifyContent: 'center',
+		alignItems: 'flex-start',
+		width: '60%'
+	},
+	travelerDetailParams: {
+		width: '40%',
+		flexDirection: 'row',
+		justifyContent: 'space-around'
 	}
 });
 
