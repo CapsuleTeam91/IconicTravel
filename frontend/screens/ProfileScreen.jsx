@@ -25,9 +25,9 @@ const UserProfileScreen = ({ route, navigation }) => {
 	const [modalVisible, setModalVisible] = useState(false);
 	const [startDate, setStartDate] = useState(new Date());
 	const [endDate, setEndDate] = useState(new Date(new Date().setDate(new Date().getDate() + 1)));
-	const [adultsNbr, setAdultsNbr] = useState(0)
-	const [childrenNbr, setChildrenNbr] = useState(0)
-	const [babiesNbr, setBabiesNbr] = useState(0)
+	const [adultsNumber, setAdultsNumber] = useState(0)
+	const [childrenNumber, setChildrenNumber] = useState(0)
+	const [babiesNumber, setBabiesNumber] = useState(0)
 
 	const startDateValidated = (date) => {
 		setStartDate(date)
@@ -51,11 +51,22 @@ const UserProfileScreen = ({ route, navigation }) => {
 					host: data.hostId,
 					startDate,
 					endDate,
-					adultsNbr,
-					childrenNbr,
-					babiesNbr
+					adultsNumber,
+					childrenNumber,
+					babiesNumber
 				}
-				travelDatas.save()
+				fetch(`${URL_EXPO}:3000/bookings/request`, {
+					method: 'POST',
+					headers: { 'Content-Type': 'application/json' },
+					body: JSON.stringify({
+						travelDatas
+					}),
+				})
+					.then(resp => resp.json())
+					.then(data => {
+						console.log('et voilà la data : ', data)
+
+					})
 			})
 
 	}
@@ -102,11 +113,11 @@ const UserProfileScreen = ({ route, navigation }) => {
 											<Text style={{ textAlign: 'center', textAlignVertical: 'center' }}>Adultes</Text>
 										</View>
 										<View style={styles.travelerDetailParams}>
-											<TouchableOpacity onPress={() => adultsNbr > 0 && setAdultsNbr(adultsNbr - 1)}>
+											<TouchableOpacity onPress={() => adultsNumber > 0 && setAdultsNumber(adultsNumber - 1)}>
 												<AntDesign name="minuscircleo" size={24} color="black" />
 											</TouchableOpacity>
-											<Text>{adultsNbr}</Text>
-											<TouchableOpacity onPress={() => setAdultsNbr(adultsNbr + 1)}>
+											<Text>{adultsNumber}</Text>
+											<TouchableOpacity onPress={() => setAdultsNumber(adultsNumber + 1)}>
 												<AntDesign name="pluscircleo" size={24} color="black" />
 											</TouchableOpacity>
 										</View>
@@ -117,11 +128,11 @@ const UserProfileScreen = ({ route, navigation }) => {
 											<Text style={{ textAlign: 'center', textAlignVertical: 'center' }}>Enfants</Text>
 										</View>
 										<View style={styles.travelerDetailParams}>
-											<TouchableOpacity onPress={() => childrenNbr > 0 && setChildrenNbr(childrenNbr - 1)}>
+											<TouchableOpacity onPress={() => childrenNumber > 0 && setChildrenNumber(childrenNumber - 1)}>
 												<AntDesign name="minuscircleo" size={24} color="black" />
 											</TouchableOpacity>
-											<Text>{childrenNbr}</Text>
-											<TouchableOpacity onPress={() => setChildrenNbr(childrenNbr + 1)}>
+											<Text>{childrenNumber}</Text>
+											<TouchableOpacity onPress={() => setChildrenNumber(childrenNumber + 1)}>
 												<AntDesign name="pluscircleo" size={24} color="black" />
 											</TouchableOpacity>
 										</View>
@@ -132,11 +143,11 @@ const UserProfileScreen = ({ route, navigation }) => {
 											<Text style={{ textAlign: 'center', textAlignVertical: 'center' }}>Bébés</Text>
 										</View>
 										<View style={styles.travelerDetailParams}>
-											<TouchableOpacity onPress={() => babiesNbr > 0 && setBabiesNbr(babiesNbr - 1)}>
+											<TouchableOpacity onPress={() => babiesNumber > 0 && setBabiesNumber(babiesNumber - 1)}>
 												<AntDesign name="minuscircleo" size={24} color="black" />
 											</TouchableOpacity>
-											<Text>{babiesNbr}</Text>
-											<TouchableOpacity onPress={() => setBabiesNbr(babiesNbr + 1)}>
+											<Text>{babiesNumber}</Text>
+											<TouchableOpacity onPress={() => setBabiesNumber(babiesNumber + 1)}>
 												<AntDesign name="pluscircleo" size={24} color="black" />
 											</TouchableOpacity>
 										</View>
