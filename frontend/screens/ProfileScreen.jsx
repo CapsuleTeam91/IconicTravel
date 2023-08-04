@@ -25,9 +25,11 @@ const UserProfileScreen = ({ route, navigation }) => {
 	const [modalVisible, setModalVisible] = useState(false);
 	const [startDate, setStartDate] = useState(new Date());
 	const [endDate, setEndDate] = useState(new Date(new Date().setDate(new Date().getDate() + 1)));
-	const [adultsNumber, setAdultsNumber] = useState(0)
+	const [adultsNumber, setAdultsNumber] = useState(1)
 	const [childrenNumber, setChildrenNumber] = useState(0)
 	const [babiesNumber, setBabiesNumber] = useState(0)
+	const [error, setError] = useState('')
+	const [bookingStatus, setBookingStatus] = useState(null)
 
 	const startDateValidated = (date) => {
 		setStartDate(date)
@@ -45,7 +47,6 @@ const UserProfileScreen = ({ route, navigation }) => {
 		fetch(`${URL_EXPO}:3000/users/getId/${thisUser.token}/${user.email}`)
 			.then(resp => resp.json())
 			.then(data => {
-				setModalVisible(!modalVisible)
 				const travelDatas = {
 					traveler: data.travelerId,
 					host: data.hostId,
@@ -64,8 +65,12 @@ const UserProfileScreen = ({ route, navigation }) => {
 				})
 					.then(resp => resp.json())
 					.then(data => {
-						console.log('et voilà la data : ', data)
-
+						if (data.result) {
+							setModalVisible(!modalVisible)
+							setBookingStatus('pending')
+						} else {
+							setError(`Impossible de contacter ${user.firstname}`)
+						}
 					})
 			})
 
@@ -170,9 +175,13 @@ const UserProfileScreen = ({ route, navigation }) => {
 						</View>
 					</View>
 				</Modal>
-				<TouchableOpacity style={styles.hostingBtn} onPress={() => setModalVisible(true)}>
-					<Text style={styles.hostingTxt}>Contact</Text>
-				</TouchableOpacity>
+				{!bookingStatus ?
+					<TouchableOpacity style={styles.hostingBtn} onPress={() => setModalVisible(true)}>
+						<Text style={styles.hostingTxt}>Contact</Text>
+					</TouchableOpacity> :
+					<View style={styles.hostingBtn}>
+						<Text style={styles.hostingTxt}>Demande en attente</Text>
+					</View>}
 			</View>
 
 			<View style={styles.detailsContainer}>
