@@ -1,25 +1,23 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { addAvatar, addData } from '../reducers/user';
+import React, { useState, useEffect } from 'react';
+import { Camera } from 'expo-camera';
 import { useDispatch } from 'react-redux';
+import { addAvatar } from '../reducers/user';
+import { URL_EXPO } from '../environnement';
+import { DEFAULT_AVATAR } from '../utils/constants';
 import { useIsFocused } from '@react-navigation/native';
 import { COLORS, STYLES_GLOBAL } from '../utils/styles';
-import { Camera, CameraType, FlashMode } from 'expo-camera';
 import { Image, SafeAreaView, StyleSheet, Text, View } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
+import Snap from './Snap';
 import Button from '../components/Button';
 import ButtonIcon from '../components/ButtonIcon';
-import { DEFAULT_AVATAR } from '../utils/constants';
-import { URL_EXPO } from '../environnement';
 
 const ProfileStepOneScreen = ({ navigation }) => {
 	const dispatch = useDispatch();
-	let cameraRef = useRef(null);
 	const isFocused = useIsFocused();
 	const [hasGalleryPermission, setHasGalleryPermission] = useState(null);
 	const [hasCameraPermission, setHasCameraPermission] = useState(false);
 	const [cameraOpen, setCameraOpen] = useState(false);
-	const [type, setType] = useState(CameraType.back);
-	const [flashMode, setFlashMode] = useState(FlashMode.off);
 	const [image, setImage] = useState(null);
 
 	const pickImage = async () => {
@@ -34,12 +32,6 @@ const ProfileStepOneScreen = ({ navigation }) => {
 		if (!result.canceled) {
 			setImage(result.assets[0].uri);
 		}
-	};
-
-	const takePicture = async () => {
-		const photo = await cameraRef.takePictureAsync({ quality: 0.3 });
-		setImage(photo.uri);
-		setCameraOpen(false);
 	};
 
 	const handleRegister = () => {
@@ -95,6 +87,7 @@ const ProfileStepOneScreen = ({ navigation }) => {
 			<Text style={[STYLES_GLOBAL.subTitle, STYLES_GLOBAL.subTitleLight]}>
 				Etape 1/3
 			</Text>
+
 			{!cameraOpen && (
 				<Image
 					source={{
@@ -104,48 +97,13 @@ const ProfileStepOneScreen = ({ navigation }) => {
 				/>
 			)}
 			{hasCameraPermission && cameraOpen && (
-				<View style={styles.cameraContainer}>
-					<View style={styles.buttonsContainer}>
-						<ButtonIcon
-							type="tertiary"
-							name={
-								type === CameraType.back ? 'sync-circle' : 'sync-circle-outline'
-							}
-							onpress={() =>
-								setType(
-									type === CameraType.back ? CameraType.front : CameraType.back
-								)
-							}
-						/>
-
-						<ButtonIcon
-							type="tertiary"
-							name={flashMode === FlashMode.off ? 'flash' : 'flash-outline'}
-							onpress={() =>
-								setFlashMode(
-									flashMode === FlashMode.off ? FlashMode.torch : FlashMode.off
-								)
-							}
-						/>
-					</View>
-					<Camera
-						type={type}
-						flashMode={flashMode}
-						ref={(ref) => (cameraRef = ref)}
-						style={styles.camera}></Camera>
-					<View style={styles.snapContainer}>
-						<ButtonIcon
-							type="tertiary"
-							name="aperture-outline"
-							onpress={() => cameraRef && takePicture()}
-						/>
-					</View>
-				</View>
+				<Snap setImage={setImage} setCameraOpen={setCameraOpen} />
 			)}
 
 			<Text style={STYLES_GLOBAL.textLight}>
 				Sélectionnez une photo de profil !
 			</Text>
+
 			<View style={styles.btnContainer}>
 				{!hasGalleryPermission ? (
 					<Text style={STYLES_GLOBAL.error}>
@@ -192,11 +150,6 @@ const styles = StyleSheet.create({
 		justifyContent: 'space-between',
 		backgroundColor: COLORS.darkBlue,
 	},
-	cameraContainer: {
-		width: '90%',
-		flexDirection: 'row',
-		justifyContent: 'center',
-	},
 	btnContainer: {
 		width: '70%',
 		flexDirection: 'row',
@@ -207,14 +160,6 @@ const styles = StyleSheet.create({
 		width: 200,
 		height: 200,
 		borderRadius: 250,
-	},
-	buttonsContainer: {
-		flex: 1,
-	},
-	snapContainer: {
-		flex: 1,
-		alignItems: 'center',
-		justifyContent: 'center',
 	},
 });
 
