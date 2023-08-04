@@ -6,10 +6,10 @@ import { RemoteDataSet } from '../components/RemoteDataSet';
 import { COLORS, COLORS_THEME, STYLES_GLOBAL } from '../utils/styles';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { AutocompleteDropdownContextProvider } from 'react-native-autocomplete-dropdown';
-import Button from '../components/Button';
 import Textarea from '../components/Textarea';
-import ButtonIcon from '../components/ButtonIcon';
 import DropdownLanguage from '../components/DropdownLanguage';
+import HeaderCreateProfile from '../components/HeaderCreateProfile';
+import FooterCreateProfile from '../components/FooterCreateProfile';
 
 const ProfileStepTwoScreen = ({ navigation }) => {
 	const dispatch = useDispatch();
@@ -54,20 +54,18 @@ const ProfileStepTwoScreen = ({ navigation }) => {
 				enableOnAndroid={true}
 				extraHeight={100} // make some height so the keyboard wont cover other component
 				contentContainerStyle={styles.container}>
-				<Text style={[STYLES_GLOBAL.title, STYLES_GLOBAL.titleLight]}>
-					Création de votre profil
-				</Text>
-				<Text style={[STYLES_GLOBAL.subTitle, STYLES_GLOBAL.subTitleLight]}>
-					Etape 2/3
-				</Text>
-				<Text style={[STYLES_GLOBAL.textLight, { marginBottom: 20 }]}>
-					Faisons plus ample connaissance ...
-				</Text>
+				<View style={styles.headerContainer}>
+					<HeaderCreateProfile step={2} />
+
+					<Text style={[STYLES_GLOBAL.textLight, { marginBottom: 20 }]}>
+						Faisons plus ample connaissance ...
+					</Text>
+				</View>
 
 				<Textarea
 					label="Description"
 					theme={COLORS_THEME.dark}
-					autoFocus={false}
+					// autoFocus={false}
 					onChangeText={(value) => setDescription(value)}
 					value={description}
 				/>
@@ -88,14 +86,11 @@ const ProfileStepTwoScreen = ({ navigation }) => {
 
 				{error && <Text style={STYLES_GLOBAL.error}>{error}</Text>}
 
-				<View style={STYLES_GLOBAL.btnBottomContainer}>
-					<ButtonIcon
-						type="secondary"
-						name="arrow-undo-outline"
-						onpress={() => navigation.navigate('ProfileStepOne')}
-					/>
-					<Button type="secondary" label="Suivant" onpress={handleRegister} />
-				</View>
+				<FooterCreateProfile
+					step={2}
+					onPressBack={() => navigation.navigate('ProfileStepOne')}
+					onPressNext={handleRegister}
+				/>
 			</KeyboardAwareScrollView>
 		</SafeAreaView>
 	);
@@ -103,9 +98,13 @@ const ProfileStepTwoScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
 	container: {
 		flexGrow: 1,
-		justifyContent: 'center',
 		alignItems: 'center',
+		justifyContent: 'space-between',
 		backgroundColor: COLORS.darkBlue,
+	},
+	headerContainer: {
+		width: '100%',
+		alignItems: 'center',
 	},
 });
 
