@@ -37,7 +37,7 @@ const HobbiesAutoCompleteHomeMade = ({
 	};
 
 	const handleNewHobby = () => {
-		let hobby = newHobby.toLowerCase().replace(' ', '_');
+		let hobby = newHobby.toLowerCase().trimEnd().replace(' ', '_');
 
 		fetch(`${URL_EXPO}:3000/hobbies/new`, {
 			method: 'POST',
@@ -59,7 +59,7 @@ const HobbiesAutoCompleteHomeMade = ({
 			});
 	};
 
-	//does not work
+	// TODO : need to be improved
 	const getSuggestions = (h) => {
 		setNewHobby(h);
 		//filtrer le dataSet
@@ -122,20 +122,12 @@ const HobbiesAutoCompleteHomeMade = ({
 									setIsActive(!isActive);
 									// setNewHobby('');
 								}}
-								style={{
-									paddingVertical: 5,
-									paddingHorizontal: 10,
-									margin: 2,
-									borderRadius: 8,
-									backgroundColor: COLORS.pink,
-								}}
+								style={styles.btn}
 								activeOpacity={0.8}>
 								<Text style={{ fontSize: 16, color: COLORS.bg }}>{item}</Text>
 							</TouchableOpacity>
 						)}
-						contentContainerStyle={{
-							minWidth: '70%',
-						}}
+						contentContainerStyle={styles.containerStyle}
 					/>
 				)}
 			</View>
@@ -159,20 +151,17 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		alignItems: 'center',
 		justifyContent: 'space-around',
-		borderColor: 'red',
-		borderWidth: 2,
 	},
 	listContainer: {
 		maxHeight: 178,
 	},
 	hobbiesContainer: {
-		width: '70%',
+		width: 300,
 		marginVertical: 10,
 		flexDirection: 'row',
+		flexWrap: 'wrap',
 		alignItems: 'center',
 		justifyContent: 'flex-start',
-		borderColor: 'yellow',
-		borderWidth: 2,
 	},
 	hobby: {
 		fontWeight: '700',
@@ -182,38 +171,15 @@ const styles = StyleSheet.create({
 		margin: 5,
 		borderRadius: 25,
 	},
-	dropdown: {
-		// height: 50,
-		width: '70%',
-		borderRadius: 8,
-		color: COLORS.bg,
-		paddingVertical: 3,
-		paddingHorizontal: 10,
-		backgroundColor: COLORS.bgDark,
-	},
-	placeholderStyle: {
-		color: COLORS.bg,
-		paddingHorizontal: 5,
-	},
-	selectedTextStyle: {
-		fontSize: 16,
-		color: COLORS.bg,
-	},
 	containerStyle: {
-		maxHeight: 300,
-		paddingTop: 15,
-		borderRadius: 8,
-		backgroundColor: COLORS.lightBlue,
+		minWidth: '70%',
 	},
-	itemTextStyle: {
-		marginTop: -15,
-		paddingBottom: 15,
-		letterSpacing: 1,
-		fontWeight: '700',
-		textAlign: 'center',
-		color: COLORS.bgDark,
-		borderBottomWidth: 1,
-		borderBottomColor: COLORS.bg,
+	btn: {
+		paddingVertical: 5,
+		paddingHorizontal: 10,
+		margin: 2,
+		borderRadius: 8,
+		backgroundColor: COLORS.pink,
 	},
 });
 
