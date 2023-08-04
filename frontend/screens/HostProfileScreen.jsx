@@ -28,7 +28,9 @@ const UserProfileScreen = ({ navigation }) => {
     fetch(`${URL_EXPO}:3000/users/hosting/${user.token}`, { method: "PUT" })
       .then((response) => response.json())
       .then((data) => {
+        // Vérifie si la propriété "result" dans la réponse est vraie
         if (data.result) {
+          // Met à jour l'état local "isEnabled" avec la valeur de "canHost" dans la réponse
           setIsEnabled(data.canHost);
           // Dispatch de l'action addData pour mettre à jour le state Redux avec la nouvelle valeur de canHost
           dispatch(addData({ canHost: data.canHost }));
