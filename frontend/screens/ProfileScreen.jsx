@@ -8,7 +8,7 @@ import {
 	View,
 	Pressable
 } from 'react-native';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { getAge } from '../utils/helper';
 import { addData } from '../reducers/user';
 import { ERRORS } from '../utils/constants';
@@ -31,12 +31,28 @@ const UserProfileScreen = ({ route, navigation }) => {
 	const [error, setError] = useState('')
 	const [bookingStatus, setBookingStatus] = useState(null)
 
+	useEffect(() => {
+		fetch(`${URL_EXPO}:3000/users/getId/${thisUser.token}/${user.email}`)
+			.then(resp => resp.json())
+			.then(data => {
+				if (data.result) {
+					fetch(`${URL_EXPO}:3000/bookings/exists/${data.travelerId}/${data.hostId}`)
+						.then(resp => resp.json())
+						.then(bookFound => {
+
+							if (bookFound.result && !bookFound.booking.done) {
+								setBookingStatus(bookFound.booking.status)
+							}
+						})
+				}
+			})
+	}, [])
+
 	const startDateValidated = (date) => {
 		setStartDate(date)
 		if (endDate <= date) {
 			setEndDate(new Date(new Date().setDate(date.getDate() + 1)))
 		}
-
 	}
 
 	const calculateNextdate = (date) => {
@@ -157,6 +173,9 @@ const UserProfileScreen = ({ route, navigation }) => {
 											</TouchableOpacity>
 										</View>
 									</View>
+									{error && <View style={{ alignItems: 'center', width: '100%' }}>
+										<Text style={{ color: 'red' }}>{error}</Text>
+									</View>}
 								</View>
 
 							</View>
@@ -180,7 +199,7 @@ const UserProfileScreen = ({ route, navigation }) => {
 						<Text style={styles.hostingTxt}>Contact</Text>
 					</TouchableOpacity> :
 					<View style={styles.hostingBtn}>
-						<Text style={styles.hostingTxt}>Demande en attente</Text>
+						<Text style={styles.hostingTxt}>{bookingStatus}</Text>
 					</View>}
 			</View>
 

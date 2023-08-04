@@ -242,11 +242,18 @@ router.get('/getId/:token/:email', (req, res) => {
 	User.findOne({ token: req.params.token }).then((user) => {
 		if (user) {
 			User.findOne({ email: req.params.email }).then((userFound) => {
-				res.json({
-					result: true,
-					hostId: userFound._id,
-					travelerId: user._id
-				})
+				if (userFound) {
+					res.json({
+						result: true,
+						hostId: userFound._id,
+						travelerId: user._id
+					})
+				} else {
+					res.json({
+						result: false,
+						error: 'Aucun utilisateur trouvé'
+					})
+				}
 			})
 		} else {
 			res.json({ result: false, error: 'Invalid token' });
