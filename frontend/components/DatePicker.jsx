@@ -15,6 +15,45 @@ const DatePicker = (props) => {
 		setDatePickerVisible(false);
 	};
 
+	const styles = StyleSheet.create({
+		container: {
+			width: props.width ? props.width : '70%',
+			height: 50,
+			flexDirection: 'row',
+			alignItems: 'center',
+			justifyContent: 'space-between',
+			borderRadius: 8,
+			paddingVertical: 10,
+			paddingHorizontal: 20,
+			marginVertical: 10,
+		},
+		btnContainer: {
+			...StyleSheet.absoluteFillObject,
+			right: 20,
+			flexDirection: 'row',
+			alignItems: 'center',
+			justifyContent: 'flex-end',
+		},
+		light: {
+			container: {
+				borderWidth: 1,
+				borderColor: COLORS.darkBlue,
+				backgroundColor: COLORS.bg,
+			},
+			label: {
+				color: COLORS.darkBlue,
+			},
+		},
+		dark: {
+			container: {
+				backgroundColor: COLORS.bgDark,
+			},
+			label: {
+				color: COLORS.bg,
+			},
+		},
+	});
+
 	return (
 		<View style={[styles.container, styles[props.theme].container]}>
 			<Text style={styles[props.theme].label}>{props.label}</Text>
@@ -38,48 +77,12 @@ const DatePicker = (props) => {
 					hideDatePicker();
 				}}
 				onCancel={hideDatePicker}
+				minimumDate={props.minimumDate}
 			/>
 		</View>
 	);
 };
 
-const styles = StyleSheet.create({
-	container: {
-		width: '70%',
-		height: 50,
-		flexDirection: 'row',
-		alignItems: 'center',
-		justifyContent: 'space-between',
-		borderRadius: 8,
-		paddingVertical: 10,
-		paddingHorizontal: 20,
-		marginVertical: 10,
-	},
-	btnContainer: {
-		...StyleSheet.absoluteFillObject,
-		right: 20,
-		flexDirection: 'row',
-		alignItems: 'center',
-		justifyContent: 'flex-end',
-	},
-	light: {
-		container: {
-			borderWidth: 1,
-			borderColor: COLORS.darkBlue,
-			backgroundColor: COLORS.bg,
-		},
-		label: {
-			color: COLORS.darkBlue,
-		},
-	},
-	dark: {
-		container: {
-			backgroundColor: COLORS.bgDark,
-		},
-		label: {
-			color: COLORS.bg,
-		},
-	},
-});
+
 
 export default DatePicker;

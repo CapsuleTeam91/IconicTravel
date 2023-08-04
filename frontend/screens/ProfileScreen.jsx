@@ -16,10 +16,24 @@ import { URL_EXPO } from '../environnement';
 import { useDispatch, useSelector } from 'react-redux';
 import { COLORS, STYLES_GLOBAL } from '../utils/styles';
 import ButtonIcon from '../components/ButtonIcon';
+import DatePicker from '../components/DatePicker'
 
 const UserProfileScreen = ({ route, navigation }) => {
 	const user = route.params.user;
 	const [modalVisible, setModalVisible] = useState(false);
+	const [startDate, setStartDate] = useState(new Date());
+	const [endDate, setEndDate] = useState(new Date(new Date().setDate(new Date().getDate() + 1)));
+
+	const startDateValidated = (date) => {
+		if (endDate <= date) {
+			setEndDate(new Date(startDate.setDate(startDate.getDate() + 1)))
+		}
+		setStartDate(date)
+	}
+
+	const calculateNextdate = (date) => {
+		return new Date(new Date().setDate(date.getDate() + 1));
+	}
 
 	return (
 		<SafeAreaView style={styles.container}>
@@ -39,7 +53,21 @@ const UserProfileScreen = ({ route, navigation }) => {
 					onRequestClose={() => { setModalVisible(!modalVisible) }}>
 					<View style={styles.centeredView}>
 						<View style={styles.modalView}>
-							<Text style={styles.modalText}>Hello World!</Text>
+							<View style={styles.dateContainer}>
+								<Text style={styles.subTitle}>Dates</Text>
+								<View style={styles.datePickersContainer}>
+									<View style={styles.date}>
+										<Text>Départ</Text>
+										<DatePicker theme='dark' width='95%' date={startDate} label={startDate.toLocaleDateString()}
+											onconfirm={(date) => startDateValidated(date)} minimumDate={new Date()} />
+									</View>
+									<View style={styles.date}>
+										<Text>Retour</Text>
+										<DatePicker theme='dark' width='95%' date={endDate} label={endDate.toLocaleDateString()}
+											onconfirm={(date) => setEndDate(date)} minimumDate={calculateNextdate(startDate)} />
+									</View>
+								</View>
+							</View>
 							<Pressable
 								style={[styles.button, styles.buttonClose]}
 								onPress={() => setModalVisible(!modalVisible)}>
@@ -198,11 +226,6 @@ const styles = StyleSheet.create({
 	details: {
 		paddingVertical: 2,
 	},
-	modale: {
-		width: '50%',
-		height: '50%',
-		backgroundColor: 'blue'
-	},
 	centeredView: {
 		flex: 1,
 		justifyContent: 'center',
@@ -210,10 +233,12 @@ const styles = StyleSheet.create({
 		marginTop: 22,
 	},
 	modalView: {
+		width: '90%',
+		height: '80%',
 		margin: 20,
 		backgroundColor: 'white',
 		borderRadius: 20,
-		padding: 35,
+		padding: 20,
 		alignItems: 'center',
 		shadowColor: '#000',
 		shadowOffset: {
@@ -244,6 +269,22 @@ const styles = StyleSheet.create({
 		marginBottom: 15,
 		textAlign: 'center',
 	},
+	dateContainer: {
+		width: '100%'
+	},
+	datePickersContainer: {
+		marginVertical: 10,
+		width: '100%',
+		justifyContent: 'center',
+		alignItems: 'center',
+		flexDirection: 'row',
+		justifyContent: 'space-evenly'
+	},
+	date: {
+		justifyContent: 'center',
+		alignItems: 'center',
+		width: '50%'
+	}
 });
 
 export default UserProfileScreen;
