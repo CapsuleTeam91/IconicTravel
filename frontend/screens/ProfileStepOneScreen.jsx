@@ -47,6 +47,7 @@ const ProfileStepOneScreen = ({ navigation }) => {
   // Fonction pour gérer l'enregistrement des données
   const handleRegister = () => {
     if (!image) {
+      dispatch(addAvatar(DEFAULT_AVATAR));
       navigation.navigate("ProfileStepTwo");
       return;
     }

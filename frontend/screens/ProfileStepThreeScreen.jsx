@@ -1,14 +1,13 @@
-import { SafeAreaView, StatusBar, StyleSheet, Text, View } from "react-native";
-import { COLORS, COLORS_THEME, STYLES_GLOBAL } from "../utils/styles";
-import Button from "../components/Button";
-import ButtonIcon from "../components/ButtonIcon";
-
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { addData } from "../reducers/user";
-import { useDispatch, useSelector } from "react-redux";
 import { ERRORS } from "../utils/constants";
 import { URL_EXPO } from "../environnement";
-import Input from "../components/Input";
+import { useDispatch, useSelector } from "react-redux";
+import { COLORS, STYLES_GLOBAL } from "../utils/styles";
+import { SafeAreaView, StatusBar, StyleSheet, Text, View } from "react-native";
+import Button from "../components/Button";
+import ButtonIcon from "../components/ButtonIcon";
+import HobbiesAutoCompleteHomeMade from "../components/HobbiesAutoCompleteHomeMade";
 
 const ProfileStepThreeScreen = ({ navigation }) => {
   // Dispatch permettant d'envoyer des actions à Redux
@@ -72,14 +71,12 @@ const ProfileStepThreeScreen = ({ navigation }) => {
     setError(""); // reset previous errors
 
     // Vérifie si l'utilisateur a sélectionné au moins un hobby
-    if (selectedHobbies.length === 0) {
+    if (hobbies.length === 0) {
       setError("Sélectionnez au moins une passion !");
       return;
     }
     // Envoie les données des hobbies sélectionnés à Redux
-    dispatch(addData({ hobbies: selectedHobbies }));
-
-    console.log("User from creation reducer", user);
+    dispatch(addData({ hobbies }));
 
     // Envoie les données de l'utilisateur à l'API backend pour enregistrement
     fetch(`${URL_EXPO}:3000/users/signup`, {
@@ -97,7 +94,7 @@ const ProfileStepThreeScreen = ({ navigation }) => {
         }
         if (userFound.result) {
           // Mise à jour du state Redux avec les données de l'utilisateur reçues de l'API
-          console.log("User reçu avant dispatch:", userFound.data);
+          console.log("User created:", userFound.data);
           const {
             firstname,
             lastname,
@@ -127,7 +124,7 @@ const ProfileStepThreeScreen = ({ navigation }) => {
             })
           );
           // Réinitialise la liste des hobbies sélectionnés après l'enregistrement réussi
-          setSelectedHobbies([]);
+          setHobbies([]);
 
           navigation.navigate("ProfileStepFour");
         } else {
@@ -154,44 +151,25 @@ const ProfileStepThreeScreen = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar backgroundColor={"white"} />
-      <Text style={[STYLES_GLOBAL.title, STYLES_GLOBAL.titleLight]}>
-        Création de votre profil
-      </Text>
-      <Text style={[STYLES_GLOBAL.subTitle, STYLES_GLOBAL.subTitleLight]}>
-        Etape 3/3
-      </Text>
+      <View style={{ alignItems: "center" }}>
+        <Text style={[STYLES_GLOBAL.title, STYLES_GLOBAL.titleLight]}>
+          Création de votre profil
+        </Text>
+        <Text style={[STYLES_GLOBAL.subTitle, STYLES_GLOBAL.subTitleLight]}>
+          Etape 3/3
+        </Text>
 
-      <Text style={STYLES_GLOBAL.textLight}>
-        Envie de partager vos passions ? Séléctionnez en au moins une et
-        terminez la création de votre Iconic Profile !
-      </Text>
-      <View style={styles.inputContainer}>
-        <Input
-          label="Hobby"
-          theme={COLORS_THEME.dark}
-          autoFocus={false}
-          autoCapitalize="none"
-          keyboardType="default"
-          onChangeText={(value) => setNewHobby(value)}
-          value={newHobby}
-        />
-        <ButtonIcon
-          type="tertiary"
-          name="add-outline"
-          onpress={handleNewHobby}
-        />
-      </View>
+        <Text style={STYLES_GLOBAL.textLight}>
+          Envie de partager vos passions ? Séléctionnez en au moins 1 et maximum
+          5 pour terminez la création de votre Iconic Profile !
+        </Text>
 
-      <View style={styles.hobbiesBtn}>
-        {hobbies.length > 0 &&
-          hobbies.map((hobby, i) => (
-            <Button
-              key={i}
-              label={hobby}
-              type={selectedHobbies.includes(hobby) ? "primary" : "tertiary"}
-              onpress={() => handleSelection(hobby)}
-            />
-          ))}
+        <HobbiesAutoCompleteHomeMade
+          hobbies={hobbies}
+          setHobbies={setHobbies}
+          error={error}
+          setError={setError}
+        />
       </View>
 
       {error && <Text style={STYLES_GLOBAL.error}>{error}</Text>}
@@ -223,6 +201,10 @@ const styles = StyleSheet.create({
   inputContainer: {
     flexDirection: "row",
     alignItems: "center",
+  },
+  test: {
+    borderColor: "red",
+    borderWidth: 2,
   },
 });
 

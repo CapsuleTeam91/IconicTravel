@@ -196,6 +196,38 @@ const UserProfileScreen = ({ route, navigation }) => {
                       </TouchableOpacity>
                     </View>
                   </View>
+                  <View style={styles.travelersDetailsContainer}>
+                    <View style={styles.travelerDetailTitle}>
+                      <Text
+                        style={{
+                          textAlign: "center",
+                          textAlignVertical: "center",
+                        }}
+                      >
+                        Enfants
+                      </Text>
+                    </View>
+                    <View style={styles.travelerDetailParams}>
+                      <TouchableOpacity
+                        onPress={() =>
+                          childrenNumber > 0 &&
+                          setChildrenNumber(childrenNumber - 1)
+                        }
+                      >
+                        <AntDesign
+                          name="minuscircleo"
+                          size={24}
+                          color="black"
+                        />
+                      </TouchableOpacity>
+                      <Text>{childrenNumber}</Text>
+                      <TouchableOpacity
+                        onPress={() => setChildrenNumber(childrenNumber + 1)}
+                      >
+                        <AntDesign name="pluscircleo" size={24} color="black" />
+                      </TouchableOpacity>
+                    </View>
+                  </View>
 
                   {/* Sélection du nombre de bébés */}
                   <View style={styles.travelersDetailsContainer}>

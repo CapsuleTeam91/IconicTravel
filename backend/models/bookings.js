@@ -3,10 +3,10 @@ const mongoose = require('mongoose');
 const bookingSchema = mongoose.Schema({
   traveler: { type: mongoose.Schema.Types.ObjectId, ref: 'users' },
   host: { type: mongoose.Schema.Types.ObjectId, ref: 'users' },
-  done: Boolean(false),
+  done: { type: Boolean, default: false },
   startDate: Date,
   endDate: Date,
-  status: String('pending'),
+  status: { type: String, default: 'pending' },
   adultsNumber: Number,
   childrenNumber: Number,
   babiesNumber: Number,
