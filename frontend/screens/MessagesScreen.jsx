@@ -7,11 +7,30 @@ import {
   TouchableOpacity,
 } from "react-native";
 import ButtonIcon from "../components/ButtonIcon";
+import { URL_EXPO } from '../environnement';
 import { STYLES_GLOBAL, COLORS } from "../utils/styles";
-import React, { useState } from "react";
+import { useDispatch, useSelector } from 'react-redux';
+import React, { useEffect, useState } from "react";
 
 const MessagesScreen = ({ navigation }) => {
-  // Fausse donnée
+
+  const user = useSelector((state) => state.user.value);
+
+  useEffect(() => {
+    fetch(`${URL_EXPO}:3000/users/getId/${user.token}/${user.email}`)
+      .then(resp => resp.json())
+      .then(data => {
+        console.log(data.traveler)
+        fetch(`${URL_EXPO}:3000/bookings/${data.host}`)
+          .then(resp => resp.json())
+          .then(bookings => {
+            console.log(bookings)
+          })
+      })
+
+  }, [])
+
+  // Fausse donnée pas véritablement vrais
   const fakeData = [
     {
       id: "user1",
@@ -51,6 +70,8 @@ const MessagesScreen = ({ navigation }) => {
     },
   ];
 
+
+
   // Variable d'état pour stocker les utilisateurs et leurs messages
   const [users, setUsers] = useState(fakeData);
 
@@ -61,6 +82,8 @@ const MessagesScreen = ({ navigation }) => {
       navigation.navigate("ChatScreen", { user: selectedUser });
     }
   };
+
+  // J'vais tous devoir refaire parce qu'elle a prit ça sur Internet et que ça ne s'applique pas notre projet
 
   // Fonction pour afficher chaque élément d'utilisateur
   const renderUserItem = ({ item }) => {

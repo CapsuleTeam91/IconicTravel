@@ -44,7 +44,24 @@ router.get(`/exists/:traveler/:host`, (req, res) => {
           error: 'Aucun contact trouvé'
         })
       }
-      console.log(data)
+    })
+})
+
+router.get(`/:host`, (req, res) => {
+  Booking.find({ host: req.params.host })
+    .then(data => {
+      console.log('data trouvé : ', data)
+      if (data.length !== 0) {
+        res.json({
+          result: true,
+          bookings: data
+        })
+      } else {
+        res.json({
+          result: false,
+          error: 'Aucun contact trouvé'
+        })
+      }
     })
 })
 
