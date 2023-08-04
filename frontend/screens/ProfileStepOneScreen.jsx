@@ -9,8 +9,9 @@ import { COLORS, STYLES_GLOBAL } from '../utils/styles';
 import { Image, SafeAreaView, StyleSheet, Text, View } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import Snap from './Snap';
-import Button from '../components/Button';
 import ButtonIcon from '../components/ButtonIcon';
+import HeaderCreateProfile from '../components/HeaderCreateProfile';
+import FooterCreateProfile from '../components/FooterCreateProfile';
 
 const ProfileStepOneScreen = ({ navigation }) => {
 	const dispatch = useDispatch();
@@ -81,65 +82,62 @@ const ProfileStepOneScreen = ({ navigation }) => {
 
 	return (
 		<SafeAreaView style={styles.container}>
-			<Text style={[STYLES_GLOBAL.title, STYLES_GLOBAL.titleLight]}>
-				Création de votre profil
-			</Text>
-			<Text style={[STYLES_GLOBAL.subTitle, STYLES_GLOBAL.subTitleLight]}>
-				Etape 1/3
-			</Text>
+			<HeaderCreateProfile step={1} />
 
 			{!cameraOpen && (
 				<Image
 					source={{
 						uri: image || DEFAULT_AVATAR,
 					}}
-					style={styles.camera}
+					style={styles.image}
 				/>
 			)}
+
 			{hasCameraPermission && cameraOpen && (
 				<Snap setImage={setImage} setCameraOpen={setCameraOpen} />
 			)}
 
-			<Text style={STYLES_GLOBAL.textLight}>
-				Sélectionnez une photo de profil !
-			</Text>
-
-			<View style={styles.btnContainer}>
-				{!hasGalleryPermission ? (
-					<Text style={STYLES_GLOBAL.error}>
-						Pas de permission d'accéder à la gallerie
+			{!cameraOpen && (
+				<View>
+					<Text style={STYLES_GLOBAL.textLight}>
+						Sélectionnez votre plus belle photo !
 					</Text>
-				) : (
-					<ButtonIcon
-						type="secondary"
-						name="images"
-						onpress={() => {
-							setCameraOpen(false);
-							pickImage();
-						}}
-					/>
-				)}
-				{!hasCameraPermission || !isFocused ? (
-					<Text style={STYLES_GLOBAL.error}>
-						Pas de permission d'accéder à votre caméra
-					</Text>
-				) : (
-					<ButtonIcon
-						type="secondary"
-						name="camera-outline"
-						onpress={() => setCameraOpen(!cameraOpen)}
-					/>
-				)}
-			</View>
 
-			<View style={STYLES_GLOBAL.btnBottomContainer}>
-				<ButtonIcon
-					type="secondary"
-					name="arrow-undo-outline"
-					onpress={() => navigation.navigate('Signup')}
-				/>
-				<Button type="secondary" label="Suivant" onpress={handleRegister} />
-			</View>
+					<View style={styles.btnContainer}>
+						{!hasGalleryPermission ? (
+							<Text style={STYLES_GLOBAL.error}>
+								Pas de permission d'accéder à la gallerie
+							</Text>
+						) : (
+							<ButtonIcon
+								type="secondaryLight"
+								name="images"
+								onpress={() => {
+									setCameraOpen(false);
+									pickImage();
+								}}
+							/>
+						)}
+						{!hasCameraPermission || !isFocused ? (
+							<Text style={STYLES_GLOBAL.error}>
+								Pas de permission d'accéder à votre caméra
+							</Text>
+						) : (
+							<ButtonIcon
+								type="secondaryLight"
+								name="camera-outline"
+								onpress={() => setCameraOpen(!cameraOpen)}
+							/>
+						)}
+					</View>
+				</View>
+			)}
+
+			<FooterCreateProfile
+				step={1}
+				onPressBack={() => navigation.navigate('Signup')}
+				onPressNext={handleRegister}
+			/>
 		</SafeAreaView>
 	);
 };
@@ -156,7 +154,7 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		justifyContent: 'space-evenly',
 	},
-	camera: {
+	image: {
 		width: 200,
 		height: 200,
 		borderRadius: 250,
