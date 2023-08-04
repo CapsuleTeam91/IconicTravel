@@ -49,7 +49,7 @@ const Textarea = (props) => {
 				<Text
 					style={
 						isHighlighted
-							? styles.isHighlightedLabel
+							? styles[props.theme].isHighlightedLabel
 							: [styles[props.theme].label, styles.label]
 					}>
 					{props.label}
@@ -58,16 +58,16 @@ const Textarea = (props) => {
 			<TextInput
 				{...props}
 				maxLength={1000}
-				multiligne={true}
-				numberOfLines={10}
+				multiline={true}
+				numberOfLines={8}
 				onFocus={handleFocus}
 				onBlur={handleBlur}
 				style={[
 					styles[props.theme].input,
 					styles.input,
-					{ height: 200, textAlignVertical: 'top' },
+					{ textAlignVertical: 'top' },
 				]}
-				cursorColor={COLORS.pink}
+				cursorColor={props.theme === 'light' ? COLORS.pink : COLORS.lightBlue}
 			/>
 		</View>
 	);
@@ -76,10 +76,7 @@ const Textarea = (props) => {
 const styles = StyleSheet.create({
 	container: {
 		width: '70%',
-		marginVertical: 20,
 		borderRadius: 8,
-		borderWidth: 1,
-		borderColor: COLORS.darkBlue,
 	},
 	input: {
 		paddingVertical: 10,
@@ -95,10 +92,6 @@ const styles = StyleSheet.create({
 	},
 	isHighlighted: {
 		borderWidth: 2,
-		borderColor: COLORS.pink,
-	},
-	isHighlightedLabel: {
-		color: COLORS.pink,
 	},
 	light: {
 		container: {
@@ -111,6 +104,12 @@ const styles = StyleSheet.create({
 		},
 		label: {
 			color: COLORS.lightBlue,
+		},
+		isHighlighted: {
+			borderColor: COLORS.pink,
+		},
+		isHighlightedLabel: {
+			color: COLORS.pink,
 		},
 	},
 	dark: {
@@ -126,7 +125,11 @@ const styles = StyleSheet.create({
 			color: COLORS.bg,
 		},
 		isHighlighted: {
+			borderColor: COLORS.lightBlue,
 			backgroundColor: COLORS.darkBlue,
+		},
+		isHighlightedLabel: {
+			color: COLORS.bg,
 		},
 		input: {
 			color: COLORS.bg,
