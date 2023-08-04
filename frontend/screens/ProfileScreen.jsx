@@ -17,18 +17,23 @@ import { useDispatch, useSelector } from 'react-redux';
 import { COLORS, STYLES_GLOBAL } from '../utils/styles';
 import ButtonIcon from '../components/ButtonIcon';
 import DatePicker from '../components/DatePicker'
+import { AntDesign } from '@expo/vector-icons';
 
 const UserProfileScreen = ({ route, navigation }) => {
 	const user = route.params.user;
 	const [modalVisible, setModalVisible] = useState(false);
 	const [startDate, setStartDate] = useState(new Date());
 	const [endDate, setEndDate] = useState(new Date(new Date().setDate(new Date().getDate() + 1)));
+	const [adultsNbr, setAdultsNbr] = useState(0)
+	const [childrenNbr, setChildrenNbr] = useState(0)
+	const [babiesNbr, setBabiesNbr] = useState(0)
 
 	const startDateValidated = (date) => {
-		if (endDate <= date) {
-			setEndDate(new Date(startDate.setDate(startDate.getDate() + 1)))
-		}
 		setStartDate(date)
+		if (endDate <= date) {
+			setEndDate(new Date(new Date().setDate(date.getDate() + 1)))
+		}
+
 	}
 
 	const calculateNextdate = (date) => {
@@ -53,7 +58,7 @@ const UserProfileScreen = ({ route, navigation }) => {
 					onRequestClose={() => { setModalVisible(!modalVisible) }}>
 					<View style={styles.centeredView}>
 						<View style={styles.modalView}>
-							<View style={styles.dateContainer}>
+							<View style={styles.categoryContainer}>
 								<Text style={styles.subTitle}>Dates</Text>
 								<View style={styles.datePickersContainer}>
 									<View style={styles.date}>
@@ -68,11 +73,69 @@ const UserProfileScreen = ({ route, navigation }) => {
 									</View>
 								</View>
 							</View>
-							<Pressable
-								style={[styles.button, styles.buttonClose]}
-								onPress={() => setModalVisible(!modalVisible)}>
-								<Text style={styles.textStyle}>Hide Modal</Text>
-							</Pressable>
+							<View style={styles.categoryContainer}>
+								<Text style={styles.subTitle}>Voyageurs</Text>
+
+								<View style={styles.modalDetailsContainer}>
+									<View style={styles.travelersDetailsContainer}>
+										<View style={styles.travelerDetailTitle}>
+											<Text style={{ textAlign: 'center', textAlignVertical: 'center' }}>Adultes</Text>
+										</View>
+										<View style={styles.travelerDetailParams}>
+											<TouchableOpacity onPress={() => adultsNbr > 0 && setAdultsNbr(adultsNbr - 1)}>
+												<AntDesign name="minuscircleo" size={24} color="black" />
+											</TouchableOpacity>
+											<Text>{adultsNbr}</Text>
+											<TouchableOpacity onPress={() => setAdultsNbr(adultsNbr + 1)}>
+												<AntDesign name="pluscircleo" size={24} color="black" />
+											</TouchableOpacity>
+										</View>
+									</View>
+
+									<View style={styles.travelersDetailsContainer}>
+										<View style={styles.travelerDetailTitle}>
+											<Text style={{ textAlign: 'center', textAlignVertical: 'center' }}>Enfants</Text>
+										</View>
+										<View style={styles.travelerDetailParams}>
+											<TouchableOpacity onPress={() => childrenNbr > 0 && setChildrenNbr(childrenNbr - 1)}>
+												<AntDesign name="minuscircleo" size={24} color="black" />
+											</TouchableOpacity>
+											<Text>{childrenNbr}</Text>
+											<TouchableOpacity onPress={() => setChildrenNbr(childrenNbr + 1)}>
+												<AntDesign name="pluscircleo" size={24} color="black" />
+											</TouchableOpacity>
+										</View>
+									</View>
+
+									<View style={styles.travelersDetailsContainer}>
+										<View style={styles.travelerDetailTitle}>
+											<Text style={{ textAlign: 'center', textAlignVertical: 'center' }}>Bébés</Text>
+										</View>
+										<View style={styles.travelerDetailParams}>
+											<TouchableOpacity onPress={() => babiesNbr > 0 && setBabiesNbr(babiesNbr - 1)}>
+												<AntDesign name="minuscircleo" size={24} color="black" />
+											</TouchableOpacity>
+											<Text>{babiesNbr}</Text>
+											<TouchableOpacity onPress={() => setBabiesNbr(babiesNbr + 1)}>
+												<AntDesign name="pluscircleo" size={24} color="black" />
+											</TouchableOpacity>
+										</View>
+									</View>
+								</View>
+
+							</View>
+							<View style={styles.btnContainer}>
+								<TouchableOpacity
+									style={[styles.button, styles.buttonClose]}
+									onPress={() => setModalVisible(!modalVisible)}>
+									<Text style={styles.textStyle}>Annuler</Text>
+								</TouchableOpacity>
+								<TouchableOpacity
+									style={[styles.button, styles.buttonClose]}
+									onPress={() => setModalVisible(!modalVisible)}>
+									<Text style={styles.textStyle}>Valider</Text>
+								</TouchableOpacity>
+							</View>
 						</View>
 					</View>
 				</Modal>
@@ -234,7 +297,6 @@ const styles = StyleSheet.create({
 	},
 	modalView: {
 		width: '90%',
-		height: '80%',
 		margin: 20,
 		backgroundColor: 'white',
 		borderRadius: 20,
@@ -250,6 +312,7 @@ const styles = StyleSheet.create({
 		elevation: 5,
 	},
 	button: {
+		marginHorizontal: 10,
 		borderRadius: 20,
 		padding: 10,
 		elevation: 2,
@@ -269,7 +332,7 @@ const styles = StyleSheet.create({
 		marginBottom: 15,
 		textAlign: 'center',
 	},
-	dateContainer: {
+	categoryContainer: {
 		width: '100%'
 	},
 	datePickersContainer: {
@@ -284,6 +347,32 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 		alignItems: 'center',
 		width: '50%'
+	},
+	modalDetailsContainer: {
+		marginTop: 10,
+		marginBottom: 20
+	},
+	travelersDetailsContainer: {
+		width: '100%',
+		flexDirection: 'row',
+		marginVertical: 5
+	},
+	travelerDetailTitle: {
+		paddingLeft: 10,
+		justifyContent: 'center',
+		alignItems: 'flex-start',
+		width: '60%'
+	},
+	travelerDetailParams: {
+		width: '40%',
+		flexDirection: 'row',
+		justifyContent: 'space-around'
+	},
+	btnContainer: {
+		width: '100%',
+		flexDirection: 'row',
+		justifyContent: 'center',
+		alignItems: 'center'
 	}
 });
 
