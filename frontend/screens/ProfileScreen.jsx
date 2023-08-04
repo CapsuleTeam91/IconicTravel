@@ -40,6 +40,17 @@ const UserProfileScreen = ({ route, navigation }) => {
 		return new Date(new Date().setDate(date.getDate() + 1));
 	}
 
+	const validateContact = () => {
+		setModalVisible(!modalVisible)
+		const travelDatas = {
+			startDate,
+			endDate,
+			adultsNbr,
+			childrenNbr,
+			babiesNbr
+		}
+	}
+
 	return (
 		<SafeAreaView style={styles.container}>
 			<Text style={styles.username}>{user.firstname}</Text>
@@ -132,7 +143,7 @@ const UserProfileScreen = ({ route, navigation }) => {
 								</TouchableOpacity>
 								<TouchableOpacity
 									style={[styles.button, styles.buttonClose]}
-									onPress={() => setModalVisible(!modalVisible)}>
+									onPress={() => validateContact()}>
 									<Text style={styles.textStyle}>Valider</Text>
 								</TouchableOpacity>
 							</View>
