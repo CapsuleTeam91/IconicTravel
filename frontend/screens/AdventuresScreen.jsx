@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import { COLORS, COLORS_THEME, STYLES_GLOBAL } from "../utils/styles";
 import ButtonIcon from "../components/ButtonIcon";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 const AdventuresScreen = ({ navigation }) => {
   // Fausse base de données
@@ -106,32 +106,41 @@ const AdventuresScreen = ({ navigation }) => {
         <View style={styles.header}>
           <Text style={styles.title}>Iconic Adventures</Text>
         </View>
+
+        {/* Conteneur des onglets */}
         <View style={styles.tabContainer}>
+          {/* Onglet "Confirmés" */}
           <TouchableOpacity
             style={[
               styles.tab,
               currentTab === "confirmes" ? styles.activeTab : null,
             ]}
-            onPress={() => setCurrentTab("confirmes")}
+            onPress={() => setCurrentTab("confirmes")} // Lorsque l'onglet est pressé, on met à jour l'état "currentTab" à "confirmes"
           >
             <Text style={styles.confirmesContainer}>Confirmés</Text>
           </TouchableOpacity>
+
+          {/* Onglet "En Attente" */}
           <TouchableOpacity
             style={[
               styles.tab,
               currentTab === "en_attente" ? styles.activeTab : null,
             ]}
-            onPress={() => setCurrentTab("en_attente")}
+            onPress={() => setCurrentTab("en_attente")} // Lorsque l'onglet est pressé, on met à jour l'état "currentTab" à "en_attente"
           >
             <Text style={styles.enAttenteContainer}>En Attente</Text>
           </TouchableOpacity>
         </View>
+
+        {/* Affichage du contenu en fonction de l'onglet actif */}
         {currentTab === "confirmes" ? (
+          // Si l'onglet actif est "confirmes", on affiche la liste des messages confirmés
           <MessagesConfirmes messages={messageConfimesList} />
         ) : (
+          // Sinon, on affiche la liste des messages en attente
           <MessagesEnAttente
             messages={messageEnAttenteList}
-            onConfirmer={handleConfirmerMessage}
+            onConfirmer={handleConfirmerMessage} // On passe la fonction handleConfirmerMessage comme prop à MessagesEnAttente pour la confirmation des messages
           />
         )}
       </View>
