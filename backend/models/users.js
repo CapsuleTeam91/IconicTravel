@@ -17,13 +17,6 @@ const citySchema = mongoose.Schema({
 	longitude: Number,
 });
 
-const travelSchema = mongoose.Schema({
-	destination: String,
-	startDate: Date,
-	endDate: Date,
-	hostId: mongoose.Schema.ObjectId,
-});
-
 const userSchema = mongoose.Schema({
 	firstname: String,
 	lastname: String,
@@ -44,7 +37,7 @@ const userSchema = mongoose.Schema({
 	city: citySchema,
 	spokenLanguages: [{ type: String, default: DEFAULT_LANGUAGE }],
 	hobbies: [{ type: String, default: DEFAULT_HOBBY }],
-	travels: [travelSchema],
+	bookings: { type: mongoose.Schema.Types.ObjectId, ref: 'bookings' },
 	canHost: { type: Boolean, default: false },
 });
 
