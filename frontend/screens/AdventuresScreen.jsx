@@ -104,7 +104,7 @@ const AdventuresScreen = ({ navigation }) => {
     <View style={styles.container}>
       <View style={styles.contentContainer}>
         <View style={styles.header}>
-          <Text style={styles.title}>Iconic Adventure</Text>
+          <Text style={styles.title}>Iconic Adventures</Text>
         </View>
         <View style={styles.tabContainer}>
           <TouchableOpacity
