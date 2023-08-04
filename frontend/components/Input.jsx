@@ -9,6 +9,7 @@ const Input = (props) => {
 
 	const handleFocus = () => {
 		setIsHighlighted(true);
+		if (props.handleFocus) props.handleFocus();
 		Animated.timing(transY, {
 			toValue: -32,
 			duration: 200,
@@ -19,6 +20,7 @@ const Input = (props) => {
 
 	const handleBlur = () => {
 		setIsHighlighted(false);
+		if (props.handleBlur) props.handleBlur();
 		if (!props.value) {
 			Animated.timing(transY, {
 				toValue: 0,
