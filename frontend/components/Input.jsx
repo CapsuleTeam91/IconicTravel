@@ -51,7 +51,7 @@ const Input = (props) => {
 				<Text
 					style={
 						isHighlighted
-							? styles.isHighlightedLabel
+							? styles[props.theme].isHighlightedLabel
 							: [styles[props.theme].label, styles.label]
 					}>
 					{props.label}
@@ -63,7 +63,7 @@ const Input = (props) => {
 				onFocus={handleFocus}
 				onBlur={handleBlur}
 				style={[styles[props.theme].input, styles.input]}
-				cursorColor={COLORS.pink}
+				cursorColor={props.theme === 'light' ? COLORS.pink : COLORS.lightBlue}
 			/>
 		</View>
 	);
@@ -89,11 +89,8 @@ const styles = StyleSheet.create({
 	},
 	isHighlighted: {
 		borderWidth: 2,
-		borderColor: COLORS.pink,
 	},
-	isHighlightedLabel: {
-		color: COLORS.pink,
-	},
+
 	light: {
 		container: {
 			borderWidth: 1,
@@ -106,11 +103,17 @@ const styles = StyleSheet.create({
 		label: {
 			color: COLORS.lightBlue,
 		},
+		isHighlighted: {
+			borderColor: COLORS.pink,
+		},
+		isHighlightedLabel: {
+			color: COLORS.pink,
+		},
 	},
 	dark: {
 		container: {
 			borderWidth: 0,
-			marginVertical: 10,
+			marginVertical: 8,
 			backgroundColor: COLORS.bgDark,
 		},
 		isHighlightedLabelContainer: {
@@ -121,7 +124,11 @@ const styles = StyleSheet.create({
 			color: COLORS.bg,
 		},
 		isHighlighted: {
+			borderColor: COLORS.bg,
 			backgroundColor: COLORS.darkBlue,
+		},
+		isHighlightedLabel: {
+			color: COLORS.bg,
 		},
 		input: {
 			color: COLORS.bg,

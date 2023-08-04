@@ -11,7 +11,7 @@ const ButtonIcon = (props) => {
 			activeOpacity={0.8}>
 			<Ionicons
 				name={props.name}
-				size={props.size || 28}
+				size={props.size || 22}
 				style={styles[`${props.type}TextBtn`]}
 			/>
 		</TouchableOpacity>
@@ -21,6 +21,7 @@ const ButtonIcon = (props) => {
 const styles = StyleSheet.create({
 	btn: {
 		alignItems: 'center',
+		justifyContent: 'center',
 		borderRadius: 30,
 		shadowColor: COLORS.bg,
 		shadowOffset: {
@@ -38,19 +39,30 @@ const styles = StyleSheet.create({
 		backgroundColor: COLORS.darkBlue,
 	},
 	secondaryBtn: {
-		width: 62,
+		width: 52,
+		height: 52,
 		borderWidth: 1,
 		marginVertical: 20,
-		paddingVertical: 15,
 		borderColor: COLORS.darkBlue,
 		backgroundColor: COLORS.bg,
 	},
-	tertiaryBtn: {
+	secondaryLightBtn: {
 		width: 62,
+		borderWidth: 2,
+		paddingVertical: 8,
+		borderColor: COLORS.lightBlue,
+		backgroundColor: COLORS.bg,
+	},
+	tertiaryBtn: {
+		width: 42,
+		height: 52,
 		margin: 5,
 		marginVertical: 20,
-		paddingVertical: 15,
-		backgroundColor: COLORS.bgDark,
+		// paddingVertical: 15,
+		borderWidth: 2,
+		// backgroundColor: COLORS.lightBlue,
+		borderColor: COLORS.lightBlue,
+		backgroundColor: COLORS.bgModal,
 	},
 	transparentBtn: {
 		width: 32,
@@ -63,10 +75,13 @@ const styles = StyleSheet.create({
 		color: COLORS.bg,
 	},
 	secondaryTextBtn: {
+		color: COLORS.darkBlue,
+	},
+	secondaryLightTextBtn: {
 		color: COLORS.lightBlue,
 	},
 	tertiaryTextBtn: {
-		color: COLORS.bg,
+		color: COLORS.lightBlue,
 	},
 	transparentTextBtn: {
 		color: COLORS.darkBlue,

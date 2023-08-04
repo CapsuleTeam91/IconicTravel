@@ -18,7 +18,7 @@ const Snap = (props) => {
 
 	return (
 		<View style={styles.cameraContainer}>
-			<View style={styles.buttonsContainer}>
+			<View>
 				<ButtonIcon
 					type="tertiary"
 					name={
@@ -40,19 +40,25 @@ const Snap = (props) => {
 						)
 					}
 				/>
+				<ButtonIcon
+					type="tertiary"
+					name="close-outline"
+					onpress={() => props.setCameraOpen(false)}
+				/>
 			</View>
+
 			<Camera
 				type={type}
 				flashMode={flashMode}
 				ref={(ref) => (cameraRef = ref)}
-				style={styles.camera}></Camera>
-			<View style={styles.snapContainer}>
-				<ButtonIcon
-					type="tertiary"
-					name="aperture-outline"
-					onpress={() => cameraRef && takePicture()}
-				/>
-			</View>
+				style={styles.camera}
+			/>
+
+			<ButtonIcon
+				type="tertiary"
+				name="aperture-outline"
+				onpress={() => cameraRef && takePicture()}
+			/>
 		</View>
 	);
 };
@@ -60,26 +66,12 @@ const styles = StyleSheet.create({
 	cameraContainer: {
 		width: '90%',
 		flexDirection: 'row',
-		justifyContent: 'center',
-	},
-	btnContainer: {
-		width: '70%',
-		flexDirection: 'row',
 		alignItems: 'center',
 		justifyContent: 'space-evenly',
 	},
 	camera: {
 		width: 200,
 		height: 200,
-		borderRadius: 250,
-	},
-	buttonsContainer: {
-		flex: 1,
-	},
-	snapContainer: {
-		flex: 1,
-		alignItems: 'center',
-		justifyContent: 'center',
 	},
 });
 
