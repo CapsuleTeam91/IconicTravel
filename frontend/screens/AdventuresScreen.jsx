@@ -7,26 +7,26 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { COLORS, COLORS_THEME, STYLES_GLOBAL } from "../utils/styles";
 import ButtonIcon from "../components/ButtonIcon";
 import React, { useEffect, useRef, useState } from "react";
-import { COLORS, COLORS_THEME, STYLES_GLOBAL } from "../utils/styles";
 
 const AdventuresScreen = ({ navigation }) => {
   // Variable d'état
-  const [messageConfirmes, setMessageConfirmes] = useState([]);
-  const [messageEnAttente, setMessageEnAttente] = useState([]);
+  const [messagesConfirmes, setMessagesConfirmes] = useState([]);
+  const [messagesEnAttente, setMessagesEnAttente] = useState([]);
   const [currentTab, setCurrentTab] = useState("confirmes");
 
   const handleConfirmerMessage = (message) => {
-    setVoyagesConfirmes([...messageConfirmes, message]);
-    setVoyagesEnAttente(messageEnAttente.filter((msg) => msg !== message));
+    setMessagesConfirmes([...messagesConfirmes, message]);
+    setMessagesEnAttente(messagesEnAttente.filter((msg) => msg !== message));
   };
 
   const handleAnnulerMessage = (message) => {
-    setVoyagesEnAttente(messageEnAttente.filter((msg) => msg !== message));
+    setMessagesEnAttente(messagesEnAttente.filter((msg) => msg !== message));
   };
 
-  const messageConfimesList = messageConfirmes.map((message, index) => (
+  const messageConfimesList = messagesConfirmes.map((message, index) => (
     <View key={index} style={styles.messageCard}>
       <Text style={styles.voyageInfo}>
         {" "}
@@ -37,7 +37,7 @@ const AdventuresScreen = ({ navigation }) => {
     </View>
   ));
 
-  const messageEnAttenteList = messageEnAttente.map((message, index) => (
+  const messageEnAttenteList = messagesEnAttente.map((message, index) => (
     <View key={index} style={styles.messageCard}>
       <Text style={styles.voyageInfo}>
         Destination : {message.destination} - Date : {message.date}{" "}
@@ -75,28 +75,48 @@ const AdventuresScreen = ({ navigation }) => {
   //       message: "Hello.",
   //     },
   //   ];
+  const MessagesConfirmes = ({ messages }) => {
+    return <View style={styles.MessagesConfirmes}>{messages}</View>;
+  };
+
+  const MessagesEnAttente = ({ messages }) => {
+    return <View style={styles.MessagesConfirmes}>{messages}</View>;
+  };
 
   return (
-    <View style={styles.tabcontainer}>
-      <View style={styles.tabContainer}>
-        <TouchableOpacity
-          style={styles.tab}
-          onPress={() => setCurrentTab("confirmes")}
-        >
-          <Text style={styles.tabConfime}> Confirmés </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.tab}
-          onPress={() => setCurrentTab("en attente")}
-        >
-          <Text style={styles.tabPending}>En Attente</Text>
-        </TouchableOpacity>
-      </View>
+    <View style={styles.container}>
       <View style={styles.contentContainer}>
-        {currentTab === "confirme" ? messageConfimesList : messageEnAttenteList}
-      </View>
-      <View style={styles.title}>
-        <Text style={STYLES_GLOBAL.title}>Iconic Adventures</Text>
+        <View style={styles.header}>
+          <Text style={styles.title}>Iconic Adventure</Text>
+        </View>
+        <View style={styles.tabContainer}>
+          <TouchableOpacity
+            style={[
+              styles.tab,
+              currentTab === "confirmes" ? styles.activeTab : null,
+            ]}
+            onPress={() => setCurrentTab("confirmes")}
+          >
+            <Text style={styles.confirmesContainer}>Confirmés</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[
+              styles.tab,
+              currentTab === "en_attente" ? styles.activeTab : null,
+            ]}
+            onPress={() => setCurrentTab("en_attente")}
+          >
+            <Text style={styles.enAttenteContainer}>En Attente</Text>
+          </TouchableOpacity>
+        </View>
+        {currentTab === "confirmes" ? (
+          <MessagesConfirmes messages={messageConfimesList} />
+        ) : (
+          <MessagesEnAttente
+            messages={messageEnAttenteList}
+            onConfirmer={handleConfirmerMessage}
+          />
+        )}
       </View>
     </View>
   );
@@ -105,100 +125,107 @@ const AdventuresScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    alignItems: "center",
+    justifyContent: "flex-start",
     backgroundColor: "#f0f0f0",
   },
   header: {
-    backgroundColor: "#007AFF",
-    paddingTop: 20,
     paddingBottom: 10,
     alignItems: "center",
   },
   title: {
     fontSize: 24,
     fontWeight: "bold",
-    color: "white",
-    borderColor: "red",
+    color: COLORS.darkBlue,
   },
   contentContainer: {
     flex: 1,
-    justifyContent: "center", // Aligne les éléments au centre verticalement
     padding: 10,
   },
   tabContainer: {
     flexDirection: "row",
-    justifyContent: "center", // Aligne les éléments au centre horizontalement
+    justifyContent: "space-around",
     paddingVertical: 10,
-    borderBottomWidth: 1,
-    borderColor: "#ccc",
+    marginTop: 20,
+    overflow: "visible",
   },
   tab: {
     paddingVertical: 10,
     paddingHorizontal: 20,
   },
-  tabConfime: {
-    fontSize: 18,
-    fontWeight: "bold",
-    color: "black",
-    justifyContent: "center",
-    border: 1,
-    borderColor: "red",
-    borderRadius: "10%",
-  },
 
-  tabPending: {
-    fontSize: 18,
-    fontWeight: "bold",
-    color: "black",
-    justifyContent: "center",
-  },
-
-  activeTab: {
-    borderBottomWidth: 2,
-    borderColor: "#007AFF",
-  },
-  messageCard: {
-    backgroundColor: "white",
+  confirmesContainer: {
+    backgroundColor: COLORS.darkBlue,
     borderRadius: 10,
-    padding: 10,
-    marginBottom: 10,
-    borderColor: "#ccc",
+    textAlign: "center",
+    color: "white",
+    fontWeight: "bold",
+    paddingVertical: 12,
+    paddingHorizontal: 30,
+    marginVertical: 30,
+    overflow: "hidden",
+  },
+
+  enAttenteContainer: {
+    backgroundColor: "#ffff",
+    borderRadius: 10,
+    fontWeight: "bold",
+    textAlign: "center",
     borderWidth: 1,
+    borderColor: COLORS.darkBlue,
+    color: COLORS.darkBlue,
+    paddingVertical: 12,
+    paddingHorizontal: 30,
+    marginVertical: 30,
+    overflow: "hidden",
   },
-  voyageInfo: {
-    fontSize: 14,
-    fontWeight: "bold",
-    marginBottom: 5,
-  },
-  messageText: {
-    fontSize: 16,
-  },
-  messageHote: {
-    fontSize: 14,
-    fontWeight: "bold",
-  },
-  confirmButton: {
-    backgroundColor: "#007AFF",
-    borderRadius: 5,
-    paddingVertical: 8,
-    paddingHorizontal: 15,
-    marginTop: 10,
-  },
-  confirmButtonText: {
-    color: "white",
-    fontSize: 16,
-    textAlign: "center",
-  },
-  cancelButton: {
-    backgroundColor: "#FF3B30",
-    borderRadius: 5,
-    paddingVertical: 8,
-    paddingHorizontal: 15,
-    marginTop: 5,
-  },
-  cancelButtonText: {
-    color: "white",
-    fontSize: 16,
-    textAlign: "center",
-  },
+
+  // messageCard: {
+  //   // backgroundColor: "white",
+  //   // borderRadius: 10,
+  //   padding: 10,
+  //   marginBottom: 10,
+  //   borderColor: "#ccc",
+  //   borderWidth: 1,
+  // },
+
+  // voyageInfo: {
+  //   fontSize: 14,
+  //   fontWeight: "bold",
+  //   marginBottom: 5,
+  // },
+  // messageText: {
+  //   fontSize: 16,
+  // },
+  // messageHote: {
+  //   fontSize: 14,
+  //   fontWeight: "bold",
+  // },
+
+  // confirmButton: {
+  //   backgroundColor: "#007AFF",
+  //   borderRadius: 5,
+  //   paddingVertical: 8,
+  //   paddingHorizontal: 15,
+  //   marginTop: 10,
+  // },
+
+  // confirmButtonText: {
+  //   color: "white",
+  //   fontSize: 16,
+  //   textAlign: "center",
+  // },
+  // cancelButton: {
+  //   backgroundColor: "#FF3B30",
+  //   borderRadius: 5,
+  //   paddingVertical: 8,
+  //   paddingHorizontal: 15,
+  //   marginTop: 5,
+  // },
+  // cancelButtonText: {
+  //   color: "white",
+  //   fontSize: 16,
+  //   textAlign: "center",
+  // },
 });
 export default AdventuresScreen;
