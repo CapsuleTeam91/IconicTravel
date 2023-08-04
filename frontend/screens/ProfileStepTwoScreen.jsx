@@ -43,8 +43,8 @@ const ProfileStepTwoScreen = ({ navigation }) => {
 	};
 
 	const clear = () => {
-		setCity('')
-	}
+		setCity('');
+	};
 
 	return (
 		<SafeAreaView style={{ flex: 1 }}>
@@ -79,11 +79,12 @@ const ProfileStepTwoScreen = ({ navigation }) => {
 						ligthTheme={false}
 						clear={clear}
 					/>
-					<DropdownLanguage
-						spokenLanguages={spokenLanguages}
-						setSpokenLanguages={setSpokenLanguages}
-					/>
 				</AutocompleteDropdownContextProvider>
+
+				<DropdownLanguage
+					spokenLanguages={spokenLanguages}
+					setSpokenLanguages={setSpokenLanguages}
+				/>
 
 				{error && <Text style={STYLES_GLOBAL.error}>{error}</Text>}
 

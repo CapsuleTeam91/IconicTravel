@@ -32,6 +32,7 @@ import DropdownLanguage from '../components/DropdownLanguage';
 import Snap from './Snap';
 import { useIsFocused } from '@react-navigation/native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import HobbiesAutoCompleteHomeMade from '../components/HobbiesAutoCompleteHomeMade';
 
 const EDITABLES = {
 	city: 'city',
@@ -63,7 +64,7 @@ const UserProfileScreen = ({ navigation }) => {
 	const [hasCameraPermission, setHasCameraPermission] = useState(false);
 	const [cameraOpen, setCameraOpen] = useState(false);
 	const [image, setImage] = useState(null);
-	const [hobbies, setHobbies] = useState([]);
+	const [hobbies, setHobbies] = useState(user.hobbies);
 
 	const toggleSwitch = () => {
 		fetch(`${URL_EXPO}:3000/users/hosting/${user.token}`, { method: 'PUT' })
@@ -252,7 +253,7 @@ const UserProfileScreen = ({ navigation }) => {
 				<Snap
 					setImage={setImage}
 					setCameraOpen={setCameraOpen}
-					navigation={navigation}
+					// navigation={navigation}
 				/>
 			)}
 			<View style={styles.btnContainer}>
@@ -263,7 +264,7 @@ const UserProfileScreen = ({ navigation }) => {
 					<ButtonIcon
 						type="secondary"
 						name="camera-outline"
-						onpress={() => setCameraOpen(true)}
+						onpress={() => setCameraOpen(!cameraOpen)}
 					/>
 				)}
 			</View>
@@ -367,7 +368,7 @@ const UserProfileScreen = ({ navigation }) => {
 		</View>
 	);
 
-	// TODO opti création component +style
+	// TODO opti création component
 	const updateInfo = (
 		<View style={styles.inputContainer}>
 			<View
@@ -448,9 +449,14 @@ const UserProfileScreen = ({ navigation }) => {
 		</View>
 	);
 
-	// TODO style + meca
 	const updatePassion = (
 		<View style={styles.inputContainer}>
+			<HobbiesAutoCompleteHomeMade
+				hobbies={hobbies}
+				setHobbies={setHobbies}
+				error={error}
+				setError={setError}
+			/>
 			<View style={styles.optionsContainer}>
 				<ButtonIcon
 					type="secondary"
@@ -464,7 +470,12 @@ const UserProfileScreen = ({ navigation }) => {
 					type="primary"
 					size={18}
 					name="checkmark-outline"
-					onpress={() => {}}
+					onpress={() => {
+						handleUpdate({
+							hobbies,
+						});
+						setUpdatePassionVisible(false);
+					}}
 				/>
 			</View>
 		</View>

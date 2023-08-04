@@ -17,54 +17,46 @@ const Snap = (props) => {
 	};
 
 	return (
-		<View style={styles.container}>
-			<View style={styles.cameraContainer}>
-				<View style={styles.buttonsContainer}>
-					<ButtonIcon
-						type="tertiary"
-						name={
-							type === CameraType.back ? 'sync-circle' : 'sync-circle-outline'
-						}
-						onpress={() =>
-							setType(
-								type === CameraType.back ? CameraType.front : CameraType.back
-							)
-						}
-					/>
+		<View style={styles.cameraContainer}>
+			<View style={styles.buttonsContainer}>
+				<ButtonIcon
+					type="tertiary"
+					name={
+						type === CameraType.back ? 'sync-circle' : 'sync-circle-outline'
+					}
+					onpress={() =>
+						setType(
+							type === CameraType.back ? CameraType.front : CameraType.back
+						)
+					}
+				/>
 
-					<ButtonIcon
-						type="tertiary"
-						name={flashMode === FlashMode.off ? 'flash' : 'flash-outline'}
-						onpress={() =>
-							setFlashMode(
-								flashMode === FlashMode.off ? FlashMode.torch : FlashMode.off
-							)
-						}
-					/>
-				</View>
-				<Camera
-					type={type}
-					flashMode={flashMode}
-					ref={(ref) => (cameraRef = ref)}
-					style={styles.camera}></Camera>
-				<View style={styles.snapContainer}>
-					<ButtonIcon
-						type="tertiary"
-						name="aperture-outline"
-						onpress={() => cameraRef && takePicture()}
-					/>
-				</View>
+				<ButtonIcon
+					type="tertiary"
+					name={flashMode === FlashMode.off ? 'flash' : 'flash-outline'}
+					onpress={() =>
+						setFlashMode(
+							flashMode === FlashMode.off ? FlashMode.torch : FlashMode.off
+						)
+					}
+				/>
+			</View>
+			<Camera
+				type={type}
+				flashMode={flashMode}
+				ref={(ref) => (cameraRef = ref)}
+				style={styles.camera}></Camera>
+			<View style={styles.snapContainer}>
+				<ButtonIcon
+					type="tertiary"
+					name="aperture-outline"
+					onpress={() => cameraRef && takePicture()}
+				/>
 			</View>
 		</View>
 	);
 };
 const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-		alignItems: 'center',
-		justifyContent: 'space-between',
-		backgroundColor: COLORS.darkBlue,
-	},
 	cameraContainer: {
 		width: '90%',
 		flexDirection: 'row',
