@@ -8,16 +8,16 @@ const ProfileStepFourScreen = ({ navigation }) => {
 		<SafeAreaView style={styles.container}>
 			<Text style={[STYLES_GLOBAL.title, styles.title]}>Bienvenue</Text>
 
-			<View styles={styles.text2}>
-			<Text style={[STYLES_GLOBAL.subTitle, styles.text3]}>
-				Vous avez achevé la création de votre profil d'Iconic Traveler !
-			</Text>
-			<Text style={styles.welcome}>
-				Bienvenue dans notre Iconic Community. 
-				C'est un endroit qui permet de rencontrer des nouvelles personnes et de créer des liens.
-				Nous vous demandons d'être respectueux et de respecter les règles de la communauté. 
-				Au plaisir !
-			</Text>
+			<View styles={styles.textContainer}>
+				<Text style={[STYLES_GLOBAL.subTitle, styles.subTitle]}>
+					Vous avez achevé la création de votre profil d'Iconic Traveler !
+				</Text>
+				<Text style={styles.text}>
+					Bienvenue dans notre Iconic Community. C'est un endroit qui permet de
+					rencontrer des nouvelles personnes et de créer des liens. Nous vous
+					demandons d'être respectueux et de respecter les règles de la
+					communauté. Au plaisir !
+				</Text>
 			</View>
 
 			<Button
@@ -32,7 +32,7 @@ const ProfileStepFourScreen = ({ navigation }) => {
 				type="secondary"
 				name="information-circle-outline"
 				onpress={() => {
-					navigation.navigate('About')
+					navigation.navigate('About');
 				}}
 			/>
 		</SafeAreaView>
@@ -45,24 +45,18 @@ const styles = StyleSheet.create({
 		justifyContent: 'space-between',
 		backgroundColor: COLORS.bg,
 	},
-
+	textContainer: {
+		marginTop: 70,
+		alignItems: 'center',
+	},
 	title: {
 		marginTop: 70,
 	},
-
-	text2: {
-		alignItems: 'center',
-		textAlign: 'justify',
-		marginTop: 70,
-	},
-
-	text3:  {
-		alignItems: 'center',
+	subTitle: {
 		padding: 10,
 		textAlign: 'center',
 	},
-
-	welcome:{
+	text: {
 		alignItems: 'center',
 		textAlign: 'justify',
 		padding: 20,
