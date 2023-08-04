@@ -22,6 +22,7 @@ export const STYLES_GLOBAL = StyleSheet.create({
 		backgroundColor: COLORS.bg,
 	},
 	title: {
+		width: '90%',
 		color: COLORS.darkBlue,
 		fontSize: 32,
 		letterSpacing: 1.2,
@@ -31,7 +32,7 @@ export const STYLES_GLOBAL = StyleSheet.create({
 	},
 	titleLight: {
 		color: COLORS.bg,
-		marginTop: 80,
+		marginTop: 40,
 		marginBottom: 20,
 	},
 	subTitle: {
@@ -40,16 +41,16 @@ export const STYLES_GLOBAL = StyleSheet.create({
 	},
 	subTitleLight: {
 		color: COLORS.bg,
-		margin: 20,
+		// margin: 20,
 	},
 	textLight: {
 		padding: 15,
-		fontSize: 18,
+		fontSize: 16,
 		color: COLORS.bg,
 	},
 	textDark: {
 		padding: 15,
-		fontSize: 18,
+		fontSize: 16,
 		color: COLORS.darkBlue,
 	},
 	error: {
