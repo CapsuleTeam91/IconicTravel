@@ -109,11 +109,18 @@ const UserProfileScreen = ({ route, navigation }) => {
 								</View>
 
 							</View>
-							<TouchableOpacity
-								style={[styles.button, styles.buttonClose]}
-								onPress={() => setModalVisible(!modalVisible)}>
-								<Text style={styles.textStyle}>Valider</Text>
-							</TouchableOpacity>
+							<View style={styles.btnContainer}>
+								<TouchableOpacity
+									style={[styles.button, styles.buttonClose]}
+									onPress={() => setModalVisible(!modalVisible)}>
+									<Text style={styles.textStyle}>Annuler</Text>
+								</TouchableOpacity>
+								<TouchableOpacity
+									style={[styles.button, styles.buttonClose]}
+									onPress={() => setModalVisible(!modalVisible)}>
+									<Text style={styles.textStyle}>Valider</Text>
+								</TouchableOpacity>
+							</View>
 						</View>
 					</View>
 				</Modal>
@@ -290,6 +297,7 @@ const styles = StyleSheet.create({
 		elevation: 5,
 	},
 	button: {
+		marginHorizontal: 10,
 		borderRadius: 20,
 		padding: 10,
 		elevation: 2,
@@ -344,6 +352,12 @@ const styles = StyleSheet.create({
 		width: '40%',
 		flexDirection: 'row',
 		justifyContent: 'space-around'
+	},
+	btnContainer: {
+		width: '100%',
+		flexDirection: 'row',
+		justifyContent: 'center',
+		alignItems: 'center'
 	}
 });
 
