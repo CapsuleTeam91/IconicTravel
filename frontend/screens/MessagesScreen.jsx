@@ -1,27 +1,145 @@
-import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
-import ButtonIcon from '../components/ButtonIcon';
-import { STYLES_GLOBAL } from '../utils/styles';
+import {
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  View,
+  FlatList,
+  TouchableOpacity,
+} from "react-native";
+import ButtonIcon from "../components/ButtonIcon";
+import { STYLES_GLOBAL, COLORS } from "../utils/styles";
+import React, { useState } from "react";
 
 const MessagesScreen = ({ navigation }) => {
-	return (
-		<SafeAreaView style={{ flex: 1 }}>
-			<View style={styles.container}>
-				<Text style={STYLES_GLOBAL.subTitle}>Messages</Text>
-			</View>
-		</SafeAreaView>
-	);
+  // Fausse donnée
+  const fakeData = [
+    {
+      id: "user1",
+      username: "John Doe",
+      messages: [
+        { id: "3", text: "Hi there!", sender: "user2", time: "10:30" },
+        { id: "4", text: "I am good.", sender: "user2", time: "10:32" },
+      ],
+    },
+    {
+      id: "user2",
+      username: "Jane Smith",
+      messages: [
+        { id: "3", text: "Hi there!", sender: "user2", time: "10:30" },
+        { id: "4", text: "I am good.", sender: "user2", time: "10:32" },
+      ],
+    },
+  ];
+
+  // Variable d'état pour stocker les utilisateurs et leurs messages
+  const [users, setUsers] = useState(fakeData);
+
+  // Fonction pour gérer le clic sur un utilisateur
+  const handleUserPress = (userId) => {
+    const selectedUser = users.find((user) => user.id === userId);
+    if (selectedUser) {
+      navigation.navigate("ChatScreen", { user: selectedUser });
+    }
+  };
+
+  // Fonction pour afficher chaque élément d'utilisateur
+  const renderUserItem = ({ item }) => {
+    // Obtenir le dernier message de l'utilisateur
+    const lastMessage = item.messages[item.messages.length - 1];
+    return (
+      <TouchableOpacity
+        style={styles.userItem}
+        onPress={() => handleUserPress(item.id)}
+      >
+        <View style={styles.userAvatar} />
+        <View style={styles.userInfo}>
+          <Text style={styles.username}>{item.username}</Text>
+          <View style={styles.lastMessageContainer}>
+            <Text style={styles.lastMessageText}>{lastMessage.text}</Text>
+            <View style={styles.timeText}>
+              <Text style={styles.time}>{lastMessage.time}</Text>
+            </View>
+          </View>
+        </View>
+      </TouchableOpacity>
+    );
+  };
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>Message</Text>
+      <View style={styles.messageContainer}>
+        <FlatList
+          data={users}
+          renderItem={renderUserItem}
+          keyExtractor={(item) => item.id}
+          contentContainerStyle={styles.userList}
+        />
+      </View>
+    </View>
+  );
 };
 
 const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-		alignItems: 'center',
-		paddingVertical: 40,
-		paddingHorizontal: 20,
-		justifyContent: 'space-between',
-		borderWidth: 2,
-		borderColor: 'red',
-	},
+  container: {
+    flex: 1,
+    backgroundColor: "#f0f0f0",
+  },
+  title: {
+    color: COLORS.darkBlue,
+    fontSize: 20,
+    letterSpacing: 1.2,
+    fontWeight: "700",
+    textAlign: "center",
+    textTransform: "uppercase",
+    marginTop: 20,
+  },
+  userList: {
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+  },
+  userItem: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: "#ccc",
+  },
+  userAvatar: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    backgroundColor: "#625f5f",
+    marginRight: 12,
+    overflow: "hidden",
+  },
+  userInfo: {
+    flex: 1,
+  },
+  username: {
+    fontSize: 18,
+    // fontWeight: "bold",
+    color: COLORS.darkBlue,
+  },
+
+  lastMessage: {
+    fontSize: 14,
+    color: "#020202",
+  },
+  time: {
+    color: "#555",
+    fontSize: 12,
+    flexDirection: "row-reverse",
+  },
+  timeText: {
+    flexDirection: "row-reverse",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  messageContainer: {
+    marginTop: 50,
+  },
 });
 
 export default MessagesScreen;
