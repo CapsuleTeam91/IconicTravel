@@ -33,18 +33,17 @@ const UserProfileScreen = ({ route, navigation }) => {
 					style={styles.image}
 				/>
 				<Modal
-					
 					animationType="fade"
 					transparent={true}
 					visible={modalVisible}
-					onRequestClose={() => {setModalVisible(!modalVisible)}}>
+					onRequestClose={() => { setModalVisible(!modalVisible) }}>
 					<View style={styles.centeredView}>
 						<View style={styles.modalView}>
 							<Text style={styles.modalText}>Hello World!</Text>
 							<Pressable
-							style={[styles.button, styles.buttonClose]}
-							onPress={() => setModalVisible(!modalVisible)}>
-							<Text style={styles.textStyle}>Hide Modal</Text>
+								style={[styles.button, styles.buttonClose]}
+								onPress={() => setModalVisible(!modalVisible)}>
+								<Text style={styles.textStyle}>Hide Modal</Text>
 							</Pressable>
 						</View>
 					</View>
@@ -89,10 +88,10 @@ const UserProfileScreen = ({ route, navigation }) => {
 				<View>
 					<Text style={styles.subTitle}>Passions</Text>
 				</View>
-				<View  style={styles.hobbiesContainer}>
-				{user.hobbies.map((h, i) => (
-					<Text key={i} style={styles.hobby}>{h}</Text>
-				))}
+				<View style={styles.hobbiesContainer}>
+					{user.hobbies.map((h, i) => (
+						<Text key={i} style={styles.hobby}>{h}</Text>
+					))}
 				</View>
 			</View>
 
@@ -200,7 +199,7 @@ const styles = StyleSheet.create({
 		paddingVertical: 2,
 	},
 	modale: {
-		width:'50%',
+		width: '50%',
 		height: '50%',
 		backgroundColor: 'blue'
 	},
@@ -209,8 +208,8 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 		alignItems: 'center',
 		marginTop: 22,
-	  },
-	  modalView: {
+	},
+	modalView: {
 		margin: 20,
 		backgroundColor: 'white',
 		borderRadius: 20,
@@ -218,33 +217,33 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		shadowColor: '#000',
 		shadowOffset: {
-		  width: 0,
-		  height: 2,
+			width: 0,
+			height: 2,
 		},
 		shadowOpacity: 0.25,
 		shadowRadius: 4,
 		elevation: 5,
-	  },
-	  button: {
+	},
+	button: {
 		borderRadius: 20,
 		padding: 10,
 		elevation: 2,
-	  },
-	  buttonOpen: {
+	},
+	buttonOpen: {
 		backgroundColor: '#F194FF',
-	  },
-	  buttonClose: {
+	},
+	buttonClose: {
 		backgroundColor: '#2196F3',
-	  },
-	  textStyle: {
+	},
+	textStyle: {
 		color: 'white',
 		fontWeight: 'bold',
 		textAlign: 'center',
-	  },
-	  modalText: {
+	},
+	modalText: {
 		marginBottom: 15,
 		textAlign: 'center',
-	  },
+	},
 });
 
 export default UserProfileScreen;

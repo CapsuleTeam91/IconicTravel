@@ -10,7 +10,7 @@ import MapView, { Marker } from 'react-native-maps';
 import { ERRORS } from '../utils/constants';
 import { URL_EXPO } from '../environnement';
 import { DISTANCES } from '../utils/data';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { MaterialCommunityIcons, Ionicons } from '@expo/vector-icons';
 import { convertCoordsToKm } from '../utils/helper'
 
 const SearchScreen = ({ navigation }) => {
@@ -131,7 +131,9 @@ const SearchScreen = ({ navigation }) => {
 							<Text style={{ fontSize: 12 }}>{newDesc}</Text>
 						</View>
 						<View style={styles.userDetailsContainer2}>
-							<Text>{`${age} ans`}</Text>
+							<TouchableOpacity on onPress={() => navigation.navigate('Profile', { user })}>
+								<Ionicons name="arrow-forward-circle-outline" size={35} color="black" />
+							</TouchableOpacity>
 						</View>
 					</View>
 				</TouchableWithoutFeedback>
@@ -155,7 +157,6 @@ const SearchScreen = ({ navigation }) => {
 					// icon={icons[user.type]}
 					description={`${user.distance}km`}
 					onPress={() => displayUser(user)}
-					onCalloutPress={() => navigation.navigate('Profile', { user })}
 				/>)
 				;
 		})
