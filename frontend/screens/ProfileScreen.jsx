@@ -21,6 +21,7 @@ import { AntDesign } from '@expo/vector-icons';
 
 const UserProfileScreen = ({ route, navigation }) => {
 	const user = route.params.user;
+	const thisUser = useSelector((state) => state.user.value);
 	const [modalVisible, setModalVisible] = useState(false);
 	const [startDate, setStartDate] = useState(new Date());
 	const [endDate, setEndDate] = useState(new Date(new Date().setDate(new Date().getDate() + 1)));
@@ -41,14 +42,22 @@ const UserProfileScreen = ({ route, navigation }) => {
 	}
 
 	const validateContact = () => {
-		setModalVisible(!modalVisible)
-		const travelDatas = {
-			startDate,
-			endDate,
-			adultsNbr,
-			childrenNbr,
-			babiesNbr
-		}
+		fetch(`${URL_EXPO}:3000/users/getId/${thisUser.token}/${user.email}`)
+			.then(resp => resp.json())
+			.then(data => {
+				setModalVisible(!modalVisible)
+				const travelDatas = {
+					traveler: data.travelerId,
+					host: data.hostId,
+					startDate,
+					endDate,
+					adultsNbr,
+					childrenNbr,
+					babiesNbr
+				}
+				travelDatas.save()
+			})
+
 	}
 
 	return (

@@ -117,6 +117,7 @@ router.get('/', (req, res) => {
 			const filteredData = data.map((user) => ({
 				firstname: user.firstname,
 				lastname: user.lastname,
+				email: user.email,
 				dateOfBirth: user.dateOfBirth,
 				avatarUrl: user.avatarUrl,
 				description: user.description,
@@ -236,5 +237,21 @@ router.delete('/deletepicture/:token', (req, res) => {
 		}
 	});
 });
+
+router.get('/getId/:token/:email', (req, res) => {
+	User.findOne({ token: req.params.token }).then((user) => {
+		if (user) {
+			User.findOne({ email: req.params.email }).then((userFound) => {
+				res.json({
+					result: true,
+					hostId: userFound._id,
+					travelerId: user._id
+				})
+			})
+		} else {
+			res.json({ result: false, error: 'Invalid token' });
+		}
+	})
+})
 
 module.exports = router;
