@@ -1,42 +1,34 @@
 import {
 	FlatList,
 	Image,
-	KeyboardAvoidingView,
 	SafeAreaView,
-	ScrollView,
 	StyleSheet,
 	Switch,
 	Text,
 	TouchableOpacity,
 	View,
 } from 'react-native';
-import { useCallback, useEffect, useState } from 'react';
-import { checkDOB, getAge } from '../utils/helper';
+import { Camera } from 'expo-camera';
 import { addData } from '../reducers/user';
 import { ERRORS } from '../utils/constants';
 import { URL_EXPO } from '../environnement';
+import { checkDOB, getAge } from '../utils/helper';
 import { useDispatch, useSelector } from 'react-redux';
+import { useIsFocused } from '@react-navigation/native';
+import { useCallback, useEffect, useState } from 'react';
 import { COLORS, COLORS_THEME, STYLES_GLOBAL } from '../utils/styles';
-import ButtonIcon from '../components/ButtonIcon';
+import Snap from './Snap';
 import Input from '../components/Input';
+import Textarea from '../components/Textarea';
 import DatePicker from '../components/DatePicker';
 import ModalModel from '../components/ModalModel';
-import Textarea from '../components/Textarea';
-import { AutocompleteDropdownContextProvider } from 'react-native-autocomplete-dropdown';
-
-import { Camera } from 'expo-camera';
-
-import * as ImagePicker from 'expo-image-picker';
-import { RemoteDataSet } from '../components/RemoteDataSet';
+import ButtonIcon from '../components/ButtonIcon';
 import DropdownLanguage from '../components/DropdownLanguage';
-import Snap from './Snap';
-import { useIsFocused } from '@react-navigation/native';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import HobbiesAutoCompleteHomeMade from '../components/HobbiesAutoCompleteHomeMade';
+import * as ImagePicker from 'expo-image-picker';
 
 const EDITABLES = {
 	city: 'city',
-	languages: 'spokenLanguages',
 };
 
 const UserProfileScreen = ({ navigation }) => {
@@ -45,7 +37,6 @@ const UserProfileScreen = ({ navigation }) => {
 	const user = useSelector((state) => state.user.value);
 	const [isEnabled, setIsEnabled] = useState(user.canHost);
 	const [isEditable, setIsEditable] = useState('');
-
 	const [firstname, setFirstname] = useState(null);
 	const [lastname, setLastname] = useState(null);
 	const [dateOfBirth, setDateOfBirth] = useState(new Date());
@@ -53,9 +44,7 @@ const UserProfileScreen = ({ navigation }) => {
 	const [newCity, setNewCity] = useState('');
 	const [city, setCity] = useState('');
 	const [spokenLanguages, setSpokenLanguages] = useState(user.spokenLanguages);
-
 	const [error, setError] = useState('');
-
 	const [updateAvatarVisible, setUpdateAvatarVisible] = useState(false);
 	const [updateDetailsVisible, setUpdateDetailsVisible] = useState(false);
 	const [updateInfoVisible, setUpdateInfoVisible] = useState(false);
@@ -249,7 +238,7 @@ const UserProfileScreen = ({ navigation }) => {
 					style={styles.image}
 				/>
 			)}
-			{cameraOpen && (
+			{isFocused && cameraOpen && (
 				<Snap
 					setImage={setImage}
 					setCameraOpen={setCameraOpen}
@@ -485,7 +474,6 @@ const UserProfileScreen = ({ navigation }) => {
 		<SafeAreaView style={styles.container}>
 			<View style={styles.optionsContainer}>
 				<Text style={STYLES_GLOBAL.subTitle}>MON PROFIL</Text>
-
 				<ButtonIcon
 					type="secondary"
 					name="arrow-undo-outline"
