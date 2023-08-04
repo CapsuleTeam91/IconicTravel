@@ -1,17 +1,14 @@
-import React, { useCallback, useState, useEffect } from 'react';
-import {
-	StyleSheet,
-	Text,
-	View,
-	Keyboard,
-	TouchableOpacity
-} from 'react-native';
+import React from 'react';
+import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { COLORS } from '../utils/styles';
 import { LANGUAGES_ISO } from '../utils/data';
-import { AutocompleteDropdown } from 'react-native-autocomplete-dropdown';
+import { Dropdown } from 'react-native-element-dropdown';
 
-const DropdownLanguage = ({ spokenLanguages, setSpokenLanguages }) => {
-
+const DropdownLanguage = ({
+	spokenLanguages,
+	setSpokenLanguages,
+	isEditable = true,
+}) => {
 	const getSelectedLanguages = (language) => {
 		if (!language?.title) return;
 		// add language only if not already in the list
@@ -29,41 +26,26 @@ const DropdownLanguage = ({ spokenLanguages, setSpokenLanguages }) => {
 
 	return (
 		<>
-			<AutocompleteDropdown
-				clearOnFocus={true}
-				readOnly={true}
-				closeOnBlur={false}
-				closeOnSubmit={false}
-				useFilter={false}
-				direction={Platform.select({ ios: 'down' })}
-				onOpenSuggestionsList={useCallback((isOpened) => {
-					Keyboard.dismiss();
-				}, [])}
-				textInputProps={{
-					showSoftInputOnFocus: false,
-					color: COLORS.bg,
-					placeholder: 'Langues parlées',
-				}}
-				onSelectItem={(item) => getSelectedLanguages(item)}
-				dataSet={Object.keys(LANGUAGES_ISO)?.map((el, i) => ({
-					id: i,
-					title: el,
-				}))}
-				inputContainerStyle={{
-					width: '70%',
-					color: COLORS.bg,
-					borderRadius: 8,
-					backgroundColor: COLORS.bgDark
-				}}
-				suggestionsListContainerStyle={{
-					backgroundColor: COLORS.lightBlue
-				}}
-				suggestionsListTextStyle={{
-					color: COLORS.bgDark,
-					fontWeight: '700',
-					letterSpacing: 1
-				}}
-			/>
+			{isEditable && (
+				<Dropdown
+					style={styles.dropdown}
+					placeholderStyle={styles.placeholderStyle}
+					selectedTextStyle={styles.selectedTextStyle}
+					containerStyle={styles.containerStyle}
+					itemTextStyle={styles.itemTextStyle}
+					data={Object.keys(LANGUAGES_ISO)?.map((el, i) => ({
+						id: i,
+						title: el,
+					}))}
+					maxHeight={100}
+					labelField="title"
+					valueField="id"
+					placeholder="Langues parlées"
+					value={'Langues parlées'}
+					onChange={(item) => getSelectedLanguages(item)}
+					mode="modal"
+				/>
+			)}
 
 			{spokenLanguages.length > 0 && (
 				<View style={styles.languagesContainer}>
@@ -93,6 +75,39 @@ const styles = StyleSheet.create({
 		paddingHorizontal: 10,
 		margin: 5,
 		borderRadius: 25,
+	},
+	dropdown: {
+		// height: 50,
+		width: '70%',
+		borderRadius: 8,
+		color: COLORS.bg,
+		paddingVertical: 3,
+		paddingHorizontal: 10,
+		backgroundColor: COLORS.bgDark,
+	},
+	placeholderStyle: {
+		color: COLORS.bg,
+		paddingHorizontal: 5,
+	},
+	selectedTextStyle: {
+		fontSize: 16,
+		color: COLORS.bg,
+	},
+	containerStyle: {
+		maxHeight: 300,
+		paddingTop: 15,
+		borderRadius: 8,
+		backgroundColor: COLORS.lightBlue,
+	},
+	itemTextStyle: {
+		marginTop: -15,
+		paddingBottom: 15,
+		letterSpacing: 1,
+		fontWeight: '700',
+		textAlign: 'center',
+		color: COLORS.bgDark,
+		borderBottomWidth: 1,
+		borderBottomColor: COLORS.bg,
 	},
 });
 

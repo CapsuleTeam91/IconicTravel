@@ -25,3 +25,9 @@ export const getAge = (dob) => {
 	var ageDate = new Date(ageDifMs);
 	return Math.abs(ageDate.getUTCFullYear() - 1970);
 };
+
+export const checkDOB = (dob) => {
+	var ageDifMs = Date.now() - dob;
+	var ageDate = new Date(ageDifMs); // miliseconds from epoch
+	return Math.abs(ageDate.getUTCFullYear() - 1970) <= 18;
+};

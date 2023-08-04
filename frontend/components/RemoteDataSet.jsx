@@ -37,7 +37,7 @@ export const RemoteDataSet = memo((props) => {
 	const clear = () => {
 		props.clear();
 		setRemoteDataSet(null);
-	}
+	};
 
 	return (
 		<AutocompleteDropdown

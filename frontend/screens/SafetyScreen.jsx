@@ -6,6 +6,7 @@ import { COLORS, COLORS_THEME, STYLES_GLOBAL } from '../utils/styles';
 import { SafeAreaView, StyleSheet, Text, View, Modal } from 'react-native';
 import Button from '../components/Button';
 import ButtonIcon from '../components/ButtonIcon';
+import ModalModel from '../components/ModalModel';
 import PasswordInput from '../components/PasswordInput';
 
 const SafetyScreen = ({ navigation }) => {
@@ -65,6 +66,58 @@ const SafetyScreen = ({ navigation }) => {
 			});
 	};
 
+	const UpdateHtml = (
+		<>
+			{success ? (
+				<Text>Votre mot de passe a bien été mis à jour</Text>
+			) : (
+				<View
+					style={{
+						minWidth: '105%',
+					}}>
+					<PasswordInput
+						label="Nouveau mot de passe"
+						theme={COLORS_THEME.light}
+						onchangetext={(value) => setNewPassword(value)}
+						value={newPassword}
+					/>
+					<PasswordInput
+						label="Confirmer le mot de passe"
+						theme={COLORS_THEME.light}
+						onchangetext={(value) => setNewConfirmedPassword(value)}
+						value={newConfirmedPassword}
+					/>
+
+					{error && <Text style={STYLES_GLOBAL.error}>{error}</Text>}
+					<View style={styles.modalBtnContainer}>
+						<Button
+							type="secondary"
+							label="Annuler"
+							onpress={() => setUpdateModalVisible(false)}
+						/>
+						<Button type="primary" label="Valider" onpress={handleUpdate} />
+					</View>
+				</View>
+			)}
+		</>
+	);
+
+	const DeleteHtml = (
+		<>
+			<Text style={styles.modalText}>
+				La suppression est définitive, êtes vous sûr(e) de vouloir continuer ?
+			</Text>
+			<View style={styles.modalBtnContainer}>
+				<Button
+					type="secondary"
+					label="Non"
+					onpress={() => setDeleteModalVisible(false)}
+				/>
+				<Button type="primary" label="Oui" onpress={handleDelete} />
+			</View>
+		</>
+	);
+
 	return (
 		<SafeAreaView style={styles.container}>
 			<Text style={[STYLES_GLOBAL.subTitle, styles.title]}>
@@ -88,7 +141,7 @@ const SafetyScreen = ({ navigation }) => {
 					<Button
 						type="primary"
 						label="Désactiver le compte"
-						onpress={() => { }}
+						onpress={() => {}}
 					/>
 					<Button
 						type="secondary"
@@ -98,84 +151,19 @@ const SafetyScreen = ({ navigation }) => {
 				</View>
 			</View>
 
-			<Modal visible={updateModalVisible} animationType="fade" transparent>
-				<View style={styles.centeredView}>
-					<View style={styles.modalView}>
-						<View style={styles.closeBtn}>
-							<ButtonIcon
-								type="transparent"
-								name="close-outline"
-								onpress={() => setUpdateModalVisible(false)}
-							/>
-						</View>
-						<Text style={STYLES_GLOBAL.subTitle}>
-							MODIFICATION DU MOT DE PASSE
-						</Text>
-						{success ? (
-							<Text>Votre mot de passe a bien été mis à jour</Text>
-						) : (
-							<View
-								style={{
-									minWidth: '105%',
-								}}>
-								<PasswordInput
-									label="Nouveau mot de passe"
-									theme={COLORS_THEME.light}
-									onchangetext={(value) => setNewPassword(value)}
-									value={newPassword}
-								/>
-								<PasswordInput
-									label="Confirmer le mot de passe"
-									theme={COLORS_THEME.light}
-									onchangetext={(value) => setNewConfirmedPassword(value)}
-									value={newConfirmedPassword}
-								/>
+			<ModalModel
+				visible={updateModalVisible}
+				setVisible={setUpdateModalVisible}
+				title="MODIFICATION DU MOT DE PASSE"
+				children={UpdateHtml}
+			/>
 
-								{error && <Text style={STYLES_GLOBAL.error}>{error}</Text>}
-								<View style={styles.modalBtnContainer}>
-									<Button
-										type="secondary"
-										label="Annuler"
-										onpress={() => setUpdateModalVisible(false)}
-									/>
-									<Button
-										type="primary"
-										label="Valider"
-										onpress={handleUpdate}
-									/>
-								</View>
-							</View>
-						)}
-					</View>
-				</View>
-			</Modal>
-
-			<Modal visible={deleteModalVisible} animationType="fade" transparent>
-				<View style={styles.centeredView}>
-					<View style={styles.modalView}>
-						<View style={styles.closeBtn}>
-							<ButtonIcon
-								type="transparent"
-								name="close-outline"
-								onpress={() => setDeleteModalVisible(false)}
-							/>
-						</View>
-						<Text style={STYLES_GLOBAL.subTitle}>SUPPRESSION DU COMPTE</Text>
-						<Text style={styles.modalText}>
-							La suppression est définitive, êtes vous sûr(e) de vouloir
-							continuer ?
-						</Text>
-						<View style={styles.modalBtnContainer}>
-							<Button
-								type="secondary"
-								label="Non"
-								onpress={() => setDeleteModalVisible(false)}
-							/>
-							<Button type="primary" label="Oui" onpress={handleDelete} />
-						</View>
-					</View>
-				</View>
-			</Modal>
+			<ModalModel
+				visible={deleteModalVisible}
+				setVisible={setDeleteModalVisible}
+				title="SUPPRESSION DU COMPTE"
+				children={DeleteHtml}
+			/>
 
 			<ButtonIcon
 				type="secondary"
@@ -207,28 +195,6 @@ const styles = StyleSheet.create({
 		marginLeft: 20,
 		fontSize: 20,
 	},
-	centeredView: {
-		flex: 1,
-		alignItems: 'center',
-		justifyContent: 'center',
-		backgroundColor: COLORS.bgModal,
-	},
-	modalView: {
-		width: '100%',
-		paddingHorizontal: 20,
-		paddingVertical: 30,
-		borderRadius: 20,
-		shadowOffset: {
-			width: 0,
-			height: 2,
-		},
-		elevation: 5,
-		shadowRadius: 4,
-		shadowOpacity: 0.25,
-		shadowColor: 'black',
-		alignItems: 'center',
-		backgroundColor: COLORS.bg,
-	},
 	modalBtnContainer: {
 		width: '100%',
 		flexDirection: 'row',
@@ -238,9 +204,6 @@ const styles = StyleSheet.create({
 	modalText: {
 		fontSize: 18,
 		textAlign: 'center',
-	},
-	closeBtn: {
-		alignSelf: 'flex-end',
 	},
 });
 

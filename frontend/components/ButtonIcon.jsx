@@ -11,7 +11,7 @@ const ButtonIcon = (props) => {
 			activeOpacity={0.8}>
 			<Ionicons
 				name={props.name}
-				size={28}
+				size={props.size || 28}
 				style={styles[`${props.type}TextBtn`]}
 			/>
 		</TouchableOpacity>
@@ -20,11 +20,8 @@ const ButtonIcon = (props) => {
 
 const styles = StyleSheet.create({
 	btn: {
-		width: 62,
 		alignItems: 'center',
 		borderRadius: 30,
-		paddingVertical: 15,
-
 		shadowColor: COLORS.bg,
 		shadowOffset: {
 			width: 0,
@@ -35,22 +32,30 @@ const styles = StyleSheet.create({
 		elevation: 2,
 	},
 	primaryBtn: {
+		width: 62,
 		marginVertical: 20,
+		paddingVertical: 15,
 		backgroundColor: COLORS.darkBlue,
 	},
 	secondaryBtn: {
+		width: 62,
 		borderWidth: 1,
 		marginVertical: 20,
+		paddingVertical: 15,
 		borderColor: COLORS.darkBlue,
 		backgroundColor: COLORS.bg,
 	},
 	tertiaryBtn: {
+		width: 62,
 		margin: 5,
 		marginVertical: 20,
+		paddingVertical: 15,
 		backgroundColor: COLORS.bgDark,
 	},
 	transparentBtn: {
+		width: 32,
 		borderWidth: 0,
+		padding: 5,
 		borderColor: 'transparent',
 		backgroundColor: COLORS.bg,
 	},

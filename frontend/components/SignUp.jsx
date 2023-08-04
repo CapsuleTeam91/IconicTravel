@@ -8,6 +8,7 @@ import Input from './Input';
 import Button from './Button';
 import PasswordInput from './PasswordInput';
 import DatePicker from '../components/DatePicker';
+import { checkDOB } from '../utils/helper';
 
 const SignUp = (props) => {
 	const dispatch = useDispatch();
@@ -18,12 +19,6 @@ const SignUp = (props) => {
 	const [password, setPassword] = useState('');
 	const [confirmedPassword, setConfirmedPassword] = useState('');
 	const [error, setError] = useState('');
-
-	const checkDOB = (dob) => {
-		var ageDifMs = Date.now() - dob;
-		var ageDate = new Date(ageDifMs); // miliseconds from epoch
-		return Math.abs(ageDate.getUTCFullYear() - 1970) <= 18;
-	};
 
 	const handleRegister = () => {
 		setError(''); // reset previous errors
@@ -100,6 +95,7 @@ const SignUp = (props) => {
 				/>
 				<DatePicker
 					date={dateOfBirth}
+					theme={COLORS_THEME.dark}
 					label={
 						dateOfBirth.toLocaleDateString() !== new Date().toLocaleDateString()
 							? dateOfBirth.toLocaleDateString()

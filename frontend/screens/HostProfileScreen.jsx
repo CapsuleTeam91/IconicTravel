@@ -7,13 +7,15 @@ import {
 	View,
 } from 'react-native';
 import { useState } from 'react';
+import { getAge } from '../utils/helper';
 import { addData } from '../reducers/user';
+import { ERRORS } from '../utils/constants';
+import { URL_EXPO } from '../environnement';
 import { useDispatch, useSelector } from 'react-redux';
-import { ERRORS, URL_EXPO } from '../utils/constants';
 import { COLORS, STYLES_GLOBAL } from '../utils/styles';
 import ButtonIcon from '../components/ButtonIcon';
 
-const UpdateUserProfileScreen = ({ navigation }) => {
+const UserProfileScreen = ({ navigation }) => {
 	const dispatch = useDispatch();
 	const user = useSelector((state) => state.user.value);
 	const [isEnabled, setIsEnabled] = useState(user.canHost);
@@ -37,10 +39,11 @@ const UpdateUserProfileScreen = ({ navigation }) => {
 				<Text style={STYLES_GLOBAL.subTitle}>MON PROFIL</Text>
 				<View style={styles.optionsBtnContainer}>
 					<ButtonIcon
-						type="secondary"
+						type="transparent"
+						size={18}
 						name="pencil-outline"
 						onpress={() => {
-							navigation.navigate('TabNavigator', { screen: 'Settings' });
+							navigation.navigate('UpdateUserProfile');
 						}}
 					/>
 					<ButtonIcon
@@ -197,4 +200,4 @@ const styles = StyleSheet.create({
 	},
 });
 
-export default UpdateUserProfileScreen;
+export default UserProfileScreen;
