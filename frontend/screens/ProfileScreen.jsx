@@ -8,7 +8,7 @@ import {
 	View,
 	Pressable
 } from 'react-native';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { getAge } from '../utils/helper';
 import { addData } from '../reducers/user';
 import { ERRORS } from '../utils/constants';
@@ -25,16 +25,34 @@ const UserProfileScreen = ({ route, navigation }) => {
 	const [modalVisible, setModalVisible] = useState(false);
 	const [startDate, setStartDate] = useState(new Date());
 	const [endDate, setEndDate] = useState(new Date(new Date().setDate(new Date().getDate() + 1)));
-	const [adultsNbr, setAdultsNbr] = useState(0)
-	const [childrenNbr, setChildrenNbr] = useState(0)
-	const [babiesNbr, setBabiesNbr] = useState(0)
+	const [adultsNumber, setAdultsNumber] = useState(1)
+	const [childrenNumber, setChildrenNumber] = useState(0)
+	const [babiesNumber, setBabiesNumber] = useState(0)
+	const [error, setError] = useState('')
+	const [bookingStatus, setBookingStatus] = useState(null)
+
+	useEffect(() => {
+		fetch(`${URL_EXPO}:3000/users/getId/${thisUser.token}/${user.email}`)
+			.then(resp => resp.json())
+			.then(data => {
+				if (data.result) {
+					fetch(`${URL_EXPO}:3000/bookings/exists/${data.travelerId}/${data.hostId}`)
+						.then(resp => resp.json())
+						.then(bookFound => {
+
+							if (bookFound.result && !bookFound.booking.done) {
+								setBookingStatus(bookFound.booking.status)
+							}
+						})
+				}
+			})
+	}, [])
 
 	const startDateValidated = (date) => {
 		setStartDate(date)
 		if (endDate <= date) {
 			setEndDate(new Date(new Date().setDate(date.getDate() + 1)))
 		}
-
 	}
 
 	const calculateNextdate = (date) => {
@@ -45,17 +63,31 @@ const UserProfileScreen = ({ route, navigation }) => {
 		fetch(`${URL_EXPO}:3000/users/getId/${thisUser.token}/${user.email}`)
 			.then(resp => resp.json())
 			.then(data => {
-				setModalVisible(!modalVisible)
 				const travelDatas = {
 					traveler: data.travelerId,
 					host: data.hostId,
 					startDate,
 					endDate,
-					adultsNbr,
-					childrenNbr,
-					babiesNbr
+					adultsNumber,
+					childrenNumber,
+					babiesNumber
 				}
-				travelDatas.save()
+				fetch(`${URL_EXPO}:3000/bookings/request`, {
+					method: 'POST',
+					headers: { 'Content-Type': 'application/json' },
+					body: JSON.stringify({
+						travelDatas
+					}),
+				})
+					.then(resp => resp.json())
+					.then(data => {
+						if (data.result) {
+							setModalVisible(!modalVisible)
+							setBookingStatus('Demande en attente')
+						} else {
+							setError(`Impossible de contacter ${user.firstname}`)
+						}
+					})
 			})
 
 	}
@@ -102,11 +134,11 @@ const UserProfileScreen = ({ route, navigation }) => {
 											<Text style={{ textAlign: 'center', textAlignVertical: 'center' }}>Adultes</Text>
 										</View>
 										<View style={styles.travelerDetailParams}>
-											<TouchableOpacity onPress={() => adultsNbr > 0 && setAdultsNbr(adultsNbr - 1)}>
+											<TouchableOpacity onPress={() => adultsNumber > 0 && setAdultsNumber(adultsNumber - 1)}>
 												<AntDesign name="minuscircleo" size={24} color="black" />
 											</TouchableOpacity>
-											<Text>{adultsNbr}</Text>
-											<TouchableOpacity onPress={() => setAdultsNbr(adultsNbr + 1)}>
+											<Text>{adultsNumber}</Text>
+											<TouchableOpacity onPress={() => setAdultsNumber(adultsNumber + 1)}>
 												<AntDesign name="pluscircleo" size={24} color="black" />
 											</TouchableOpacity>
 										</View>
@@ -117,11 +149,11 @@ const UserProfileScreen = ({ route, navigation }) => {
 											<Text style={{ textAlign: 'center', textAlignVertical: 'center' }}>Enfants</Text>
 										</View>
 										<View style={styles.travelerDetailParams}>
-											<TouchableOpacity onPress={() => childrenNbr > 0 && setChildrenNbr(childrenNbr - 1)}>
+											<TouchableOpacity onPress={() => childrenNumber > 0 && setChildrenNumber(childrenNumber - 1)}>
 												<AntDesign name="minuscircleo" size={24} color="black" />
 											</TouchableOpacity>
-											<Text>{childrenNbr}</Text>
-											<TouchableOpacity onPress={() => setChildrenNbr(childrenNbr + 1)}>
+											<Text>{childrenNumber}</Text>
+											<TouchableOpacity onPress={() => setChildrenNumber(childrenNumber + 1)}>
 												<AntDesign name="pluscircleo" size={24} color="black" />
 											</TouchableOpacity>
 										</View>
@@ -132,15 +164,18 @@ const UserProfileScreen = ({ route, navigation }) => {
 											<Text style={{ textAlign: 'center', textAlignVertical: 'center' }}>Bébés</Text>
 										</View>
 										<View style={styles.travelerDetailParams}>
-											<TouchableOpacity onPress={() => babiesNbr > 0 && setBabiesNbr(babiesNbr - 1)}>
+											<TouchableOpacity onPress={() => babiesNumber > 0 && setBabiesNumber(babiesNumber - 1)}>
 												<AntDesign name="minuscircleo" size={24} color="black" />
 											</TouchableOpacity>
-											<Text>{babiesNbr}</Text>
-											<TouchableOpacity onPress={() => setBabiesNbr(babiesNbr + 1)}>
+											<Text>{babiesNumber}</Text>
+											<TouchableOpacity onPress={() => setBabiesNumber(babiesNumber + 1)}>
 												<AntDesign name="pluscircleo" size={24} color="black" />
 											</TouchableOpacity>
 										</View>
 									</View>
+									{error && <View style={{ alignItems: 'center', width: '100%' }}>
+										<Text style={{ color: 'red' }}>{error}</Text>
+									</View>}
 								</View>
 
 							</View>
@@ -159,9 +194,13 @@ const UserProfileScreen = ({ route, navigation }) => {
 						</View>
 					</View>
 				</Modal>
-				<TouchableOpacity style={styles.hostingBtn} onPress={() => setModalVisible(true)}>
-					<Text style={styles.hostingTxt}>Contact</Text>
-				</TouchableOpacity>
+				{!bookingStatus ?
+					<TouchableOpacity style={styles.hostingBtn} onPress={() => setModalVisible(true)}>
+						<Text style={styles.hostingTxt}>Contact</Text>
+					</TouchableOpacity> :
+					<View style={styles.hostingBtn}>
+						<Text style={styles.hostingTxt}>{bookingStatus}</Text>
+					</View>}
 			</View>
 
 			<View style={styles.detailsContainer}>
@@ -209,7 +248,6 @@ const UserProfileScreen = ({ route, navigation }) => {
 		</SafeAreaView>
 	);
 };
-
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
