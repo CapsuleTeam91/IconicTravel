@@ -12,39 +12,70 @@ import ButtonIcon from "../components/ButtonIcon";
 import React, { useEffect, useRef, useState } from "react";
 
 const AdventuresScreen = ({ navigation }) => {
+  // Fausse base de données
+  const fakeData = [
+    {
+      destination: "Paris",
+      date: "2023-07-15",
+      hôte: "Margot",
+      text: "Bonjour.",
+    },
+
+    {
+      destination: "New York",
+      date: "2023-09-15",
+      hôte: "Sana",
+      text: "Hello.",
+    },
+  ];
+
   // Variable d'état
-  const [messagesConfirmes, setMessagesConfirmes] = useState([]);
+  const [messagesConfirmes, setMessagesConfirmes] = useState([fakeData]);
   const [messagesEnAttente, setMessagesEnAttente] = useState([]);
   const [currentTab, setCurrentTab] = useState("confirmes");
 
+  // Utilisation de useEffect pour initialiser les messages en attente au chargement de la page
+  useEffect(() => {
+    // Au chargement, fausses données seront dans  "messagesEnAttente"
+    setMessagesEnAttente(fakeData);
+  }, []);
+
+  // Fonction pour gérer la confirmation d'un message
   const handleConfirmerMessage = (message) => {
+    // Ajout du message aux messages confirmés et suppression du message des messages en attente
     setMessagesConfirmes([...messagesConfirmes, message]);
     setMessagesEnAttente(messagesEnAttente.filter((msg) => msg !== message));
   };
 
+  // Fonction pour gérer l'annulation d'un message
   const handleAnnulerMessage = (message) => {
+    // Suppression du message des messages en attente
     setMessagesEnAttente(messagesEnAttente.filter((msg) => msg !== message));
   };
 
+  // Liste des messages confirmés
   const messageConfimesList = messagesConfirmes.map((message, index) => (
     <View key={index} style={styles.messageCard}>
       <Text style={styles.voyageInfo}>
         {" "}
-        Destination : {message.destination} - Date : {message.date}{" "}
+        Destination : {message.destination} - Date : {message.date}
       </Text>
-      <Text style={styles.messageHote}>Hôte : {message.hote}</Text>
-      <Text style={styles.messageText}>{message.text}</Text>
+      <Text style={styles.messageHote}>Hôte : {message.hôte}</Text>
+      <Text style={styles.messageText}>Message : {message.text}</Text>
     </View>
   ));
 
+  // Liste des messages en Attente
   const messageEnAttenteList = messagesEnAttente.map((message, index) => (
     <View key={index} style={styles.messageCard}>
       <Text style={styles.voyageInfo}>
         Destination : {message.destination} - Date : {message.date}{" "}
       </Text>
-      <Text style={styles.voyageHote}>Hôte : {message.hote}</Text>
-      <Text style={styles.messageText}>{message.text}</Text>
-      <TouchableOpacity
+      <Text style={styles.messageHote}>Hôte : {message.hôte}</Text>
+
+      <Text style={styles.messageText}>Message : {message.text}</Text>
+      {/* Button pour confirmés le message ou l'annuler. */}
+      {/* <TouchableOpacity
         style={styles.confirmButton}
         onPress={() => handleConfirmerMessage(message)}
       >
@@ -55,30 +86,16 @@ const AdventuresScreen = ({ navigation }) => {
         onPress={() => handleAnnulerMessage(message)}
       >
         <Text style={styles.cancelButtonText}>Annuler</Text>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
     </View>
   ));
 
-  //   // Fausse base de données
-  //   const fakeData = [
-  //     {
-  //       destination: "Paris",
-  //       date: "2023-07-15",
-  //       hôte: "Margot",
-  //       message: "Bonjour.",
-  //     },
-
-  //     {
-  //       destination: "New York",
-  //       date: "2023-09-15",
-  //       hôte: "Sana",
-  //       message: "Hello.",
-  //     },
-  //   ];
+  // Composant pour afficher les messages confirmés
   const MessagesConfirmes = ({ messages }) => {
     return <View style={styles.MessagesConfirmes}>{messages}</View>;
   };
 
+  // Composant pour afficher les messages en attente
   const MessagesEnAttente = ({ messages }) => {
     return <View style={styles.MessagesConfirmes}>{messages}</View>;
   };
@@ -180,52 +197,65 @@ const styles = StyleSheet.create({
     overflow: "hidden",
   },
 
-  // messageCard: {
-  //   // backgroundColor: "white",
-  //   // borderRadius: 10,
-  //   padding: 10,
-  //   marginBottom: 10,
-  //   borderColor: "#ccc",
-  //   borderWidth: 1,
-  // },
+  messageCard: {
+    backgroundColor: "white",
+    borderRadius: 10,
+    padding: 10,
+    marginBottom: 10,
+    borderColor: "#ccc",
+    borderWidth: 1,
+  },
 
-  // voyageInfo: {
-  //   fontSize: 14,
-  //   fontWeight: "bold",
-  //   marginBottom: 5,
-  // },
-  // messageText: {
-  //   fontSize: 16,
-  // },
-  // messageHote: {
-  //   fontSize: 14,
-  //   fontWeight: "bold",
-  // },
+  voyageInfo: {
+    fontSize: 14,
+    fontWeight: "bold",
+    marginBottom: 5,
+  },
+  messageText: {
+    fontSize: 16,
+  },
+  messageHote: {
+    fontSize: 14,
+    fontWeight: "bold",
+  },
 
-  // confirmButton: {
-  //   backgroundColor: "#007AFF",
-  //   borderRadius: 5,
-  //   paddingVertical: 8,
-  //   paddingHorizontal: 15,
-  //   marginTop: 10,
-  // },
+  confirmButton: {
+    backgroundColor: COLORS.darkBlue,
+    borderRadius: 5,
+    paddingVertical: 8,
+    paddingHorizontal: 15,
+    marginTop: 10,
+  },
 
-  // confirmButtonText: {
-  //   color: "white",
-  //   fontSize: 16,
-  //   textAlign: "center",
-  // },
-  // cancelButton: {
-  //   backgroundColor: "#FF3B30",
-  //   borderRadius: 5,
-  //   paddingVertical: 8,
-  //   paddingHorizontal: 15,
-  //   marginTop: 5,
-  // },
-  // cancelButtonText: {
-  //   color: "white",
-  //   fontSize: 16,
-  //   textAlign: "center",
-  // },
+  confirmButtonText: {
+    color: "white",
+    fontSize: 16,
+    textAlign: "center",
+  },
+  cancelButton: {
+    backgroundColor: "#ffff",
+    borderWidth: 1,
+    borderColor: COLORS.darkBlue,
+    color: "black",
+    borderRadius: 5,
+    paddingVertical: 8,
+    paddingHorizontal: 15,
+    marginTop: 5,
+  },
+  cancelButtonText: {
+    color: COLORS.darkBlue,
+    fontSize: 16,
+    textAlign: "center",
+  },
+
+  messageHote: {
+    fontSize: 14,
+    fontWeight: "bold",
+    color: COLORS.darkGray,
+  },
+  messageText: {
+    fontSize: 14,
+    color: "grey",
+  },
 });
 export default AdventuresScreen;
