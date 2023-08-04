@@ -151,9 +151,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   title: {
-    fontSize: 24,
-    fontWeight: "bold",
     color: COLORS.darkBlue,
+    fontSize: 20,
+    letterSpacing: 1.2,
+    fontWeight: "700",
+    textAlign: "center",
+    textTransform: "uppercase",
   },
   contentContainer: {
     flex: 1,
