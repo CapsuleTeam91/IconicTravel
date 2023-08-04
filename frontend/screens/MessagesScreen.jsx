@@ -17,16 +17,36 @@ const MessagesScreen = ({ navigation }) => {
       id: "user1",
       username: "John Doe",
       messages: [
-        { id: "3", text: "Hi there!", sender: "user2", time: "10:30" },
-        { id: "4", text: "I am good.", sender: "user2", time: "10:32" },
+        {
+          id: "3",
+          text: "Hi there!",
+          sender: "user2",
+          time: "10:30",
+        },
+        {
+          id: "4",
+          text: "I am good.",
+          sender: "user2",
+          time: "10:32",
+        },
       ],
     },
     {
       id: "user2",
       username: "Jane Smith",
       messages: [
-        { id: "3", text: "Hi there!", sender: "user2", time: "10:30" },
-        { id: "4", text: "I am good.", sender: "user2", time: "10:32" },
+        {
+          id: "3",
+          text: "Hi there!",
+          sender: "user2",
+          time: "10:30",
+        },
+        {
+          id: "4",
+          text: "I am good.",
+          sender: "user2",
+          time: "10:32",
+        },
       ],
     },
   ];
@@ -53,7 +73,10 @@ const MessagesScreen = ({ navigation }) => {
       >
         <View style={styles.userAvatar} />
         <View style={styles.userInfo}>
-          <Text style={styles.username}>{item.username}</Text>
+          <Text style={styles.username}>
+            {item.username}
+            <Text style={styles.locationText}></Text>
+          </Text>
           <View style={styles.lastMessageContainer}>
             <Text style={styles.lastMessageText}>{lastMessage.text}</Text>
             <View style={styles.timeText}>
@@ -67,7 +90,7 @@ const MessagesScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Message</Text>
+      <Text style={styles.title}>Messages</Text>
       <View style={styles.messageContainer}>
         <FlatList
           data={users}
@@ -110,7 +133,7 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
     borderRadius: 25,
-    backgroundColor: "#625f5f",
+    backgroundColor: "#dbd9d9",
     marginRight: 12,
     overflow: "hidden",
   },
