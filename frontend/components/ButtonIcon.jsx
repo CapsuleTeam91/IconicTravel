@@ -33,7 +33,8 @@ const styles = StyleSheet.create({
 		elevation: 2,
 	},
 	primaryBtn: {
-		width: 62,
+		width: 52,
+		height: 52,
 		marginVertical: 20,
 		paddingVertical: 15,
 		backgroundColor: COLORS.darkBlue,
