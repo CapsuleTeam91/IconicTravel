@@ -37,7 +37,7 @@ const userSchema = mongoose.Schema({
 	city: citySchema,
 	spokenLanguages: [{ type: String, default: DEFAULT_LANGUAGE }],
 	hobbies: [{ type: String, default: DEFAULT_HOBBY }],
-	bookings: { type: mongoose.Schema.Types.ObjectId, ref: 'bookings' },
+	bookings: [{ type: mongoose.Schema.Types.ObjectId, ref: 'bookings' }],
 	canHost: { type: Boolean, default: false },
 });
 
