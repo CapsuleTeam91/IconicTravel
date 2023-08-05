@@ -96,8 +96,9 @@ const SearchScreen = ({ navigation }) => {
 									<Text style={{ fontSize: 12 }}>{newDesc}</Text>
 								</View>
 								<View style={styles.userDetailsContainer2}>
-									<Text>{`${age} ans`}</Text>
-									<Text>{`${Math.round(user.distance)}km`}</Text>
+								<TouchableOpacity on onPress={() => navigation.navigate('Profile', { user })}>
+								<Ionicons name="arrow-forward-circle-outline" size={35} color="black" />
+							</TouchableOpacity>
 								</View>
 							</View>
 						</TouchableWithoutFeedback>
@@ -113,8 +114,9 @@ const SearchScreen = ({ navigation }) => {
 								<Text style={{ fontSize: 12 }}>{newDesc}</Text>
 							</View>
 							<View style={styles.userDetailsContainer2}>
-								<Text>{`${age} ans`}</Text>
-								<Text>{`${Math.round(user.distance)}km`}</Text>
+							<TouchableOpacity on onPress={() => navigation.navigate('Profile', { user })}>
+								<Ionicons name="arrow-forward-circle-outline" size={35} color="black" />
+							</TouchableOpacity>
 							</View>
 						</View>
 					</TouchableWithoutFeedback>
