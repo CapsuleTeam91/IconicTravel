@@ -21,17 +21,12 @@ const SigninScreen = ({ navigation, view = SIGN_VIEW.in }) => {
 		<TouchableWithoutFeedback
 			onPress={() => Keyboard.dismiss()}
 			style={{ flex: 1 }}>
-			<SafeAreaView style={{ flex: 1 }}>
+			<SafeAreaView style={styles.container}>
 				<KeyboardAwareScrollView
 					extraScrollHeight={100} // (when scroll)to have extra height between keyboard and text input
 					enableOnAndroid={true}
 					extraHeight={100} // make some height so the keyboard wont cover other component
-					contentContainerStyle={{
-						flexGrow: 1,
-						justifyContent: 'center',
-						alignItems: 'center',
-						backgroundColor: COLORS.darkBlue,
-					}}>
+					contentContainerStyle={styles.contentContainerStyle}>
 					<SignIn
 						signView={signView}
 						navigate={() =>
@@ -40,23 +35,27 @@ const SigninScreen = ({ navigation, view = SIGN_VIEW.in }) => {
 					/>
 					<SignUp navigate={() => navigation.navigate('ProfileStepOne')} />
 
-					<View>
-						<Text style={STYLES_GLOBAL.textLight}>
-							{signView === SIGN_VIEW.in
-								? 'Pas encore de compte ?'
-								: 'Vous avez déjà un compte ?'}
-						</Text>
-						<TouchableOpacity
-							onPress={() =>
-								setSignView(
-									signView === SIGN_VIEW.in ? SIGN_VIEW.up : SIGN_VIEW.in
-								)
-							}
-							activeOpacity={0.8}>
-							<Text style={styles.link}>
-								{signView === SIGN_VIEW.in ? 'Créer un compte' : 'Se connecter'}
+					<View style={styles.switchLinkContainer}>
+						<View style={styles.switchLinkContainer2}>
+							<Text style={STYLES_GLOBAL.textLight}>
+								{signView === SIGN_VIEW.in
+									? 'Pas encore de compte ?'
+									: 'Vous avez déjà un compte ?'}
 							</Text>
-						</TouchableOpacity>
+							<TouchableOpacity
+								onPress={() =>
+									setSignView(
+										signView === SIGN_VIEW.in ? SIGN_VIEW.up : SIGN_VIEW.in
+									)
+								}
+								activeOpacity={0.8}>
+								<Text style={styles.link}>
+									{signView === SIGN_VIEW.in
+										? 'Créer un compte'
+										: 'Se connecter'}
+								</Text>
+							</TouchableOpacity>
+						</View>
 					</View>
 				</KeyboardAwareScrollView>
 			</SafeAreaView>
@@ -67,15 +66,34 @@ const SigninScreen = ({ navigation, view = SIGN_VIEW.in }) => {
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
+		// alignItems: 'center',
+		// justifyContent: 'space-between',
+		backgroundColor: COLORS.lightBlue,
+	},
+	contentContainerStyle: {
+		flexGrow: 1,
+		justifyContent: 'center',
 		alignItems: 'center',
-		justifyContent: 'flex-start',
+	},
+	switchLinkContainer: {
+		width: '100%',
+		height: 100,
+		// flexDirection: 'row',
+
 		backgroundColor: COLORS.darkBlue,
 	},
+	switchLinkContainer2: {
+		width: '100%',
+		height: 100,
+		alignItems: 'center',
+		backgroundColor: COLORS.lightBlue,
+		// borderTopLeftRadius: 100,
+	},
 	link: {
-		fontSize: 20,
+		fontSize: 16,
 		letterSpacing: 1,
 		fontWeight: '700',
-		color: COLORS.pink,
+		color: COLORS.darkBlue,
 		textAlign: 'center',
 		textDecorationLine: 'underline',
 	},

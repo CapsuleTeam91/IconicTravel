@@ -3,7 +3,12 @@ import { COLORS } from '../utils/styles';
 import ButtonIcon from './ButtonIcon';
 import Button from './Button';
 
-const FooterCreateProfile = ({ step, onPressBack, onPressNext }) => {
+const FooterCreateProfile = ({
+	step,
+	onPressBack,
+	onPressNext,
+	label = 'Suivant',
+}) => {
 	return (
 		<View style={styles.firstTopLayer}>
 			<View
@@ -19,7 +24,7 @@ const FooterCreateProfile = ({ step, onPressBack, onPressNext }) => {
 					name="arrow-back-outline"
 					onpress={onPressBack}
 				/>
-				<Button type="primary" label="Suivant" onpress={onPressNext} />
+				<Button type="primary" label={label} onpress={onPressNext} />
 			</View>
 		</View>
 	);
