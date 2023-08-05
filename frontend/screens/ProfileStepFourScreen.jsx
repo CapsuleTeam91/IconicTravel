@@ -10,13 +10,13 @@ const ProfileStepFourScreen = ({ navigation }) => {
 
 			<View styles={styles.textContainer}>
 				<Text style={[STYLES_GLOBAL.subTitle, styles.subTitle]}>
-					Vous avez achevé la création de votre profil d'Iconic Traveler !
+					Iconic Traveler !
 				</Text>
 				<Text style={styles.text}>
-					Bienvenue dans notre Iconic Community. C'est un endroit qui permet de
-					rencontrer des nouvelles personnes et de créer des liens. Nous vous
-					demandons d'être respectueux et de respecter les règles de la
-					communauté. Au plaisir !
+					Tu fais désormais parti de notre notre Iconic Community. Cette application permet de
+					rencontrer de nouvelles personnes et de créer des liens. Nous vous
+					demandons juste de respecter les règles de
+					bienséance. Au plaisir !
 				</Text>
 			</View>
 
