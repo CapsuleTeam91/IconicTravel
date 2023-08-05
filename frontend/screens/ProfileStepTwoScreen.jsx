@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { SafeAreaView, StatusBar, StyleSheet, Text, View } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { addData } from '../reducers/user';
 import { RemoteDataSet } from '../components/RemoteDataSet';
 import { COLORS, COLORS_THEME, STYLES_GLOBAL } from '../utils/styles';
+import { SafeAreaView, StatusBar, StyleSheet, Text, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { AutocompleteDropdownContextProvider } from 'react-native-autocomplete-dropdown';
 import Textarea from '../components/Textarea';
@@ -57,7 +57,7 @@ const ProfileStepTwoScreen = ({ navigation }) => {
 				<View style={styles.headerContainer}>
 					<HeaderCreateProfile step={2} />
 
-					<Text style={[STYLES_GLOBAL.textLight, { marginBottom: 20 }]}>
+					<Text style={[STYLES_GLOBAL.textLight, { marginBottom: 10 }]}>
 						Faisons plus ample connaissance ...
 					</Text>
 				</View>
@@ -65,7 +65,7 @@ const ProfileStepTwoScreen = ({ navigation }) => {
 				<Textarea
 					label="Description"
 					theme={COLORS_THEME.dark}
-					// autoFocus={false}
+					autoFocus={false}
 					onChangeText={(value) => setDescription(value)}
 					value={description}
 				/>

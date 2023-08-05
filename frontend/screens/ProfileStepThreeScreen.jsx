@@ -5,8 +5,9 @@ import { URL_EXPO } from '../environnement';
 import { useDispatch, useSelector } from 'react-redux';
 import { COLORS, STYLES_GLOBAL } from '../utils/styles';
 import { SafeAreaView, StatusBar, StyleSheet, Text, View } from 'react-native';
-import Button from '../components/Button';
-import ButtonIcon from '../components/ButtonIcon';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import HeaderCreateProfile from '../components/HeaderCreateProfile';
+import FooterCreateProfile from '../components/FooterCreateProfile';
 import HobbiesAutoCompleteHomeMade from '../components/HobbiesAutoCompleteHomeMade';
 
 const ProfileStepThreeScreen = ({ navigation }) => {
@@ -22,6 +23,8 @@ const ProfileStepThreeScreen = ({ navigation }) => {
 			setError('Sélectionnez au moins une passion !');
 			return;
 		}
+
+		console.log(hobbies);
 		dispatch(addData({ hobbies }));
 
 		fetch(`${URL_EXPO}:3000/users/signup`, {
@@ -77,63 +80,53 @@ const ProfileStepThreeScreen = ({ navigation }) => {
 	};
 
 	return (
-		<SafeAreaView style={styles.container}>
+		<SafeAreaView style={{ flex: 1 }}>
 			<StatusBar backgroundColor={'white'} />
-			<View style={{ alignItems: 'center' }}>
-				<Text style={[STYLES_GLOBAL.title, STYLES_GLOBAL.titleLight]}>
-					Création de votre profil
-				</Text>
-				<Text style={[STYLES_GLOBAL.subTitle, STYLES_GLOBAL.subTitleLight]}>
-					Etape 3/3
-				</Text>
+			<KeyboardAwareScrollView
+				extraScrollHeight={100} // (when scroll)to have extra height between keyboard and text input
+				enableOnAndroid={true}
+				extraHeight={100} // make some height so the keyboard wont cover other component
+				contentContainerStyle={styles.container}>
+				<View style={styles.hobbiesContainer}>
+					<HeaderCreateProfile step={3} />
 
-				<Text style={STYLES_GLOBAL.textLight}>
-					Envie de partager vos passions ? Séléctionnez en au moins 1 et maximum
-					5 pour terminez la création de votre Iconic Profile !
-				</Text>
+					<Text style={[STYLES_GLOBAL.textLight, { textAlign: 'center' }]}>
+						Envie de partager vos passions ? Séléctionnez en au moins 1 et
+						maximum 5 pour terminez la création de votre Iconic Profile !
+					</Text>
 
-				<HobbiesAutoCompleteHomeMade
-					hobbies={hobbies}
-					setHobbies={setHobbies}
-					error={error}
-					setError={setError}
+					<HobbiesAutoCompleteHomeMade
+						hobbies={hobbies}
+						setHobbies={setHobbies}
+						error={error}
+						setError={setError}
+					/>
+				</View>
+
+				{error && <Text style={STYLES_GLOBAL.error}>{error}</Text>}
+
+				<FooterCreateProfile
+					step={3}
+					label="Enregistrer"
+					onPressBack={() => navigation.navigate('ProfileStepTwo')}
+					onPressNext={handleRegister}
 				/>
-			</View>
-
-			{error && <Text style={STYLES_GLOBAL.error}>{error}</Text>}
-
-			<View style={STYLES_GLOBAL.btnBottomContainer}>
-				<ButtonIcon
-					type="secondary"
-					name="arrow-undo-outline"
-					onpress={() => navigation.navigate('ProfileStepTwo')}
-				/>
-				<Button type="secondary" label="Enregistrer" onpress={handleRegister} />
-			</View>
+			</KeyboardAwareScrollView>
 		</SafeAreaView>
 	);
 };
 
 const styles = StyleSheet.create({
 	container: {
-		flex: 1,
+		flexGrow: 1,
 		alignItems: 'center',
 		justifyContent: 'space-between',
 		backgroundColor: COLORS.darkBlue,
 	},
-	hobbiesBtn: {
-		flexWrap: 'wrap',
-		flexDirection: 'row',
-		justifyContent: 'space-around',
-		rowGap: -20,
-	},
-	inputContainer: {
-		flexDirection: 'row',
+	hobbiesContainer: {
+		flex: 1,
+		width: '100%',
 		alignItems: 'center',
-	},
-	test: {
-		borderColor: 'red',
-		borderWidth: 2,
 	},
 });
 

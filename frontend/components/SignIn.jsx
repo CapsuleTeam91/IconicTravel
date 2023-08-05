@@ -87,7 +87,7 @@ const SignIn = (props) => {
 
 	useEffect(() => {
 		Animated.timing(translateAnim, {
-			toValue: props.signView === SIGN_VIEW.up ? -700 : 0,
+			toValue: props.signView === SIGN_VIEW.up ? -800 : 0,
 			duration: 1000,
 			easing: Easing.bounce,
 			useNativeDriver: true, //makes animations run on the UI thread
@@ -97,57 +97,77 @@ const SignIn = (props) => {
 	return (
 		<Animated.View
 			style={[
-				styles.signContainer,
-				styles.signinContainer,
+				styles.container,
+
 				{
 					transform: [{ translateY: translateAnim }], // Bind translateY to animated value
 				},
 			]}>
-			<Text style={[STYLES_GLOBAL.title, styles.titleDark]}>CONNECTION</Text>
+			<View style={styles.firstTopLayer}>
+				<View style={styles.secondTopLayer}></View>
+			</View>
+			<View style={styles.wrapper}>
+				<Text style={[STYLES_GLOBAL.title, styles.titleDark]}>CONNECTION</Text>
 
-			<View style={styles.inputContainer}>
-				<Input
-					label="Email"
-					theme={COLORS_THEME.light}
-					autoFocus={false}
-					autoCapitalize="none"
-					keyboardType="email-address"
-					autoComplete="email"
-					onChangeText={(value) => setEmail(value)}
-					value={email}
-				/>
-				<PasswordInput
-					label="Mot de passe"
-					width="100%"
-					theme={COLORS_THEME.light}
-					onchangetext={(value) => setPassword(value)}
-					value={password}
+				<View style={styles.inputContainer}>
+					<Input
+						label="Email"
+						theme={COLORS_THEME.light}
+						autoFocus={false}
+						autoCapitalize="none"
+						keyboardType="email-address"
+						autoComplete="email"
+						onChangeText={(value) => setEmail(value)}
+						value={email}
+					/>
+					<PasswordInput
+						label="Mot de passe"
+						width="100%"
+						theme={COLORS_THEME.light}
+						onchangetext={(value) => setPassword(value)}
+						value={password}
+					/>
+				</View>
+				{error && <Text style={STYLES_GLOBAL.error}>{error}</Text>}
+				<Button
+					type="primary"
+					size="big"
+					label="Se connecter"
+					onpress={handleConnection}
 				/>
 			</View>
-			{error && <Text style={STYLES_GLOBAL.error}>{error}</Text>}
-			<Button
-				type="primary"
-				size="big"
-				label="Se connecter"
-				onpress={handleConnection}
-			/>
 		</Animated.View>
 	);
 };
 
 const styles = StyleSheet.create({
-	signinContainer: {
+	container: {
 		...StyleSheet.absoluteFillObject,
 		zIndex: 2,
-		backgroundColor: COLORS.bg,
+		backgroundColor: COLORS.lightBlue,
 		borderBottomLeftRadius: 80,
 		borderBottomRightRadius: 80,
-	},
-	signContainer: {
 		width: '100%',
-		height: 700,
+		height: '87.5%',
+		overflow: 'hidden',
+	},
+	firstTopLayer: {
+		width: '100%',
+		height: 80,
+		backgroundColor: COLORS.bg,
+	},
+	secondTopLayer: {
+		width: '100%',
+		height: 80,
+		backgroundColor: COLORS.lightBlue,
+		borderBottomRightRadius: 100,
+	},
+	wrapper: {
+		flex: 1,
 		alignItems: 'center',
 		justifyContent: 'center',
+		backgroundColor: COLORS.bg,
+		borderTopLeftRadius: 100,
 	},
 	inputContainer: {
 		width: '100%',
