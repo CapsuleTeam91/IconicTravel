@@ -1,9 +1,7 @@
 import React, { useState, useRef } from 'react';
-import { COLORS } from '../utils/styles';
-import { Camera, CameraType, FlashMode } from 'expo-camera';
 import { StyleSheet, View } from 'react-native';
-
-import ButtonIcon from '../components/ButtonIcon';
+import { Camera, CameraType, FlashMode } from 'expo-camera';
+import ButtonIcon from '../../components/ButtonIcon';
 
 const Snap = (props) => {
 	let cameraRef = useRef(null);

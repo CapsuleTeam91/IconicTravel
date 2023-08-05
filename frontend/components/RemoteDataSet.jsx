@@ -41,6 +41,7 @@ export const RemoteDataSet = memo((props) => {
 
 	return (
 		<AutocompleteDropdown
+			disablePortal
 			dataSet={remoteDataSet}
 			closeOnBlur={false}
 			useFilter={false}
@@ -62,6 +63,7 @@ export const RemoteDataSet = memo((props) => {
 				borderColor: props.ligthTheme ? COLORS.pink : COLORS.bg,
 			}}
 			suggestionsListContainerStyle={{
+				zIndex: 10,
 				backgroundColor: props.ligthTheme ? COLORS.pink : COLORS.lightBlue,
 			}}
 			suggestionsListTextStyle={{

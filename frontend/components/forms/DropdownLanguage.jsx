@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
-import { COLORS } from '../utils/styles';
-import { LANGUAGES_ISO } from '../utils/data';
+import { COLORS } from '../../utils/styles';
+import { LANGUAGES_ISO } from '../../utils/data';
 import { Dropdown } from 'react-native-element-dropdown';
 
 const DropdownLanguage = ({

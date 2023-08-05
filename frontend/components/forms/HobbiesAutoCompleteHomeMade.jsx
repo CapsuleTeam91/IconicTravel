@@ -6,38 +6,32 @@ import {
 	TouchableOpacity,
 	FlatList,
 } from 'react-native';
-import { URL_EXPO } from '../environnement';
-import { COLORS, COLORS_THEME } from '../utils/styles';
+import { URL_EXPO } from '../../environnement';
+import { COLORS, COLORS_THEME } from '../../utils/styles';
 import Input from './Input';
-import ButtonIcon from './ButtonIcon';
+import ButtonIcon from '../ButtonIcon';
 
 const HobbiesAutoCompleteHomeMade = ({
 	hobbies,
 	setHobbies,
-	error,
 	setError,
 	isEditable = true,
 }) => {
-	const [dataSet, setDataSet] = useState([]);
+	const [newHobbies, setNewHobbies] = useState('');
 	const [newHobby, setNewHobby] = useState('');
-	const [isActive, setIsActive] = useState(false);
 
 	const removeHobby = (hobby) => {
-		const hobbiesFiltered = hobbies.filter((el) => el !== hobby);
-		setHobbies(hobbiesFiltered);
+		setHobbies(hobbies.filter((el) => el !== hobby));
+		setNewHobbies(newHobbies.filter((el) => el !== hobby));
 	};
 
-	const addHobby = (hobby) => {
+	const handleNewHobby = () => {
 		if (hobbies.length === 5) {
 			setError('Maximum 5 hobbies baby');
 			return;
 		}
-		!hobbies.includes(hobby) && setHobbies([...hobbies, hobby]);
-		setIsActive(false);
-	};
 
-	const handleNewHobby = () => {
-		let hobby = newHobby.toLowerCase().trimEnd().replace(' ', '_');
+		let hobby = newHobby.toLowerCase().replace(' ', '_');
 
 		fetch(`${URL_EXPO}:3000/hobbies/new`, {
 			method: 'POST',
@@ -47,59 +41,30 @@ const HobbiesAutoCompleteHomeMade = ({
 			.then((response) => response.json())
 			.then((data) => {
 				if (data.result) {
-					const newHobbies = data.hobbiesList?.map((el) =>
-						el.replace('_', ' ')
-					);
-					setDataSet(newHobbies);
 					setHobbies([...hobbies, newHobby]);
+					setNewHobbies([...newHobbies, newHobby]);
 					setNewHobby('');
 				} else {
-					setError('Problème');
+					setError(`Oh ooh ton hobby n'est pas valide, vérifie la liste !`);
 				}
 			});
 	};
-
-	// TODO : need to be improved
-	const getSuggestions = (h) => {
-		setNewHobby(h);
-		//filtrer le dataSet
-		const suggestions = dataSet.filter((hobby) => hobby[0] === h.toLowerCase());
-
-		if (suggestions.length > 0) {
-			setDataSet(suggestions.sort());
-		}
-	};
-
-	useEffect(() => {
-		(async () => {
-			const URL = `${URL_EXPO}:3000/hobbies`;
-
-			const response = await fetch(URL);
-			const data = await response.json();
-
-			if (!data.result) return;
-
-			const hobbiesList = data.hobbiesList?.map((el) => el.replace('_', ' '));
-
-			setDataSet(hobbiesList.sort());
-		})();
-	}, [hobbies]);
 
 	return (
 		<>
 			<View style={styles.container}>
 				<Input
-					label="Mes hobbies"
+					label="Créez un hobby"
 					theme={COLORS_THEME.dark}
 					autoFocus={false}
 					autoCapitalize="none"
 					keyboardType="default"
 					onChangeText={(value) => {
-						getSuggestions(value);
+						setNewHobby(value);
 					}}
 					value={newHobby}
-					handleFocus={() => setIsActive(!isActive)}
-					// handleBlur={() => setIsActive(false)}
+					// handleFocus={() => setIsActive(!isActive)}
+					// // handleBlur={() => setIsActive(false)}
 				/>
 				<ButtonIcon
 					type="secondary"
@@ -107,34 +72,14 @@ const HobbiesAutoCompleteHomeMade = ({
 					name="add-outline"
 					onpress={() => {
 						handleNewHobby();
-						setIsActive(false);
+						// setIsActive(false);
 					}}
 				/>
 			</View>
-			<View style={styles.listContainer}>
-				{isActive && (
-					<FlatList
-						data={dataSet}
-						renderItem={({ item }) => (
-							<TouchableOpacity
-								onPress={() => {
-									addHobby(item);
-									setIsActive(!isActive);
-									// setNewHobby('');
-								}}
-								style={styles.btn}
-								activeOpacity={0.8}>
-								<Text style={{ fontSize: 16, color: COLORS.bg }}>{item}</Text>
-							</TouchableOpacity>
-						)}
-						contentContainerStyle={styles.containerStyle}
-					/>
-				)}
-			</View>
 
-			{hobbies.length > 0 && (
+			{newHobbies.length > 0 && (
 				<View style={styles.hobbiesContainer}>
-					{hobbies.map((el, i) => (
+					{newHobbies.map((el, i) => (
 						<TouchableOpacity key={i} onPress={() => removeHobby(el)}>
 							<Text style={styles.hobby}>{el}</Text>
 						</TouchableOpacity>
@@ -147,7 +92,7 @@ const HobbiesAutoCompleteHomeMade = ({
 
 const styles = StyleSheet.create({
 	container: {
-		width: '100%',
+		width: '70%',
 		flexDirection: 'row',
 		alignItems: 'center',
 		justifyContent: 'space-around',

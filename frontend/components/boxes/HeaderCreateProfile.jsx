@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View } from 'react-native';
-import { COLORS, STYLES_GLOBAL } from '../utils/styles';
+import { COLORS, STYLES_GLOBAL } from '../../utils/styles';
 
 const HeaderCreateProfile = ({ step }) => {
 	return (

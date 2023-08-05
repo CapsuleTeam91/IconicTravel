@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
 import Animated, { useAnimatedProps } from 'react-native-reanimated';
 import { Path } from 'react-native-svg';
-import { COLORS } from '../utils/styles';
+import { COLORS } from '../../utils/styles';
 
 const AnimatedPath = Animated.createAnimatedComponent(Path);
 

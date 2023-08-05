@@ -6,8 +6,8 @@ import { COLORS, COLORS_THEME, STYLES_GLOBAL } from '../utils/styles';
 import { SafeAreaView, StyleSheet, Text, View, Modal } from 'react-native';
 import Button from '../components/Button';
 import ButtonIcon from '../components/ButtonIcon';
-import ModalModel from '../components/ModalModel';
-import PasswordInput from '../components/PasswordInput';
+import ModalModel from '../components/modals/ModalModel';
+import PasswordInput from '../components/forms/PasswordInput';
 
 const SafetyScreen = ({ navigation }) => {
 	const user = useSelector((state) => state.user.value);

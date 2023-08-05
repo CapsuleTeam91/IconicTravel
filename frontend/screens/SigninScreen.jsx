@@ -11,8 +11,8 @@ import { SIGN_VIEW } from '../utils/constants';
 import { COLORS, STYLES_GLOBAL } from '../utils/styles';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import SignIn from '../components/SignIn';
-import SignUp from '../components/SignUp';
+import SignIn from '../components/login/SignIn';
+import SignUp from '../components/login/SignUp';
 
 const SigninScreen = ({ navigation, view = SIGN_VIEW.in }) => {
 	const [signView, setSignView] = useState(view);

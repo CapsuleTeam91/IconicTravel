@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { COLORS } from '../utils/styles';
+import { COLORS } from '../../utils/styles';
 import { StyleSheet, View, TouchableOpacity } from 'react-native';
 import Input from './Input';
 import Ionicons from 'react-native-vector-icons/Ionicons';

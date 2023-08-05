@@ -3,13 +3,20 @@ import { useDispatch } from 'react-redux';
 import { addData } from '../reducers/user';
 import { RemoteDataSet } from '../components/RemoteDataSet';
 import { COLORS, COLORS_THEME, STYLES_GLOBAL } from '../utils/styles';
-import { SafeAreaView, StatusBar, StyleSheet, Text, View } from 'react-native';
+import {
+	SafeAreaView,
+	ScrollView,
+	StatusBar,
+	StyleSheet,
+	Text,
+	View,
+} from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { AutocompleteDropdownContextProvider } from 'react-native-autocomplete-dropdown';
-import Textarea from '../components/Textarea';
-import DropdownLanguage from '../components/DropdownLanguage';
-import HeaderCreateProfile from '../components/HeaderCreateProfile';
-import FooterCreateProfile from '../components/FooterCreateProfile';
+import Textarea from '../components/forms/Textarea';
+import DropdownLanguage from '../components/forms/DropdownLanguage';
+import HeaderCreateProfile from '../components/boxes/HeaderCreateProfile';
+import FooterCreateProfile from '../components/boxes/FooterCreateProfile';
 
 const ProfileStepTwoScreen = ({ navigation }) => {
 	const dispatch = useDispatch();

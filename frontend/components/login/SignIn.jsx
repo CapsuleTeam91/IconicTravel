@@ -1,14 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Easing } from 'react-native-reanimated';
 import { useDispatch } from 'react-redux';
-import { addData } from '../reducers/user';
+import { addData } from '../../reducers/user';
 import { StyleSheet, Text, Animated, View } from 'react-native';
-import { COLORS, COLORS_THEME, STYLES_GLOBAL } from '../utils/styles';
-import { EMAIL_REGEX, ERRORS, SIGN_VIEW } from '../utils/constants';
-import { URL_EXPO } from '../environnement';
-import Input from './Input';
-import Button from './Button';
-import PasswordInput from './PasswordInput';
+import { COLORS, COLORS_THEME, STYLES_GLOBAL } from '../../utils/styles';
+import { EMAIL_REGEX, ERRORS, SIGN_VIEW } from '../../utils/constants';
+import { URL_EXPO } from '../../environnement';
+import Input from '../forms/Input';
+import Button from '../Button';
+import PasswordInput from '../forms/PasswordInput';
 
 const SignIn = (props) => {
 	const dispatch = useDispatch();

@@ -17,14 +17,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useIsFocused } from '@react-navigation/native';
 import { useCallback, useEffect, useState } from 'react';
 import { COLORS, COLORS_THEME, STYLES_GLOBAL } from '../utils/styles';
-import Snap from './Snap';
-import Input from '../components/Input';
-import Textarea from '../components/Textarea';
+import Snap from '../components/camera/Snap';
+import Input from '../components/forms/Input';
+import Textarea from '../components/forms/Textarea';
 import DatePicker from '../components/DatePicker';
-import ModalModel from '../components/ModalModel';
+import ModalModel from '../components/modals/ModalModel';
 import ButtonIcon from '../components/ButtonIcon';
-import DropdownLanguage from '../components/DropdownLanguage';
-import HobbiesAutoCompleteHomeMade from '../components/HobbiesAutoCompleteHomeMade';
+import DropdownLanguage from '../components/forms/DropdownLanguage';
+import HobbiesAutoCompleteHomeMade from '../components/forms/HobbiesAutoCompleteHomeMade';
 import * as ImagePicker from 'expo-image-picker';
 
 const EDITABLES = {

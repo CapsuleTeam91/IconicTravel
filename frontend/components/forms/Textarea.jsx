@@ -1,15 +1,14 @@
 import React, { useRef, useState } from 'react';
-import { COLORS } from '../utils/styles';
+import { COLORS } from '../../utils/styles';
 import { Easing } from 'react-native-reanimated';
 import { StyleSheet, TextInput, View, Text, Animated } from 'react-native';
 
-const Input = (props) => {
-	const transY = useRef(new Animated.Value(0)).current;
+const Textarea = (props) => {
+	const transY = useRef(new Animated.Value(10)).current;
 	const [isHighlighted, setIsHighlighted] = useState(props.autoFocus);
 
 	const handleFocus = () => {
 		setIsHighlighted(true);
-		if (props.handleFocus) props.handleFocus();
 		Animated.timing(transY, {
 			toValue: -32,
 			duration: 200,
@@ -20,10 +19,9 @@ const Input = (props) => {
 
 	const handleBlur = () => {
 		setIsHighlighted(false);
-		if (props.handleBlur) props.handleBlur();
 		if (!props.value) {
 			Animated.timing(transY, {
-				toValue: 0,
+				toValue: 10,
 				duration: 200,
 				easing: Easing.ease,
 				useNativeDriver: true,
@@ -59,10 +57,16 @@ const Input = (props) => {
 			</Animated.View>
 			<TextInput
 				{...props}
-				maxLength={100}
+				maxLength={1000}
+				multiline={true}
+				numberOfLines={8}
 				onFocus={handleFocus}
 				onBlur={handleBlur}
-				style={[styles[props.theme].input, styles.input]}
+				style={[
+					styles[props.theme].input,
+					styles.input,
+					{ textAlignVertical: 'top' },
+				]}
 				cursorColor={props.theme === 'light' ? COLORS.pink : COLORS.lightBlue}
 			/>
 		</View>
@@ -73,12 +77,8 @@ const styles = StyleSheet.create({
 	container: {
 		width: '70%',
 		borderRadius: 8,
-		borderWidth: 1,
-		justifyContent: 'center',
-		borderColor: COLORS.darkBlue,
 	},
 	input: {
-		// height: 50,
 		paddingVertical: 10,
 		paddingHorizontal: 20,
 	},
@@ -87,10 +87,12 @@ const styles = StyleSheet.create({
 		position: 'absolute',
 		paddingHorizontal: 20,
 	},
+	label: {
+		fontStyle: 'italic',
+	},
 	isHighlighted: {
 		borderWidth: 2,
 	},
-
 	light: {
 		container: {
 			borderWidth: 1,
@@ -113,7 +115,6 @@ const styles = StyleSheet.create({
 	dark: {
 		container: {
 			borderWidth: 0,
-			marginVertical: 8,
 			backgroundColor: COLORS.bgDark,
 		},
 		isHighlightedLabelContainer: {
@@ -124,7 +125,7 @@ const styles = StyleSheet.create({
 			color: COLORS.bg,
 		},
 		isHighlighted: {
-			borderColor: COLORS.bg,
+			borderColor: COLORS.lightBlue,
 			backgroundColor: COLORS.darkBlue,
 		},
 		isHighlightedLabel: {
@@ -136,4 +137,4 @@ const styles = StyleSheet.create({
 	},
 });
 
-export default Input;
+export default Textarea;

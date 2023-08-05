@@ -8,10 +8,10 @@ import { useIsFocused } from '@react-navigation/native';
 import { COLORS, STYLES_GLOBAL } from '../utils/styles';
 import { Image, SafeAreaView, StyleSheet, Text, View } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
-import Snap from './Snap';
+import Snap from '../components/camera/Snap';
 import ButtonIcon from '../components/ButtonIcon';
-import HeaderCreateProfile from '../components/HeaderCreateProfile';
-import FooterCreateProfile from '../components/FooterCreateProfile';
+import HeaderCreateProfile from '../components/boxes/HeaderCreateProfile';
+import FooterCreateProfile from '../components/boxes/FooterCreateProfile';
 
 const ProfileStepOneScreen = ({ navigation }) => {
 	const dispatch = useDispatch();

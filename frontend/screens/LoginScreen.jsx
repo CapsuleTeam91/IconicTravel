@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import { clearData } from '../reducers/user';
 import { STYLES_GLOBAL } from '../utils/styles';
 import Button from '../components/Button';
-import StrokeAnimation from '../components/StrokeAnimation';
+import StrokeAnimation from '../components/animations/StrokeAnimation';
 
 const LoginScreen = ({ navigation }) => {
 	const dispatch = useDispatch();

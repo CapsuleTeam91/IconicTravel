@@ -49,8 +49,6 @@ export default StrokeAnimation;
 
 const styles = StyleSheet.create({
 	container: {
-		// ...StyleSheet.absoluteFillObject,
-		// flex: 1,
 		backgroundColor: '#F8F9FA',
 		paddingVertical: 60,
 		justifyContent: 'center',

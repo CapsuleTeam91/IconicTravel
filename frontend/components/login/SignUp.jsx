@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { addData } from '../reducers/user';
-import { checkDOB } from '../utils/helper';
+import { addData } from '../../reducers/user';
+import { checkDOB } from '../../utils/helper';
 import { StyleSheet, Text, View } from 'react-native';
-import { EMAIL_REGEX, ERRORS } from '../utils/constants';
-import { COLORS, COLORS_THEME, STYLES_GLOBAL } from '../utils/styles';
-import Input from './Input';
-import Button from './Button';
-import PasswordInput from './PasswordInput';
-import DatePicker from '../components/DatePicker';
+import { EMAIL_REGEX, ERRORS } from '../../utils/constants';
+import { COLORS, COLORS_THEME, STYLES_GLOBAL } from '../../utils/styles';
+import Input from '../forms/Input';
+import Button from '../Button';
+import PasswordInput from '../forms/PasswordInput';
+import DatePicker from '../DatePicker';
 
 const SignUp = (props) => {
 	const dispatch = useDispatch();
