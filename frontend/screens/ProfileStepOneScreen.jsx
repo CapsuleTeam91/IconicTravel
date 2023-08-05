@@ -6,7 +6,14 @@ import { URL_EXPO } from '../environnement';
 import { DEFAULT_AVATAR } from '../utils/constants';
 import { useIsFocused } from '@react-navigation/native';
 import { COLORS, STYLES_GLOBAL } from '../utils/styles';
-import { Image, SafeAreaView, StyleSheet, Text, View } from 'react-native';
+import {
+	ActivityIndicator,
+	Image,
+	SafeAreaView,
+	StyleSheet,
+	Text,
+	View,
+} from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import Snap from '../components/camera/Snap';
 import ButtonIcon from '../components/ButtonIcon';
@@ -20,6 +27,7 @@ const ProfileStepOneScreen = ({ navigation }) => {
 	const [hasCameraPermission, setHasCameraPermission] = useState(false);
 	const [cameraOpen, setCameraOpen] = useState(false);
 	const [image, setImage] = useState(null);
+	const [loading, setLoading] = useState(false);
 
 	const pickImage = async () => {
 		// No permissions request is necessary for launching the image library
@@ -50,6 +58,8 @@ const ProfileStepOneScreen = ({ navigation }) => {
 			type: 'image/jpeg',
 		});
 
+		setLoading(true);
+
 		fetch(`${URL_EXPO}:3000/users/upload`, {
 			method: 'POST',
 			body: formData,
@@ -57,7 +67,6 @@ const ProfileStepOneScreen = ({ navigation }) => {
 			.then((response) => response.json())
 			.then((data) => {
 				// If user doesn't select image we will give a default one
-
 				if (data.result) {
 					dispatch(addAvatar(data.url));
 					navigation.navigate('ProfileStepTwo');
@@ -133,6 +142,12 @@ const ProfileStepOneScreen = ({ navigation }) => {
 				</View>
 			)}
 
+			{loading && (
+				<View style={styles.activityindicatorContainer}>
+					<ActivityIndicator size="large" color={COLORS.lightBlue} />
+				</View>
+			)}
+
 			<FooterCreateProfile
 				step={1}
 				onPressBack={() => navigation.navigate('Signup')}
@@ -158,6 +173,16 @@ const styles = StyleSheet.create({
 		width: 200,
 		height: 200,
 		borderRadius: 250,
+	},
+	activityindicatorContainer: {
+		...StyleSheet.absoluteFillObject,
+		top: '85%',
+		left: 0,
+		zIndex: 10,
+		width: '100%',
+		height: '15%',
+		justifyContent: 'space-around',
+		backgroundColor: COLORS.darkBlue,
 	},
 });
 
