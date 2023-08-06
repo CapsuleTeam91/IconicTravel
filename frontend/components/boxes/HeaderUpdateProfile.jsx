@@ -12,7 +12,7 @@ const HeaderUpdateProfile = ({
 			<View style={styles.secondTopLayer}>
 				<View style={styles.container}>
 					<ButtonIcon
-						type="secondary"
+						type="primary"
 						name="close-outline"
 						onpress={handleNagitaion}
 					/>
@@ -20,7 +20,7 @@ const HeaderUpdateProfile = ({
 						MON PROFIL
 					</Text>
 					<ButtonIcon
-						type="secondary"
+						type="primary"
 						name={
 							editViewEnabled ? 'brush-outline' : 'ellipsis-vertical-outline'
 						}
