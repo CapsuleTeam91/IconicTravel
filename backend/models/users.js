@@ -38,6 +38,7 @@ const userSchema = mongoose.Schema({
 	spokenLanguages: [{ type: String, default: DEFAULT_LANGUAGE }],
 	hobbies: [{ type: String, default: DEFAULT_HOBBY }],
 	bookings: [{ type: mongoose.Schema.Types.ObjectId, ref: 'bookings' }],
+	chatChannels: [{ type: mongoose.Schema.Types.ObjectId, ref: 'chatChannels' }],
 	canHost: { type: Boolean, default: false },
 });
 
