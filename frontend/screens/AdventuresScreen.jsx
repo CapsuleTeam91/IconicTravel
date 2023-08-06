@@ -6,33 +6,27 @@ import {
   Touchable,
   TouchableOpacity,
   View,
+  Image
 } from "react-native";
 import { COLORS, COLORS_THEME, STYLES_GLOBAL } from "../utils/styles";
 import ButtonIcon from "../components/ButtonIcon";
+import { useDispatch, useSelector } from 'react-redux';
 import React, { useEffect, useState } from "react";
+import { URL_EXPO } from '../environnement';
 
 const AdventuresScreen = ({ navigation }) => {
-  // Fausse base de données
-  const fakeData = [
-    {
-      destination: "Paris",
-      date: "2023-07-15",
-      hôte: "Margot",
-      text: "Bonjour.",
-    },
-
-    {
-      destination: "New York",
-      date: "2023-09-15",
-      hôte: "Sana",
-      text: "Hello.",
-    },
-  ];
-
-  // Variable d'état
-  const [messagesConfirmes, setMessagesConfirmes] = useState([fakeData]);
-  const [messagesEnAttente, setMessagesEnAttente] = useState([]);
+  const thisUser = useSelector((state) => state.user.value);
+  
   const [currentTab, setCurrentTab] = useState("confirmes");
+  const [bookings, setBookings] = useState([]);
+
+  useEffect(() => {
+    fetch(`${URL_EXPO}:3000/bookings/${thisUser.token}`)
+    .then(resp => resp.json())
+    .then(bookings => {
+      console.log(bookings)
+    })
+  }, [])
 
   const styles = StyleSheet.create({
     container: {
@@ -41,21 +35,14 @@ const AdventuresScreen = ({ navigation }) => {
       justifyContent: "flex-start",
       backgroundColor: "#f0f0f0",
     },
-    header: {
-      paddingBottom: 10,
-      alignItems: "center",
-    },
     title: {
       color: COLORS.darkBlue,
       fontSize: 20,
+      marginTop: 30,
       letterSpacing: 1.2,
       fontWeight: "700",
       textAlign: "center",
       textTransform: "uppercase",
-    },
-    contentContainer: {
-      flex: 1,
-      padding: 10,
     },
     tabContainer: {
       flexDirection: "row",
@@ -96,177 +83,69 @@ const AdventuresScreen = ({ navigation }) => {
       marginVertical: 30,
       overflow: "hidden",
     },
-  
-    messageCard: {
-      backgroundColor: "white",
-      borderRadius: 10,
-      padding: 10,
-      marginBottom: 10,
-      borderColor: "#ccc",
+    bookingContainer: {
+      flexDirection: 'row',
+      alignItems:'center',
+      padding: 5,
+      width: '80%',
+      height: '10%',
       borderWidth: 1,
+      borderRadius: 20,
     },
-  
-    voyageInfo: {
-      fontSize: 14,
-      fontWeight: "bold",
-      marginBottom: 5,
+    profilContainer: {
+      backgroundColor: 'red',
+      width: '100%',
+      height: '50%'
     },
-    messageText: {
-      fontSize: 16,
+    avatar: {
+      width: "15%",
+      height: '80%',
+      borderRadius: 250
     },
-    messageHote: {
-      fontSize: 14,
-      fontWeight: "bold",
-    },
-  
-    confirmButton: {
-      backgroundColor: COLORS.darkBlue,
-      borderRadius: 5,
-      paddingVertical: 8,
-      paddingHorizontal: 15,
-      marginTop: 10,
-    },
-  
-    confirmButtonText: {
-      color: "white",
-      fontSize: 16,
-      textAlign: "center",
-    },
-    cancelButton: {
-      backgroundColor: "#ffff",
-      borderWidth: 1,
-      borderColor: COLORS.darkBlue,
-      color: "black",
-      borderRadius: 5,
-      paddingVertical: 8,
-      paddingHorizontal: 15,
-      marginTop: 5,
-    },
-    cancelButtonText: {
-      color: COLORS.darkBlue,
-      fontSize: 16,
-      textAlign: "center",
-    },
-  
-    messageHote: {
-      fontSize: 14,
-      fontWeight: "bold",
-      color: COLORS.darkGray,
-    },
-    messageText: {
-      fontSize: 14,
-      color: "grey",
-    },
+    btnContainer: {
+      flexDirection: 'row',
+      width: '100%',
+      height: '50%'
+    }
   });
 
-  // Utilisation de useEffect pour initialiser les messages en attente au chargement de la page
-  useEffect(() => {
-    // Au chargement, fausses données seront dans  "messagesEnAttente"
-    setMessagesEnAttente(fakeData);
-  }, []);
-
-  // Fonction pour gérer la confirmation d'un message
-  const handleConfirmerMessage = (message) => {
-    // Ajout du message aux messages confirmés et suppression du message des messages en attente
-    setMessagesConfirmes([...messagesConfirmes, message]);
-    setMessagesEnAttente(messagesEnAttente.filter((msg) => msg !== message));
-  };
-
-  // Fonction pour gérer l'annulation d'un message
-  const handleAnnulerMessage = (message) => {
-    // Suppression du message des messages en attente
-    setMessagesEnAttente(messagesEnAttente.filter((msg) => msg !== message));
-  };
-
-  // Liste des messages confirmés
-  const messageConfimesList = messagesConfirmes.map((message, index) => (
-    <View key={index} style={styles.messageCard}>
-      <Text style={styles.voyageInfo}>
-        {" "}
-        Destination : {message.destination} - Date : {message.date}
-      </Text>
-      <Text style={styles.messageHote}>Hôte : {message.hôte}</Text>
-      <Text style={styles.messageText}>Message : {message.text}</Text>
-    </View>
-  ));
-
-  // Liste des messages en Attente
-  const messageEnAttenteList = messagesEnAttente.map((message, index) => (
-    <View key={index} style={styles.messageCard}>
-      <Text style={styles.voyageInfo}>
-        Destination : {message.destination} - Date : {message.date}{" "}
-      </Text>
-      <Text style={styles.messageHote}>Hôte : {message.hôte}</Text>
-
-      <Text style={styles.messageText}>Message : {message.text}</Text>
-      {/* Button pour confirmés le message ou l'annuler. */}
-      {/* <TouchableOpacity
-        style={styles.confirmButton}
-        onPress={() => handleConfirmerMessage(message)}
-      >
-        <Text style={styles.confirmButtonText}>Confirmer</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.cancelButton}
-        onPress={() => handleAnnulerMessage(message)}
-      >
-        <Text style={styles.cancelButtonText}>Annuler</Text>
-      </TouchableOpacity> */}
-    </View>
-  ));
-
-  // Composant pour afficher les messages confirmés
-  const MessagesConfirmes = ({ messages }) => {
-    return <View style={styles.MessagesConfirmes}>{messages}</View>;
-  };
-
-  // Composant pour afficher les messages en attente
-  const MessagesEnAttente = ({ messages }) => {
-    return <View style={styles.MessagesConfirmes}>{messages}</View>;
-  };
 
   return (
     <View style={styles.container}>
-      <View style={styles.contentContainer}>
-        <View style={styles.header}>
-          <Text style={styles.title}>Iconic Adventures</Text>
-        </View>
-
-        {/* Conteneur des onglets */}
+        <Text style={styles.title}>Iconic Adventures</Text>
         <View style={styles.tabContainer}>
-          {/* Onglet "Confirmés" */}
           <TouchableOpacity
-            style={[
-              styles.tab
-            ]}
-            onPress={() => setCurrentTab("confirmes")} // Lorsque l'onglet est pressé, on met à jour l'état "currentTab" à "confirmes"
+            style={[styles.tab]}
+            onPress={() => setCurrentTab("confirmes")}
           >
             <Text style={styles.confirmesContainer}>Confirmés</Text>
           </TouchableOpacity>
-
-          {/* Onglet "En Attente" */}
           <TouchableOpacity
-            style={[
-              styles.tab
-            ]}
-            onPress={() => setCurrentTab("en_attente")} // Lorsque l'onglet est pressé, on met à jour l'état "currentTab" à "en_attente"
+            style={[styles.tab]}
+            onPress={() => setCurrentTab("en_attente")}
           >
             <Text style={styles.enAttenteContainer}>En Attente</Text>
           </TouchableOpacity>
         </View>
 
-        {/* Affichage du contenu en fonction de l'onglet actif */}
         {currentTab === "confirmes" ? (
-          // Si l'onglet actif est "confirmes", on affiche la liste des messages confirmés
-          <MessagesConfirmes messages={messageConfimesList} />
+          <></>
         ) : (
-          // Sinon, on affiche la liste des messages en attente
-          <MessagesEnAttente
-            messages={messageEnAttenteList}
-            onConfirmer={handleConfirmerMessage} // On passe la fonction handleConfirmerMessage comme prop à MessagesEnAttente pour la confirmation des messages
-          />
+          <View style={styles.bookingContainer}>
+            <Image source={{ uri: thisUser.avatarUrl }} style={styles.avatar} />
+            <View style={styles.profilContainer}>
+              <Text>Laura</Text>
+              <View style={styles.btnContainer}>
+                <TouchableOpacity>
+                  <Text>Accepter</Text>
+                </TouchableOpacity>
+                <TouchableOpacity>
+                  <Text>Refuser</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
         )}
-      </View>
     </View>
   );
 };

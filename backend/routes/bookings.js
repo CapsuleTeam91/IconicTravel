@@ -52,8 +52,15 @@ router.post('/request', (req, res) => {
   })
 })
 
-router.get('/', (req, res) => {
-
+router.get('/:token', (req, res) => {
+  User.find({ token: req.params.token})
+  .then(userFound => {
+    res.json({
+      result: true,
+      bookings: userFound
+    })
+    console.log(userFound)
+  })
 })
 
 router.get(`/exists/:traveler/:host`, (req, res) => {
