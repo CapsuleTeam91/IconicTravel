@@ -26,21 +26,21 @@ import ButtonIcon from '../components/ButtonIcon';
 import DropdownLanguage from '../components/forms/DropdownLanguage';
 import HobbiesAutoCompleteHomeMade from '../components/forms/HobbiesAutoCompleteHomeMade';
 import * as ImagePicker from 'expo-image-picker';
-
-const EDITABLES = {
-	city: 'city',
-};
+import HeaderUpdateProfile from '../components/boxes/HeaderUpdateProfile';
 
 const UserProfileScreen = ({ navigation }) => {
 	const dispatch = useDispatch();
 	const isFocused = useIsFocused();
 	const user = useSelector((state) => state.user.value);
+	const [editViewEnabled, setEditViewEnabled] = useState(false);
+	const [remoteDataSet, setRemoteDataSet] = useState([]);
+
 	const [isEnabled, setIsEnabled] = useState(user.canHost);
 	const [isEditable, setIsEditable] = useState('');
 	const [firstname, setFirstname] = useState(null);
 	const [lastname, setLastname] = useState(null);
 	const [dateOfBirth, setDateOfBirth] = useState(new Date());
-	const [description, setDescription] = useState(null);
+	const [description, setDescription] = useState(user.description);
 	const [newCity, setNewCity] = useState('');
 	const [city, setCity] = useState('');
 	const [spokenLanguages, setSpokenLanguages] = useState(user.spokenLanguages);
@@ -48,6 +48,8 @@ const UserProfileScreen = ({ navigation }) => {
 	const [updateAvatarVisible, setUpdateAvatarVisible] = useState(false);
 	const [updateDetailsVisible, setUpdateDetailsVisible] = useState(false);
 	const [updateInfoVisible, setUpdateInfoVisible] = useState(false);
+	const [updateLanguagesVisible, setUpdateLanguagesVisible] = useState(false);
+
 	const [updatePassionVisible, setUpdatePassionVisible] = useState(false);
 	const [hasGalleryPermission, setHasGalleryPermission] = useState(null);
 	const [hasCameraPermission, setHasCameraPermission] = useState(false);
@@ -55,6 +57,7 @@ const UserProfileScreen = ({ navigation }) => {
 	const [image, setImage] = useState(null);
 	const [hobbies, setHobbies] = useState(user.hobbies);
 
+	// HOSTING
 	const toggleSwitch = () => {
 		fetch(`${URL_EXPO}:3000/users/hosting/${user.token}`, { method: 'PUT' })
 			.then((response) => response.json())
@@ -68,19 +71,34 @@ const UserProfileScreen = ({ navigation }) => {
 			});
 	};
 
-	const pickImage = async () => {
-		// No permissions request is necessary for launching the image library
-		let result = await ImagePicker.launchImageLibraryAsync({
-			mediaTypes: ImagePicker.MediaTypeOptions.Images,
-			allowsEditing: true,
-			aspect: [4, 3],
-			quality: 1,
-		});
+	// CITY
+	const getSuggestions = useCallback(async (q) => {
+		setNewCity(q);
+		const filterToken = q.toLowerCase();
 
-		if (!result.canceled) {
-			setImage(result.assets[0].uri);
+		if (typeof q !== 'string' || q.length < 3) {
+			setRemoteDataSet([]);
+			return;
 		}
-	};
+
+		// setLoading(true);
+
+		const URL = `https://www.mapquestapi.com/geocoding/v1/address?key=WvE5tMdxgRUWtFIPcZXO1qITivOTwk7V&location=${filterToken}`;
+		const response = await fetch(URL);
+		const items = await response.json();
+		const detailedCities = items.results[0].locations;
+
+		const suggestions = detailedCities.map((city, i) => ({
+			id: i,
+			title: `${city.adminArea5}, ${city.adminArea4}`,
+			name: city.adminArea5,
+			latitude: city.displayLatLng.lat,
+			longitude: city.displayLatLng.lng,
+		}));
+
+		setRemoteDataSet(suggestions);
+		// setLoading(false);
+	}, []);
 
 	// REQUESTS
 	const handleAvatarUpdate = () => {
@@ -176,6 +194,20 @@ const UserProfileScreen = ({ navigation }) => {
 			});
 	};
 
+	// CAMERA
+	const pickImage = async () => {
+		let result = await ImagePicker.launchImageLibraryAsync({
+			mediaTypes: ImagePicker.MediaTypeOptions.Images,
+			allowsEditing: true,
+			aspect: [4, 3],
+			quality: 1,
+		});
+
+		if (!result.canceled) {
+			setImage(result.assets[0].uri);
+		}
+	};
+
 	useEffect(() => {
 		(async () => {
 			const { status } = await Camera.requestCameraPermissionsAsync();
@@ -189,36 +221,6 @@ const UserProfileScreen = ({ navigation }) => {
 				await ImagePicker.requestMediaLibraryPermissionsAsync();
 			setHasGalleryPermission(galleryStatus);
 		})();
-	}, []);
-
-	const [remoteDataSet, setRemoteDataSet] = useState([]);
-
-	const getSuggestions = useCallback(async (q) => {
-		setNewCity(q);
-		const filterToken = q.toLowerCase();
-
-		if (typeof q !== 'string' || q.length < 3) {
-			setRemoteDataSet([]);
-			return;
-		}
-
-		// setLoading(true);
-
-		const URL = `https://www.mapquestapi.com/geocoding/v1/address?key=WvE5tMdxgRUWtFIPcZXO1qITivOTwk7V&location=${filterToken}`;
-		const response = await fetch(URL);
-		const items = await response.json();
-		const detailedCities = items.results[0].locations;
-
-		const suggestions = detailedCities.map((city, i) => ({
-			id: i,
-			title: `${city.adminArea5}, ${city.adminArea4}`,
-			name: city.adminArea5,
-			latitude: city.displayLatLng.lat,
-			longitude: city.displayLatLng.lng,
-		}));
-
-		setRemoteDataSet(suggestions);
-		// setLoading(false);
 	}, []);
 
 	// TODO style
@@ -308,25 +310,65 @@ const UserProfileScreen = ({ navigation }) => {
 				onconfirm={(date) => setDateOfBirth(date)}
 			/>
 
-			<Textarea
-				label="Description"
+			<Input
+				label={city.latitude ? 'Ville sélectionnée' : user.city.name}
 				theme={COLORS_THEME.light}
 				autoFocus={false}
-				onChangeText={(value) => setDescription(value)}
-				value={description}
+				autoCapitalize="none"
+				keyboardType="default"
+				onChangeText={(value) => getSuggestions(value)}
+				value={newCity}
 			/>
+			{remoteDataSet.length > 0 && (
+				<FlatList
+					data={remoteDataSet}
+					renderItem={({ item }) => (
+						<TouchableOpacity
+							onPress={() =>
+								setCity(
+									!item?.name
+										? user.city
+										: {
+												name: item.name,
+												latitude: item.latitude,
+												longitude: item.longitude,
+										  }
+								)
+							}
+							style={{
+								paddingVertical: 5,
+								paddingHorizontal: 10,
+								margin: 2,
+								borderRadius: 8,
+								backgroundColor:
+									city.latitude === item.latitude
+										? COLORS.lightBlue
+										: COLORS.pink,
+							}}
+							activeOpacity={0.8}>
+							<Text style={{ fontSize: 16, color: COLORS.bg }}>
+								{item.title}
+							</Text>
+						</TouchableOpacity>
+					)}
+					contentContainerStyle={{
+						minWidth: '70%',
+					}}
+				/>
+			)}
+
 			{error && <Text style={STYLES_GLOBAL.error}>{error}</Text>}
 			<View style={styles.optionsContainer}>
 				<ButtonIcon
 					type="secondary"
 					size={18}
-					name="arrow-undo-outline"
+					name="arrow-back-outline"
 					onpress={() => {
 						setError('');
 						setFirstname(null);
 						setLastname(null);
 						setDateOfBirth(new Date());
-						setDescription(null);
+						setCity(null);
 						setUpdateDetailsVisible(false);
 					}}
 				/>
@@ -344,12 +386,13 @@ const UserProfileScreen = ({ navigation }) => {
 							firstname: firstname?.trim() || user.firstname,
 							lastname: lastname?.trim() || user.lastname,
 							dateOfBirth,
-							description: description || user.description,
+							city,
 						});
+
+						setCity(null);
 						setFirstname(null);
 						setLastname(null);
 						setDateOfBirth(new Date());
-						setDescription(null);
 						setUpdateDetailsVisible(false);
 					}}
 				/>
@@ -357,69 +400,24 @@ const UserProfileScreen = ({ navigation }) => {
 		</View>
 	);
 
-	// TODO opti création component
 	const updateInfo = (
 		<View style={styles.inputContainer}>
-			<View
-				style={{
-					width: '100%',
-					alignItems: 'center',
-				}}>
-				<Input
-					label={city.latitude ? 'Ville sélectionnée' : user.city.name}
-					theme={COLORS_THEME.light}
-					autoFocus={false}
-					autoCapitalize="none"
-					keyboardType="default"
-					onChangeText={(value) => getSuggestions(value)}
-					value={newCity}
-				/>
-				{remoteDataSet.length > 0 && (
-					<FlatList
-						data={remoteDataSet}
-						renderItem={({ item }) => (
-							<TouchableOpacity
-								onPress={() =>
-									setCity(
-										!item?.name
-											? user.city
-											: {
-													name: item.name,
-													latitude: item.latitude,
-													longitude: item.longitude,
-											  }
-									)
-								}
-								style={{
-									paddingVertical: 5,
-									paddingHorizontal: 10,
-									margin: 2,
-									borderRadius: 8,
-									backgroundColor:
-										city.latitude === item.latitude
-											? COLORS.lightBlue
-											: COLORS.pink,
-								}}
-								activeOpacity={0.8}>
-								<Text style={{ fontSize: 16, color: COLORS.bg }}>
-									{item.title}
-								</Text>
-							</TouchableOpacity>
-						)}
-						contentContainerStyle={{
-							minWidth: '70%',
-						}}
-					/>
-				)}
-			</View>
+			<Textarea
+				label={description ? '' : 'Description'}
+				theme={COLORS_THEME.light}
+				autoFocus={false}
+				onChangeText={(value) => setDescription(value)}
+				value={description}
+			/>
 
 			<View style={styles.optionsContainer}>
 				<ButtonIcon
 					type="secondary"
 					size={18}
-					name="arrow-undo-outline"
+					name="arrow-back-outline"
 					onpress={() => {
 						setUpdateInfoVisible(false);
+						setDescription(null);
 					}}
 				/>
 				<ButtonIcon
@@ -428,10 +426,39 @@ const UserProfileScreen = ({ navigation }) => {
 					name="checkmark-outline"
 					onpress={() => {
 						handleUpdate({
-							city,
+							description: description || user.description,
 						});
-						setCity('');
+						setDescription(null);
 						setUpdateInfoVisible(false);
+					}}
+				/>
+			</View>
+		</View>
+	);
+
+	const updateLanguages = (
+		<View style={styles.inputContainer}>
+			<DropdownLanguage
+				spokenLanguages={spokenLanguages}
+				setSpokenLanguages={setSpokenLanguages}
+			/>
+
+			<View style={styles.optionsContainer}>
+				<ButtonIcon
+					type="secondary"
+					size={18}
+					name="arrow-back-outline"
+					onpress={() => {
+						setUpdateLanguagesVisible(false);
+					}}
+				/>
+				<ButtonIcon
+					type="primary"
+					size={18}
+					name="checkmark-outline"
+					onpress={() => {
+						handleUpdate({ spokenLanguages });
+						setUpdateLanguagesVisible(false);
 					}}
 				/>
 			</View>
@@ -472,178 +499,156 @@ const UserProfileScreen = ({ navigation }) => {
 
 	return (
 		<SafeAreaView style={styles.container}>
-			<View style={styles.optionsContainer}>
-				<Text style={STYLES_GLOBAL.subTitle}>MON PROFIL</Text>
-				<ButtonIcon
-					type="secondary"
-					name="arrow-undo-outline"
-					onpress={() => {
-						navigation.navigate('TabNavigator', { screen: 'Settings' });
-					}}
-				/>
-			</View>
+			<HeaderUpdateProfile
+				editViewEnabled={editViewEnabled}
+				handleNagitaion={() => {
+					navigation.navigate('TabNavigator', { screen: 'Settings' });
+				}}
+				handleUpdateView={() => setEditViewEnabled(!editViewEnabled)}
+			/>
 
-			<View style={[styles.optionsContainer, styles.imageContainer]}>
-				<View
-					style={{
-						width: 150,
-						padding: 10,
-					}}>
-					<Image
-						source={{
-							uri: user.avatarUrl,
-						}}
-						style={styles.image}
-					/>
+			<View
+				style={{
+					...StyleSheet.absoluteFillObject,
+					top: 80,
+					width: '100%',
+					height: 140,
+					alignItems: 'center',
+					padding: 20,
+					zIndex: 3,
+				}}>
+				<Image
+					source={{
+						uri: user.avatarUrl,
+					}}
+					style={styles.image}
+				/>
+				{editViewEnabled && (
 					<View
 						style={{
 							...StyleSheet.absoluteFillObject,
-							top: '65%',
-							left: '75%',
-							margin: -20,
+							top: 90,
+							left: '60%',
 						}}>
 						<ButtonIcon
-							type="primary"
+							type="secondaryLight"
 							name="camera-reverse-outline"
 							onpress={() => {
 								setUpdateAvatarVisible(true);
 							}}
 						/>
 					</View>
-				</View>
-
-				<View style={styles.switchContainer}>
-					<Text style={STYLES_GLOBAL.subTitle}>Iconic Host</Text>
-					<Switch
-						trackColor={{ false: COLORS.darkBlue, true: COLORS.pink }}
-						thumbColor={isEnabled ? COLORS.bg : COLORS.lightBlue}
-						style={{
-							marginTop: 10,
-							transform: [{ scaleX: 1.7 }, { scaleY: 1.7 }],
-						}}
-						ios_backgroundColor={COLORS.lightBlue}
-						onValueChange={toggleSwitch}
-						value={isEnabled}
-					/>
-				</View>
+				)}
 			</View>
 
-			<View style={styles.detailsContainer}>
-				<View style={styles.optionsBtnContainer}>
-					<View style={styles.nameContainer}>
-						<Text style={styles.name}>
-							{user.firstname} {user.lastname}
-						</Text>
-						<Text style={styles.age}> - {getAge(user.dateOfBirth)} ans</Text>
+			<View style={styles.wrapperLayer}>
+				<TouchableOpacity
+					style={[styles.detailsContainer, editViewEnabled && styles.border]}
+					onPress={() => editViewEnabled && setUpdateDetailsVisible(true)}
+					activeOpacity={0.8}>
+					<Text
+						style={[
+							styles.name,
+							{
+								color: editViewEnabled ? COLORS.lightBlue : COLORS.darkBlue,
+							},
+						]}>
+						{user.firstname} {user.lastname}
+					</Text>
+
+					<Text
+						style={[
+							styles.details,
+							{
+								color: editViewEnabled ? COLORS.lightBlue : COLORS.darkBlue,
+							},
+						]}>
+						{user.city.name}
+					</Text>
+
+					<Text
+						style={[
+							styles.age,
+							{
+								color: editViewEnabled ? COLORS.lightBlue : COLORS.darkBlue,
+							},
+						]}>
+						{getAge(user.dateOfBirth)} ans
+					</Text>
+				</TouchableOpacity>
+
+				<TouchableOpacity
+					style={[styles.detailsContainer, editViewEnabled && styles.border]}
+					onPress={() => editViewEnabled && setUpdateInfoVisible(true)}
+					activeOpacity={0.8}>
+					<Text
+						style={[
+							STYLES_GLOBAL.textDark,
+							{
+								color: editViewEnabled ? COLORS.lightBlue : COLORS.darkBlue,
+							},
+						]}>
+						{user.description}
+					</Text>
+				</TouchableOpacity>
+
+				<View
+					style={{
+						flexDirection: 'row',
+						alignItems: 'center',
+					}}>
+					<TouchableOpacity
+						style={[styles.detailsContainer, editViewEnabled && styles.border]}
+						onPress={() => editViewEnabled && setUpdateLanguagesVisible(true)}
+						activeOpacity={0.8}>
+						<Text style={STYLES_GLOBAL.textDark}>Je parle :</Text>
+						<View style={styles.languagesContainer}>
+							{user.spokenLanguages.map((language, i) => (
+								<Text
+									key={i}
+									style={[
+										STYLES_GLOBAL.textDark,
+										{
+											color: editViewEnabled
+												? COLORS.lightBlue
+												: COLORS.darkBlue,
+										},
+									]}>
+									{language}
+								</Text>
+							))}
+						</View>
+					</TouchableOpacity>
+
+					<View style={styles.switchContainer}>
+						<Text style={STYLES_GLOBAL.subTitle}>Iconic Host</Text>
+						<Switch
+							trackColor={{ false: COLORS.darkBlue, true: COLORS.pink }}
+							thumbColor={isEnabled ? COLORS.bg : COLORS.lightBlue}
+							style={{
+								marginTop: 10,
+								transform: [{ scaleX: 1.7 }, { scaleY: 1.7 }],
+							}}
+							ios_backgroundColor={COLORS.lightBlue}
+							onValueChange={toggleSwitch}
+							value={isEnabled}
+						/>
 					</View>
-
-					<ButtonIcon
-						type="transparent"
-						size={18}
-						name="pencil-outline"
-						onpress={() => {
-							setUpdateDetailsVisible(true);
-						}}
-					/>
 				</View>
 
-				<View style={styles.optionsContainer}>
-					<Text style={STYLES_GLOBAL.textDark}>{user.description}</Text>
-				</View>
-			</View>
-
-			<View style={styles.detailsContainer}>
-				<Text style={styles.subTitle}>Informations</Text>
-
-				<View style={styles.optionsContainer}>
+				<TouchableOpacity
+					style={[styles.detailsContainer, editViewEnabled && styles.border]}
+					onPress={() => editViewEnabled && setUpdatePassionVisible(true)}
+					activeOpacity={0.8}>
+					<Text style={STYLES_GLOBAL.textDark}>Mes Passions : </Text>
 					<View style={styles.optionsContainer}>
-						<Text style={[STYLES_GLOBAL.textDark, styles.details]}>
-							Lieu de résidence
-						</Text>
-						<View
-							style={[styles.optionsBtnContainer, { width: 'fit-content' }]}>
-							<Text style={[STYLES_GLOBAL.textDark, styles.details]}>
-								{user.city.name}
-							</Text>
-							<ButtonIcon
-								type="transparent"
-								size={18}
-								name="pencil-outline"
-								onpress={() => {
-									setNewCity('');
-									setUpdateInfoVisible(true);
-								}}
-							/>
-						</View>
+						{user.hobbies.map((h, i) => (
+							<View key={i} style={styles.hobbyContainer}>
+								<Text style={styles.hobby}>{h}</Text>
+							</View>
+						))}
 					</View>
-				</View>
-
-				<View style={styles.optionsContainer}>
-					{isEditable !== EDITABLES.languages ? (
-						<>
-							<Text style={[STYLES_GLOBAL.textDark, styles.details]}>
-								Langues parlées
-							</Text>
-							<View style={styles.languagesContainer}>
-								{user.spokenLanguages.map((language, i) => (
-									<Text
-										key={i}
-										style={[STYLES_GLOBAL.textDark, styles.details]}>
-										{language}
-									</Text>
-								))}
-								<ButtonIcon
-									type="transparent"
-									size={18}
-									name="pencil-outline"
-									onpress={() => {
-										setIsEditable(EDITABLES.languages);
-									}}
-								/>
-							</View>
-						</>
-					) : (
-						<>
-							<View style={{ flex: 1 }}>
-								<DropdownLanguage
-									spokenLanguages={spokenLanguages}
-									setSpokenLanguages={setSpokenLanguages}
-								/>
-							</View>
-
-							<ButtonIcon
-								type="transparent"
-								size={18}
-								name="checkmark-outline"
-								onpress={() => {
-									handleUpdate({ spokenLanguages });
-									setIsEditable('');
-								}}
-							/>
-						</>
-					)}
-				</View>
-			</View>
-
-			<View style={styles.detailsContainer}>
-				<View style={styles.optionsBtnContainer}>
-					<Text style={styles.subTitle}>Passions</Text>
-					<ButtonIcon
-						type="transparent"
-						size={18}
-						name="pencil-outline"
-						onpress={() => {
-							setUpdatePassionVisible(true);
-						}}
-					/>
-				</View>
-				<View style={styles.optionsContainer}>
-					{user.hobbies.map((h, i) => (
-						<View key={i} style={styles.hobbyContainer}>
-							<Text style={styles.hobby}>{h}</Text>
-						</View>
-					))}
-				</View>
+				</TouchableOpacity>
 			</View>
 
 			<ModalModel
@@ -663,8 +668,15 @@ const UserProfileScreen = ({ navigation }) => {
 			<ModalModel
 				visible={updateInfoVisible}
 				setVisible={setUpdateInfoVisible}
-				title="MISE A JOUR DE VOS PASSIONS"
+				title="MAIS QUI ÊTES-VOUS ?"
 				children={updateInfo}
+			/>
+
+			<ModalModel
+				visible={updateLanguagesVisible}
+				setVisible={setUpdateLanguagesVisible}
+				title="QUELLES LANGUES PARLEZ-VOUS ?"
+				children={updateLanguages}
 			/>
 
 			<ModalModel
@@ -680,14 +692,43 @@ const UserProfileScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		paddingVertical: 40,
-		paddingHorizontal: 20,
+		alignItems: 'center',
+		backgroundColor: COLORS.darkBlue,
+	},
+	wrapperLayer: {
+		minWidth: '100%',
+		marginTop: 160,
 		alignItems: 'center',
 		justifyContent: 'space-around',
+		backgroundColor: COLORS.bg,
+		borderTopLeftRadius: 100,
 	},
+	detailsContainer: {
+		// width: Platform.OS === 'ios' ? '90%' : '100%',
+		// flex: 1,
+		padding: 20,
+		marginTop: 50,
+		paddingHorizontal: 40,
+		alignItems: 'center',
+		justifyContent: 'center',
+	},
+	border: {
+		borderColor: COLORS.lightBlue,
+		borderWidth: 1,
+		borderRadius: 30,
+		shadowColor: COLORS.lightBlue,
+		shadowOffset: {
+			width: 0,
+			height: 1,
+		},
+		shadowOpacity: 0.2,
+		shadowRadius: 1.41,
+		elevation: 2,
+	},
+
 	inputContainer: {
 		width: '100%',
-		marginTop: 20,
+		// marginTop: 20,
 		alignItems: 'center',
 		justifyContent: 'center',
 	},
@@ -697,6 +738,8 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		alignItems: 'center',
 		justifyContent: 'space-between',
+		borderWidth: 1,
+		borderColor: 'red',
 	},
 	optionsBtnContainer: {
 		width: '100%',
@@ -711,39 +754,37 @@ const styles = StyleSheet.create({
 	},
 	switchContainer: {
 		alignItems: 'center',
+		justifyContent: 'center',
+		padding: 20,
+		marginTop: 50,
+		paddingHorizontal: 40,
 	},
 
-	detailsContainer: {
-		width: Platform.OS === 'ios' ? '90%' : '100%',
-	},
-	nameContainer: {
-		flexDirection: 'row',
-		alignItems: 'baseline',
-		justifyContent: 'flex-start',
-	},
 	languagesContainer: {
-		flex: 1,
+		// flex: 1,
 		flexWrap: 'wrap',
 		flexDirection: 'row',
 		justifyContent: 'flex-end',
 	},
-	imageContainer: {
-		padding: 20,
-	},
+
 	image: {
 		width: 120,
 		height: 120,
 		borderRadius: 250,
 	},
-	age: {
-		marginRight: 20,
-	},
 	name: {
-		fontSize: 24,
+		fontSize: 28,
+		fontWeight: '700',
 		letterSpacing: 1,
-		color: COLORS.darkBlue,
 		textTransform: 'capitalize',
 	},
+	details: {
+		fontSize: 26,
+	},
+	age: {
+		fontSize: 16,
+	},
+
 	subTitle: {
 		fontSize: 24,
 		marginRight: 10,
@@ -760,9 +801,6 @@ const styles = StyleSheet.create({
 		paddingVertical: 5,
 		paddingHorizontal: 7,
 		backgroundColor: COLORS.lightBlue,
-	},
-	details: {
-		paddingVertical: 2,
 	},
 });
 
