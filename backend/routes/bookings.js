@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 
 const Booking = require('../models/bookings');
+const User = require('../models/users');
 
 router.post('/request', (req, res) => {
   const {
@@ -21,8 +22,35 @@ router.post('/request', (req, res) => {
     childrenNumber,
     babiesNumber,
   })
-  newBooking.save().then(data => {
-    res.json({ result: true })
+  newBooking.save().then(async (data) => {
+    console.log('les datas : ',data)
+    const travelerFound = await User.findOne({ _id: traveler });
+    const hostFound = await User.findOne({ _id: host });
+    console.log('Voyageur trouvé : ', travelerFound)
+    console.log('Hote trouvé : ', hostFound)
+
+	if(travelerFound.bookings.includes(data._id) || hostFound.bookings.includes(data._id)) {
+		res.json( {
+			result: false,
+			error: 'Booking déjà enregistré !'
+		})
+	}else {
+		travelerFound.bookings.push(data._id)
+    hostFound.bookings.push(data._id)
+
+		const newTraveler = await travelerFound.save();
+    const newHost = await hostFound.save();
+
+    console.log('Nouveau traveller :', newHost)
+    console.log('Nouvel hote :', newHost)
+	
+		if (!newTraveler || !newHost)
+			return res
+				.status(409)
+				.json({ result: false, error: 'Can not add booking id to user' });
+	
+		res.json({ result: true, travelerBookings: newTraveler.bookings, hostBookings: newHost.bookings });
+	}
   })
 })
 
@@ -47,8 +75,8 @@ router.get(`/exists/:traveler/:host`, (req, res) => {
     })
 })
 
-router.get(`/:host`, (req, res) => {
-  Booking.find({ host: req.params.host })
+router.get(`/traveler/:traveler`, (req, res) => {
+  Booking.find({ traveler: req.params.traveler })
     .then(data => {
       console.log('data trouvé : ', data)
       if (data.length !== 0) {

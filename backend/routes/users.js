@@ -162,7 +162,7 @@ router.put('/hosting/:token', async (req, res) => {
 	res.json({ result: true, canHost: newUser.canHost });
 });
 
-/* PUT /password/:token - update only canHost property*/
+/* PUT /password/:token - update only password property*/
 router.put('/password/:token', async (req, res) => {
 	const { password } = req.body;
 	const user = await User.findOne({ token: req.params.token });
@@ -198,6 +198,30 @@ router.put('/update/:token', async (req, res) => {
 			.json({ result: false, error: 'Can not update user' });
 
 	res.json({ result: true, data: newUser });
+});
+
+/* PUT /hosting/:token - update only canHost property*/
+router.put('/booking/:token/:bookingId', async (req, res) => {
+	const user = await User.findOne({ token: req.params.token });
+
+	if(user.bookings.includes(req.params.bookingId)) {
+		res.json( {
+			result: false,
+			error: 'Booking déjà enregistré !'
+		})
+	}else {
+		user.bookings.push(req.params.bookingId)
+
+		const newUser = await user.save();
+	
+		if (!newUser)
+			return res
+				.status(409)
+				.json({ result: false, error: 'Can not add booking id' });
+	
+		res.json({ result: true, canHost: newUser.canHost });
+	}
+	
 });
 
 /* DELETE /delete/:token - remove all data from user in db (pusher ?) */

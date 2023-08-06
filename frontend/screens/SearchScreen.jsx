@@ -12,6 +12,7 @@ import { URL_EXPO } from '../environnement';
 import { DISTANCES } from '../utils/data';
 import { MaterialCommunityIcons, Ionicons } from '@expo/vector-icons';
 import { convertCoordsToKm } from '../utils/helper'
+import { useIsFocused } from '@react-navigation/native';
 
 const SearchScreen = ({ navigation }) => {
 	const user = useSelector((state) => state.user.value);
@@ -24,6 +25,8 @@ const SearchScreen = ({ navigation }) => {
 	const mapRef = useRef(null)
 	const svRef = useRef(null)
 	const markersRef = useRef([]);
+
+	const isFocused = useIsFocused()
 
 
 	useEffect(() => {
@@ -42,7 +45,7 @@ const SearchScreen = ({ navigation }) => {
 					setError(ERRORS[`err${users.status}`]);
 				}
 			});
-	}, []);
+	}, [isFocused]);
 
 	const sortedUsers = usersAroundDestination;
 

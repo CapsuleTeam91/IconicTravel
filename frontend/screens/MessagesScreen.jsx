@@ -11,8 +11,11 @@ import { URL_EXPO } from '../environnement';
 import { STYLES_GLOBAL, COLORS } from "../utils/styles";
 import { useDispatch, useSelector } from 'react-redux';
 import React, { useEffect, useState } from "react";
+import { useIsFocused } from '@react-navigation/native';
 
-const MessagesScreen = ({ navigation }) => {
+const MessagesScreen = ({ navigation }, props) => {
+
+  const isFocused = useIsFocused();
 
   const user = useSelector((state) => state.user.value);
 
@@ -20,15 +23,15 @@ const MessagesScreen = ({ navigation }) => {
     fetch(`${URL_EXPO}:3000/users/getId/${user.token}/${user.email}`)
       .then(resp => resp.json())
       .then(data => {
-        console.log(data.traveler)
-        fetch(`${URL_EXPO}:3000/bookings/${data.host}`)
+        console.log(data)
+        fetch(`${URL_EXPO}:3000/bookings/traveler/${data.travelerId}`)
           .then(resp => resp.json())
           .then(bookings => {
             console.log(bookings)
           })
       })
 
-  }, [])
+  }, [isFocused])
 
   // Fausse donnée pas véritablement vrais
   const fakeData = [

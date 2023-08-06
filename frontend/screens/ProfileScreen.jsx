@@ -84,7 +84,7 @@ const UserProfileScreen = ({ route, navigation }) => {
 							setModalVisible(!modalVisible)
 							setBookingStatus('Demande en attente')
 						} else {
-							setError(`Impossible de contacter ${user.firstname}`)
+							setError(data.error)
 						}
 					})
 			})
