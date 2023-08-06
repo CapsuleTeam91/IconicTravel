@@ -3,6 +3,7 @@ var router = express.Router();
 
 const Booking = require('../models/bookings');
 const User = require('../models/users');
+const chatChannel = require('../models/chatChannels');
 
 router.post('/request', (req, res) => {
   const {
@@ -26,8 +27,6 @@ router.post('/request', (req, res) => {
     console.log('les datas : ',data)
     const travelerFound = await User.findOne({ _id: traveler });
     const hostFound = await User.findOne({ _id: host });
-    console.log('Voyageur trouvé : ', travelerFound)
-    console.log('Hote trouvé : ', hostFound)
 
 	if(travelerFound.bookings.includes(data._id) || hostFound.bookings.includes(data._id)) {
 		res.json( {
@@ -40,14 +39,13 @@ router.post('/request', (req, res) => {
 
 		const newTraveler = await travelerFound.save();
     const newHost = await hostFound.save();
-
-    console.log('Nouveau traveller :', newHost)
-    console.log('Nouvel hote :', newHost)
 	
 		if (!newTraveler || !newHost)
 			return res
 				.status(409)
 				.json({ result: false, error: 'Can not add booking id to user' });
+
+        
 	
 		res.json({ result: true, travelerBookings: newTraveler.bookings, hostBookings: newHost.bookings });
 	}

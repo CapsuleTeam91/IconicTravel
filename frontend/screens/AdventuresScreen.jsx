@@ -34,6 +34,131 @@ const AdventuresScreen = ({ navigation }) => {
   const [messagesEnAttente, setMessagesEnAttente] = useState([]);
   const [currentTab, setCurrentTab] = useState("confirmes");
 
+  const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      alignItems: "center",
+      justifyContent: "flex-start",
+      backgroundColor: "#f0f0f0",
+    },
+    header: {
+      paddingBottom: 10,
+      alignItems: "center",
+    },
+    title: {
+      color: COLORS.darkBlue,
+      fontSize: 20,
+      letterSpacing: 1.2,
+      fontWeight: "700",
+      textAlign: "center",
+      textTransform: "uppercase",
+    },
+    contentContainer: {
+      flex: 1,
+      padding: 10,
+    },
+    tabContainer: {
+      flexDirection: "row",
+      justifyContent: "space-around",
+      paddingVertical: 10,
+      marginTop: 20,
+      overflow: "visible",
+    },
+    tab: {
+      paddingVertical: 10,
+      paddingHorizontal: 20,
+    },
+    confirmesContainer: {
+      backgroundColor: currentTab === "confirmes" ? COLORS.darkBlue : "#ffff",
+      borderRadius: 10,
+      textAlign: "center",
+      color: currentTab === "confirmes" ? "white" : COLORS.darkBlue,
+      borderWidth: currentTab === "confirmes" ? 0 : 1,
+      borderColor: currentTab === "confirmes" && COLORS.darkBlue,
+      fontWeight: "bold",
+      paddingVertical: 12,
+      paddingHorizontal: 30,
+      marginVertical: 30,
+      overflow: "hidden",
+    },
+  
+    enAttenteContainer: {
+      backgroundColor: currentTab !== "confirmes" ? COLORS.darkBlue : "#ffff",
+      borderRadius: 10,
+      fontWeight: "bold",
+      textAlign: "center",
+      borderWidth: 1,
+      color: currentTab !== "confirmes" ? "white" : COLORS.darkBlue,
+      borderWidth: currentTab !== "confirmes" ? 0 : 1,
+      borderColor: currentTab !== "confirmes" && COLORS.darkBlue,
+      paddingVertical: 12,
+      paddingHorizontal: 30,
+      marginVertical: 30,
+      overflow: "hidden",
+    },
+  
+    messageCard: {
+      backgroundColor: "white",
+      borderRadius: 10,
+      padding: 10,
+      marginBottom: 10,
+      borderColor: "#ccc",
+      borderWidth: 1,
+    },
+  
+    voyageInfo: {
+      fontSize: 14,
+      fontWeight: "bold",
+      marginBottom: 5,
+    },
+    messageText: {
+      fontSize: 16,
+    },
+    messageHote: {
+      fontSize: 14,
+      fontWeight: "bold",
+    },
+  
+    confirmButton: {
+      backgroundColor: COLORS.darkBlue,
+      borderRadius: 5,
+      paddingVertical: 8,
+      paddingHorizontal: 15,
+      marginTop: 10,
+    },
+  
+    confirmButtonText: {
+      color: "white",
+      fontSize: 16,
+      textAlign: "center",
+    },
+    cancelButton: {
+      backgroundColor: "#ffff",
+      borderWidth: 1,
+      borderColor: COLORS.darkBlue,
+      color: "black",
+      borderRadius: 5,
+      paddingVertical: 8,
+      paddingHorizontal: 15,
+      marginTop: 5,
+    },
+    cancelButtonText: {
+      color: COLORS.darkBlue,
+      fontSize: 16,
+      textAlign: "center",
+    },
+  
+    messageHote: {
+      fontSize: 14,
+      fontWeight: "bold",
+      color: COLORS.darkGray,
+    },
+    messageText: {
+      fontSize: 14,
+      color: "grey",
+    },
+  });
+
   // Utilisation de useEffect pour initialiser les messages en attente au chargement de la page
   useEffect(() => {
     // Au chargement, fausses données seront dans  "messagesEnAttente"
@@ -112,8 +237,7 @@ const AdventuresScreen = ({ navigation }) => {
           {/* Onglet "Confirmés" */}
           <TouchableOpacity
             style={[
-              styles.tab,
-              currentTab === "confirmes" ? styles.activeTab : null,
+              styles.tab
             ]}
             onPress={() => setCurrentTab("confirmes")} // Lorsque l'onglet est pressé, on met à jour l'état "currentTab" à "confirmes"
           >
@@ -123,8 +247,7 @@ const AdventuresScreen = ({ navigation }) => {
           {/* Onglet "En Attente" */}
           <TouchableOpacity
             style={[
-              styles.tab,
-              currentTab === "en_attente" ? styles.activeTab : null,
+              styles.tab
             ]}
             onPress={() => setCurrentTab("en_attente")} // Lorsque l'onglet est pressé, on met à jour l'état "currentTab" à "en_attente"
           >
@@ -148,126 +271,5 @@ const AdventuresScreen = ({ navigation }) => {
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "flex-start",
-    backgroundColor: "#f0f0f0",
-  },
-  header: {
-    paddingBottom: 10,
-    alignItems: "center",
-  },
-  title: {
-    color: COLORS.darkBlue,
-    fontSize: 20,
-    letterSpacing: 1.2,
-    fontWeight: "700",
-    textAlign: "center",
-    textTransform: "uppercase",
-  },
-  contentContainer: {
-    flex: 1,
-    padding: 10,
-  },
-  tabContainer: {
-    flexDirection: "row",
-    justifyContent: "space-around",
-    paddingVertical: 10,
-    marginTop: 20,
-    overflow: "visible",
-  },
-  tab: {
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-  },
 
-  confirmesContainer: {
-    backgroundColor: COLORS.darkBlue,
-    borderRadius: 10,
-    textAlign: "center",
-    color: "white",
-    fontWeight: "bold",
-    paddingVertical: 12,
-    paddingHorizontal: 30,
-    marginVertical: 30,
-    overflow: "hidden",
-  },
-
-  enAttenteContainer: {
-    backgroundColor: "#ffff",
-    borderRadius: 10,
-    fontWeight: "bold",
-    textAlign: "center",
-    borderWidth: 1,
-    borderColor: COLORS.darkBlue,
-    color: COLORS.darkBlue,
-    paddingVertical: 12,
-    paddingHorizontal: 30,
-    marginVertical: 30,
-    overflow: "hidden",
-  },
-
-  messageCard: {
-    backgroundColor: "white",
-    borderRadius: 10,
-    padding: 10,
-    marginBottom: 10,
-    borderColor: "#ccc",
-    borderWidth: 1,
-  },
-
-  voyageInfo: {
-    fontSize: 14,
-    fontWeight: "bold",
-    marginBottom: 5,
-  },
-  messageText: {
-    fontSize: 16,
-  },
-  messageHote: {
-    fontSize: 14,
-    fontWeight: "bold",
-  },
-
-  confirmButton: {
-    backgroundColor: COLORS.darkBlue,
-    borderRadius: 5,
-    paddingVertical: 8,
-    paddingHorizontal: 15,
-    marginTop: 10,
-  },
-
-  confirmButtonText: {
-    color: "white",
-    fontSize: 16,
-    textAlign: "center",
-  },
-  cancelButton: {
-    backgroundColor: "#ffff",
-    borderWidth: 1,
-    borderColor: COLORS.darkBlue,
-    color: "black",
-    borderRadius: 5,
-    paddingVertical: 8,
-    paddingHorizontal: 15,
-    marginTop: 5,
-  },
-  cancelButtonText: {
-    color: COLORS.darkBlue,
-    fontSize: 16,
-    textAlign: "center",
-  },
-
-  messageHote: {
-    fontSize: 14,
-    fontWeight: "bold",
-    color: COLORS.darkGray,
-  },
-  messageText: {
-    fontSize: 14,
-    color: "grey",
-  },
-});
 export default AdventuresScreen;

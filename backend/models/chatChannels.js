@@ -8,7 +8,7 @@ const messageSchema = mongoose.Schema({
 
 const chatChannelSchema = mongoose.Schema({
     name: String,
-    messages: messageSchema,
+    messages: [messageSchema],
     createdAt: Date
 });
 
