@@ -57,7 +57,7 @@ const Textarea = (props) => {
 			</Animated.View>
 			<TextInput
 				{...props}
-				maxLength={1000}
+				maxLength={450}
 				multiline={true}
 				numberOfLines={8}
 				onFocus={handleFocus}
