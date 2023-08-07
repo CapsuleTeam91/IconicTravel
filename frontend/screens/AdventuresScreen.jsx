@@ -27,11 +27,25 @@ const AdventuresScreen = ({ navigation }) => {
 		}
 	}, [isFocused]);
 
-	const userMatched = {
-		firstname: 'Laura',
-		city: 'San Francisco',
-		avatarUrl: thisUser.avatarUrl,
-	};
+	console.log('User Trouvé : ', user);
+
+	let pendingBooksList = [];
+
+	if (user.bookings) {
+		pendingBooksList = user.bookings.map((booking, index) => {
+			return (
+				booking.host === user._id && (
+					<AdventureCard
+						key={index}
+						userMatched={booking.traveler}
+						handleDismiss={() => {}}
+						handleValidate={() => {}}
+					/>
+				)
+			);
+		});
+	}
+
 	return (
 		<View style={styles.container}>
 			<Text style={STYLES_GLOBAL.subTitle}>Iconic Adventures</Text>
