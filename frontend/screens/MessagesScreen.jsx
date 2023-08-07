@@ -31,6 +31,21 @@ const MessagesScreen = ({ navigation }, props) => {
 		}
 	}, [isFocused]);
 
+	const chatList = chats.map((chat, i) => {
+
+		let userToDisplay = chat.traveler;
+		if (chat.host.email !== user.email) {
+			userToDisplay = chat.host
+		}
+
+		return (
+			<View key={i} style={styles.messageContainer}>
+				<Image source={{ uri: userToDisplay.avatarUrl }} style={styles.avatar} />
+				<Text>{userToDisplay.firstname}</Text>
+			</View>
+		)
+	})
+
 
 
 
@@ -39,9 +54,7 @@ const MessagesScreen = ({ navigation }, props) => {
 		<View style={styles.container}>
 			<Text style={styles.title}>Messages</Text>
 			<View style={styles.messagesContainer}>
-				<View style={styles.messageContainer}>
-					<Image source={{ uri: user.avatarUrl }} style={styles.avatar} />
-				</View>
+				{chatList}
 			</View>
 		</View>
 	);
@@ -66,6 +79,9 @@ const styles = StyleSheet.create({
 		marginTop: 50,
 	},
 	messageContainer: {
+		padding: 10,
+		flexDirection: 'row',
+		alignItems: 'center',
 		width: '90%',
 		height: '30%',
 		borderWidth: 1,
