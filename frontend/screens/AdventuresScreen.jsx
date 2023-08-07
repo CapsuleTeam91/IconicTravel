@@ -1,13 +1,4 @@
-import {
-	FlatList,
-	SafeAreaView,
-	StyleSheet,
-	Text,
-	Touchable,
-	TouchableOpacity,
-	View,
-	Image,
-} from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { COLORS, STYLES_GLOBAL } from '../utils/styles';
 import Button from '../components/buttons/Button';
 import { useSelector } from 'react-redux';
@@ -24,33 +15,23 @@ const AdventuresScreen = ({ navigation }) => {
 	const isFocused = useIsFocused();
 	const thisUser = useSelector((state) => state.user.value);
 	const [currentTab, setCurrentTab] = useState(ADVENTURE_STATE.confirmed);
-	const [user, setUser] = useState({})
+	const [bookings, setBookings] = useState([]);
 
 	useEffect(() => {
 		if (isFocused) {
 			fetch(`${URL_EXPO}:3000/bookings/${thisUser.token}`)
 				.then((resp) => resp.json())
 				.then((result) => {
-					setUser(result.user)
-
+					setBookings(result.bookings);
 				});
 		}
 	}, [isFocused]);
 
-	console.log('User Trouvé : ', user)
-
-	const pendingBooksList = user.bookings.map((booking, index) => {
-		return (
-			booking.host === user._id &&
-			<AdventureCard
-				key={index}
-				userMatched={booking.traveler}
-				handleDismiss={() => { }}
-				handleValidate={() => { }}
-			/>
-		)
-	})
-
+	const userMatched = {
+		firstname: 'Laura',
+		city: 'San Francisco',
+		avatarUrl: thisUser.avatarUrl,
+	};
 	return (
 		<View style={styles.container}>
 			<Text style={STYLES_GLOBAL.subTitle}>Iconic Adventures</Text>
@@ -73,7 +54,11 @@ const AdventuresScreen = ({ navigation }) => {
 			</View>
 
 			{currentTab === ADVENTURE_STATE.pending && (
-				pendingBooksList
+				<AdventureCard
+					userMatched={userMatched}
+					handleDismiss={() => {}}
+					handleValidate={() => {}}
+				/>
 			)}
 		</View>
 	);

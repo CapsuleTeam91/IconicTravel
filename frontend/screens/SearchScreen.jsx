@@ -23,6 +23,7 @@ import { MaterialCommunityIcons, Ionicons } from '@expo/vector-icons';
 import { convertCoordsToKm } from '../utils/helper';
 import { useIsFocused } from '@react-navigation/native';
 import { Map } from '../components/Map';
+import { HostCard } from '../components/cards/HostCard';
 
 const SearchScreen = ({ navigation }) => {
 	const isFocused = useIsFocused();
@@ -103,7 +104,17 @@ const SearchScreen = ({ navigation }) => {
 						<TouchableWithoutFeedback
 							key={i}
 							onPress={() => displayUserOnMap(user)}>
-							<View
+							<HostCard
+								user={user}
+								selected={
+									userSelected?.index === user.index
+										? styles.userContainerSelected
+										: styles.userContainer
+								}
+								handleClick={() => navigation.navigate('Profile', { user })}
+							/>
+
+							{/* <View
 								key={i}
 								style={
 									userSelected?.index === user.index
@@ -129,7 +140,7 @@ const SearchScreen = ({ navigation }) => {
 										/>
 									</TouchableOpacity>
 								</View>
-							</View>
+							</View> */}
 						</TouchableWithoutFeedback>
 					);
 				}

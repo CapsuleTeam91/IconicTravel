@@ -13,7 +13,6 @@ import PasswordInput from '../forms/PasswordInput';
 const SignIn = (props) => {
 	const dispatch = useDispatch();
 	const userLogs = useSelector((state) => state.user.logs);
-	console.log(userLogs);
 	const translateAnim = useRef(new Animated.Value(0)).current;
 	const [email, setEmail] = useState('');
 	const [error, setError] = useState('');
@@ -108,7 +107,6 @@ const SignIn = (props) => {
 		<Animated.View
 			style={[
 				styles.container,
-
 				{
 					transform: [{ translateY: translateAnim }], // Bind translateY to animated value
 				},
@@ -121,7 +119,7 @@ const SignIn = (props) => {
 
 				<View style={styles.inputContainer}>
 					<Input
-						label="Email"
+						label={userLogs.email ? '' : 'Email'}
 						theme={COLORS_THEME.light}
 						autoFocus={false}
 						autoCapitalize="none"

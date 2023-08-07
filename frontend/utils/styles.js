@@ -10,6 +10,11 @@ export const COLORS = {
 	// lightGrey: '#f5f8fb',
 };
 
+export const RADIUS = {
+	image: 250,
+	card: 20,
+};
+
 export const COLORS_THEME = {
 	light: 'light',
 	dark: 'dark',
