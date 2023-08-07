@@ -39,17 +39,22 @@ const AdventuresScreen = ({ navigation }) => {
 
 	console.log('User Trouvé : ', user)
 
-	const pendingBooksList = user.bookings.map((booking, index) => {
-		return (
-			booking.host === user._id &&
-			<AdventureCard
-				key={index}
-				userMatched={booking.traveler}
-				handleDismiss={() => { }}
-				handleValidate={() => { }}
-			/>
-		)
-	})
+	let pendingBooksList = []
+
+	if (user.bookings) {
+		pendingBooksList = user.bookings.map((booking, index) => {
+			return (
+				booking.host === user._id &&
+				<AdventureCard
+					key={index}
+					userMatched={booking.traveler}
+					handleDismiss={() => { }}
+					handleValidate={() => { }}
+				/>
+			)
+		})
+
+	}
 
 	return (
 		<View style={styles.container}>
