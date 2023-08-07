@@ -53,11 +53,15 @@ router.post('/request', (req, res) => {
 })
 
 router.get('/:token', (req, res) => {
-  User.findOne({ token: req.params.token }).populate('bookings')
+  User.findOne({ token: req.params.token }).populate({
+    path: 'bookings',
+    // Get friends of friends - populate the 'friends' array for every friend
+    populate: { path: 'traveler' }
+  })
     .then(userFound => {
       res.json({
         result: true,
-        bookings: userFound.bookings
+        user: userFound
       })
     })
 })
