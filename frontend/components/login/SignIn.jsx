@@ -61,6 +61,7 @@ const SignIn = (props) => {
 						spokenLanguages,
 						hobbies,
 						travels,
+						canHost,
 					} = userFound.data;
 					dispatch(
 						addData({
@@ -75,8 +76,10 @@ const SignIn = (props) => {
 							spokenLanguages,
 							hobbies,
 							travels,
+							canHost,
 						})
 					);
+
 					dispatch(rememberPassword({ email, password }));
 					setEmail('');
 					setPassword('');

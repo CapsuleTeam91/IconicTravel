@@ -454,16 +454,17 @@ const styles = StyleSheet.create({
 		borderRadius: 250,
 	},
 	name: {
+		marginTop: 10,
 		fontSize: 28,
 		fontWeight: '700',
 		letterSpacing: 1,
 		textTransform: 'capitalize',
 	},
 	details: {
-		fontSize: 26,
+		fontSize: 18,
 	},
 	age: {
-		fontSize: 16,
+		fontSize: 14,
 	},
 	languagesContainer: {
 		flexWrap: 'wrap',

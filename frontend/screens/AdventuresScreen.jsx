@@ -16,6 +16,8 @@ const AdventuresScreen = ({ navigation }) => {
 	const thisUser = useSelector((state) => state.user.value);
 	const [currentTab, setCurrentTab] = useState(ADVENTURE_STATE.confirmed);
 	const [user, setUser] = useState({});
+	const [pendingTravels, setPendingTravels] = useState([]);
+	const [pendingHosts, setPendingHosts] = useState([]);
 
 	useEffect(() => {
 		if (isFocused) {
@@ -23,42 +25,23 @@ const AdventuresScreen = ({ navigation }) => {
 				.then((resp) => resp.json())
 				.then((result) => {
 					setUser(result.user);
+					if (result.user.bookings) {
+						setPendingTravels(
+							result.user.bookings.filter(
+								(booking) => booking.host !== result.user._id
+							)
+						);
+						setPendingHosts(
+							result.user.bookings.filter(
+								(booking) => booking.host === result.user._id
+							)
+						);
+					}
 				});
 		}
 	}, [isFocused]);
 
 	console.log('User Trouvé : ', user);
-
-	let pendingTravels = [];
-	let pendingHosts = [];
-
-	if (user.bookings) {
-		pendingTravels = user.bookings.filter(
-			(booking) => booking.host !== user._id
-		);
-		pendingHosts = user.bookings.filter((booking) => booking.host === user._id);
-	}
-
-	// if (user.bookings) {
-	// 	pendingBooksList = user.bookings.map((booking, index) => {
-	// 		return (
-	// 			//Créer une scrollview pour les hostings requests et une pour les user's requests en attente
-	// 			booking.host === user._id && (
-	// 				<ScrollView>
-	// 					{/* <Text>Hosts</Text> */}
-	// 					<AdventureCard
-	// 						key={index}
-	// 						userMatched={booking.traveler}
-	// 						startDate={new Date(booking.startDate).toLocaleDateString()}
-	// 						endDate={new Date(booking.endDate).toLocaleDateString()}
-	// 						handleDismiss={() => {}}
-	// 						handleValidate={() => {}}
-	// 					/>
-	// 				</ScrollView>
-	// 			)
-	// 		);
-	// 	});
-	// }
 
 	return (
 		<View style={styles.container}>
@@ -158,7 +141,7 @@ const styles = StyleSheet.create({
 	},
 	titleContainer: {
 		width: '90%',
-		marginBottom: 5,
+		marginVertical: 15,
 		paddingHorizontal: 5,
 		borderBottomWidth: 2,
 		flexDirection: 'row',

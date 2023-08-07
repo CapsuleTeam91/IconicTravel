@@ -1,5 +1,4 @@
-import { SafeAreaView, StyleSheet, View, useColorScheme } from 'react-native';
-import { useState, useEffect } from 'react';
+import { StyleSheet, View, useColorScheme } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { Platform, NativeModules } from 'react-native';
 const { StatusBarManager } = NativeModules;
@@ -87,6 +86,7 @@ const TabNavigator = () => (
 			tabBarActiveTintColor: COLORS.pink,
 			tabBarInactiveTintColor: COLORS.darkBlue,
 			headerShown: false,
+			tabBarHideOnKeyboard: true,
 		})}>
 		<Tab.Screen name="History" component={HistoryScreen} />
 		<Tab.Screen name="Adventures" component={AdventuresScreen} />
