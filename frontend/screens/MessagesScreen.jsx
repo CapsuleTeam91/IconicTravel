@@ -45,7 +45,7 @@ const MessagesScreen = ({ navigation }, props) => {
 				<Image source={{ uri: userToDisplay.avatarUrl }} style={styles.avatar} />
 				<Text style={styles.message}>{userToDisplay.firstname} · {userToDisplay.city.name}</Text>
 				<ButtonIcon
-					onpress={() => { }}
+					onpress={() => chatClicked(chat)}
 					name="arrow-forward-outline"
 					type="transparent"
 				/>
@@ -54,7 +54,9 @@ const MessagesScreen = ({ navigation }, props) => {
 	})
 
 
-
+	const chatClicked = (chat) => {
+		navigation.navigate('Chat', { chat })
+	}
 
 
 	return (

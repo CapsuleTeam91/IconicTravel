@@ -27,6 +27,7 @@ import SearchScreen from './screens/SearchScreen';
 import SafetyScreen from './screens/SafetyScreen';
 import ProfileScreen from './screens/ProfileScreen';
 import HistoryScreen from './screens/HistoryScreen';
+import ChatScreen from './screens/ChatScreen';
 import TraductionScreen from './screens/Traduction';
 import SettingsScreen from './screens/SettingsScreen';
 import MessagesScreen from './screens/MessagesScreen';
@@ -140,6 +141,7 @@ export default function App() {
 							<Stack.Screen name="Safety" component={SafetyScreen} />
 							<Stack.Screen name="UserProfile" component={UserProfileScreen} />
 							<Stack.Screen name="Profile" component={ProfileScreen} />
+							<Stack.Screen name="Chat" component={ChatScreen} />
 							<Stack.Screen name="TabNavigator" component={TabNavigator} />
 						</Stack.Navigator>
 					</View>
