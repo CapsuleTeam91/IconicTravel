@@ -30,21 +30,23 @@ const SearchScreen = ({ navigation }) => {
 
 
 	useEffect(() => {
-		fetch(`${URL_EXPO}:3000/users`)
-			.then((response) =>
-				response.status > 400 ? response.status : response.json()
-			)
-			.then((users) => {
-				if (typeof users === 'number') {
-					setError(ERRORS[`err${users}`]);
-					return;
-				}
-				if (users.result) {
-					setUsersAroundDestination(users.data);
-				} else {
-					setError(ERRORS[`err${users.status}`]);
-				}
-			});
+		if (isFocused) {
+			fetch(`${URL_EXPO}:3000/users`)
+				.then((response) =>
+					response.status > 400 ? response.status : response.json()
+				)
+				.then((users) => {
+					if (typeof users === 'number') {
+						setError(ERRORS[`err${users}`]);
+						return;
+					}
+					if (users.result) {
+						setUsersAroundDestination(users.data);
+					} else {
+						setError(ERRORS[`err${users.status}`]);
+					}
+				});
+		}
 	}, [isFocused]);
 
 	const sortedUsers = usersAroundDestination;
@@ -99,9 +101,9 @@ const SearchScreen = ({ navigation }) => {
 									<Text style={{ fontSize: 12 }}>{newDesc}</Text>
 								</View>
 								<View style={styles.userDetailsContainer2}>
-								<TouchableOpacity on onPress={() => navigation.navigate('Profile', { user })}>
-								<Ionicons name="arrow-forward-circle-outline" size={35} color="black" />
-							</TouchableOpacity>
+									<TouchableOpacity on onPress={() => navigation.navigate('Profile', { user })}>
+										<Ionicons name="arrow-forward-circle-outline" size={35} color="black" />
+									</TouchableOpacity>
 								</View>
 							</View>
 						</TouchableWithoutFeedback>
@@ -117,9 +119,9 @@ const SearchScreen = ({ navigation }) => {
 								<Text style={{ fontSize: 12 }}>{newDesc}</Text>
 							</View>
 							<View style={styles.userDetailsContainer2}>
-							<TouchableOpacity on onPress={() => navigation.navigate('Profile', { user })}>
-								<Ionicons name="arrow-forward-circle-outline" size={35} color="black" />
-							</TouchableOpacity>
+								<TouchableOpacity on onPress={() => navigation.navigate('Profile', { user })}>
+									<Ionicons name="arrow-forward-circle-outline" size={35} color="black" />
+								</TouchableOpacity>
 							</View>
 						</View>
 					</TouchableWithoutFeedback>
