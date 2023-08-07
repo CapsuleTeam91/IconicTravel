@@ -45,8 +45,8 @@ const SearchScreen = ({ navigation }) => {
 		}
 	}, [isFocused]);
 
-	const sortedUsers = usersAroundDestination.filter(traveler =>
-		traveler.canHost && traveler.email !== user.email
+	const sortedUsers = usersAroundDestination.filter(
+		(traveler) => traveler.canHost && traveler.email !== user.email
 	);
 
 	if (usersAroundDestination.length > 0) {
@@ -68,8 +68,8 @@ const SearchScreen = ({ navigation }) => {
 			Number(p1.distance) < Number(p2.distance)
 				? -1
 				: Number(p1.distance) > Number(p2.distance)
-					? 1
-					: 0
+				? 1
+				: 0
 		);
 	}
 
@@ -117,24 +117,24 @@ const SearchScreen = ({ navigation }) => {
 	});
 
 	const markersList = [];
-	if (usersAroundDestination.length > 0) {
-		usersAroundDestination.map((user, i) => {
-			markersList.push(
-				<Marker
-					key={i}
-					ref={(ref) => (markersRef.current[i] = ref)}
-					coordinate={{
-						latitude: user.city.latitude,
-						longitude: user.city.longitude,
-					}}
-					title={user.firstname}
-					pinColor="#F87575"
-					description={`${user.distance}km`}
-					onPress={() => displayUser(user)}
-				/>
-			);
-		});
-	}
+	// if (usersAroundDestination.length > 0) {
+	usersAroundDestination?.map((user, i) => {
+		markersList.push(
+			<Marker
+				key={i}
+				ref={(ref) => (markersRef.current[i] = ref)}
+				coordinate={{
+					latitude: user.city.latitude,
+					longitude: user.city.longitude,
+				}}
+				title={user.firstname}
+				pinColor="#F87575"
+				description={`${user.distance}km`}
+				onPress={() => displayUser(user)}
+			/>
+		);
+	});
+	// }
 
 	const addCity = (newCity) => {
 		if (!newCity) return;

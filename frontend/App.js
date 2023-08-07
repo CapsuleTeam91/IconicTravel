@@ -25,6 +25,7 @@ import SigninScreen from './screens/SigninScreen';
 import SignupScreen from './screens/SignupScreen';
 import SearchScreen from './screens/SearchScreen';
 import SafetyScreen from './screens/SafetyScreen';
+import ProfileScreen from './screens/ProfileScreen';
 import HistoryScreen from './screens/HistoryScreen';
 import TraductionScreen from './screens/Traduction';
 import SettingsScreen from './screens/SettingsScreen';
@@ -36,7 +37,6 @@ import ProfileStepOneScreen from './screens/ProfileStepOneScreen';
 import ProfileStepTwoScreen from './screens/ProfileStepTwoScreen';
 import ProfileStepFourScreen from './screens/ProfileStepFourScreen';
 import ProfileStepThreeScreen from './screens/ProfileStepThreeScreen';
-import ProfileScreen from './screens/ProfileScreen';
 
 // Utils
 import { COLORS } from './utils/styles';
