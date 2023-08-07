@@ -38,6 +38,8 @@ const AdventuresScreen = ({ navigation }) => {
 					<AdventureCard
 						key={index}
 						userMatched={booking.traveler}
+						startDate={new Date(booking.startDate).toLocaleDateString()}
+						endDate={new Date(booking.endDate).toLocaleDateString()}
 						handleDismiss={() => {}}
 						handleValidate={() => {}}
 					/>

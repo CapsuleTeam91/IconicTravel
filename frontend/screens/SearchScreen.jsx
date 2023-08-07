@@ -89,7 +89,7 @@ const SearchScreen = ({ navigation }) => {
 
 	const usersList = sortedUsers.map((user, i) => {
 		var ageDate = new Date(Date.now() - new Date(user.dateOfBirth));
-		const age = Math.abs(ageDate.getUTCFullYear() - 1970);
+		// const age = Math.abs(ageDate.getUTCFullYear() - 1970);
 		let newDesc = user.description;
 
 		if (newDesc.length >= 80) {
@@ -101,116 +101,32 @@ const SearchScreen = ({ navigation }) => {
 				const distSearched = Number(distanceSelected.label.match(/\d+/)[0]);
 				if (user.distance <= distSearched) {
 					return (
-						<TouchableWithoutFeedback
-							key={i}
-							onPress={() => displayUserOnMap(user)}>
-							<HostCard
-								user={user}
-								selected={
-									userSelected?.index === user.index
-										? styles.userContainerSelected
-										: styles.userContainer
-								}
-								handleClick={() => navigation.navigate('Profile', { user })}
-							/>
-
-							{/* <View
-								key={i}
-								style={
-									userSelected?.index === user.index
-										? styles.userContainerSelected
-										: styles.userContainer
-								}>
-								<Image source={{ uri: user.avatarUrl }} style={styles.avatar} />
-								<View style={styles.userDetailsContainer}>
-									<Text
-										style={{
-											fontWeight: 600,
-										}}>{`${user.firstname} • ${user.city.name}`}</Text>
-									<Text style={{ fontSize: 12 }}>{newDesc}</Text>
-								</View>
-								<View style={styles.userDetailsContainer2}>
-									<TouchableOpacity
-										on
-										onPress={() => navigation.navigate('Profile', { user })}>
-										<Ionicons
-											name="arrow-forward-circle-outline"
-											size={35}
-											color="black"
-										/>
-									</TouchableOpacity>
-								</View>
-							</View> */}
-						</TouchableWithoutFeedback>
+						<HostCard
+							user={user}
+							displayUserOnMap={() => displayUserOnMap(user)}
+							selected={userSelected?.index === user.index}
+							handleClick={() => navigation.navigate('Profile', { user })}
+						/>
 					);
 				}
 			} else {
 				return (
-					<TouchableWithoutFeedback
-						key={i}
-						onPress={() => displayUserOnMap(user)}>
-						<View
-							key={i}
-							style={
-								userSelected?.index === user.index
-									? styles.userContainerSelected
-									: styles.userContainer
-							}>
-							<Image source={{ uri: user.avatarUrl }} style={styles.avatar} />
-							<View style={styles.userDetailsContainer}>
-								<Text
-									style={{
-										fontWeight: 600,
-									}}>{`${user.firstname} • ${user.city.name}`}</Text>
-								<Text style={{ fontSize: 12 }}>{newDesc}</Text>
-							</View>
-							<View style={styles.userDetailsContainer2}>
-								<TouchableOpacity
-									on
-									onPress={() => navigation.navigate('Profile', { user })}>
-									<Ionicons
-										name="arrow-forward-circle-outline"
-										size={35}
-										color="black"
-									/>
-								</TouchableOpacity>
-							</View>
-						</View>
-					</TouchableWithoutFeedback>
+					<HostCard
+						user={user}
+						displayUserOnMap={() => displayUserOnMap(user)}
+						selected={userSelected?.index === user.index}
+						handleClick={() => navigation.navigate('Profile', { user })}
+					/>
 				);
 			}
 		} else {
 			return (
-				<TouchableWithoutFeedback
-					key={i}
-					onPress={() => displayUserOnMap(user)}>
-					<View
-						style={
-							userSelected?.index === user.index
-								? styles.userContainerSelected
-								: styles.userContainer
-						}>
-						<Image source={{ uri: user.avatarUrl }} style={styles.avatar} />
-						<View style={styles.userDetailsContainer}>
-							<Text
-								style={{
-									fontWeight: 600,
-								}}>{`${user.firstname} • ${user.city.name}`}</Text>
-							<Text style={{ fontSize: 12 }}>{newDesc}</Text>
-						</View>
-						<View style={styles.userDetailsContainer2}>
-							<TouchableOpacity
-								on
-								onPress={() => navigation.navigate('Profile', { user })}>
-								<Ionicons
-									name="arrow-forward-circle-outline"
-									size={35}
-									color="black"
-								/>
-							</TouchableOpacity>
-						</View>
-					</View>
-				</TouchableWithoutFeedback>
+				<HostCard
+					user={user}
+					displayUserOnMap={() => displayUserOnMap(user)}
+					selected={userSelected?.index === user.index}
+					handleClick={() => navigation.navigate('Profile', { user })}
+				/>
 			);
 		}
 	});
@@ -418,38 +334,40 @@ const styles = StyleSheet.create({
 		width: '100%',
 		justifyContent: 'center',
 		alignItems: 'center',
-		backgroundColor: COLORS.bg,
+		// paddingBottom: 1000,
+		// backgroundColor: COLORS.bg,
 	},
 	scrollViewItems: {
 		width: '100%',
-		padding: 15,
+		height: '40%',
+		paddingVertical: 15,
 	},
-	userContainer: {
-		flexDirection: 'row',
-		justifyContent: 'center',
-		alignItems: 'center',
-		backgroundColor: '#E3E8ED',
-		width: '100%',
-		height: 80,
-		borderColor: 'black',
-		borderWidth: 0.5,
-		borderRadius: 10,
-		padding: 10,
-		marginBottom: 15,
-	},
-	userContainerSelected: {
-		flexDirection: 'row',
-		justifyContent: 'center',
-		alignItems: 'center',
-		backgroundColor: '#95B8D1',
-		width: '100%',
-		height: 80,
-		borderColor: 'black',
-		borderWidth: 0.5,
-		borderRadius: 10,
-		padding: 10,
-		marginBottom: 15,
-	},
+	// userContainer: {
+	// 	flexDirection: 'row',
+	// 	justifyContent: 'center',
+	// 	alignItems: 'center',
+	// 	backgroundColor: '#E3E8ED',
+	// 	width: '100%',
+	// 	height: 80,
+	// 	borderColor: 'black',
+	// 	borderWidth: 0.5,
+	// 	borderRadius: 10,
+	// 	padding: 10,
+	// 	marginBottom: 15,
+	// },
+	// userContainerSelected: {
+	// 	flexDirection: 'row',
+	// 	justifyContent: 'center',
+	// 	alignItems: 'center',
+	// 	backgroundColor: '#95B8D1',
+	// 	width: '100%',
+	// 	height: 80,
+	// 	borderColor: 'black',
+	// 	borderWidth: 0.5,
+	// 	borderRadius: 10,
+	// 	padding: 10,
+	// 	marginBottom: 15,
+	// },
 	avatar: {
 		width: '17%',
 		height: '100%',

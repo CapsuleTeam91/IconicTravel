@@ -1,43 +1,61 @@
-import { StyleSheet, Text, View, Image } from 'react-native';
+import {
+	StyleSheet,
+	Text,
+	View,
+	Image,
+	TouchableWithoutFeedback,
+} from 'react-native';
 import ButtonIcon from '../buttons/ButtonIcon';
-import { RADIUS } from '../../utils/styles';
+import { COLORS, RADIUS } from '../../utils/styles';
 
-export const HostCard = ({ user, selected, handleClick }) => {
+export const HostCard = ({ user, selected, handleClick, displayUserOnMap }) => {
 	const getDescription = (desc) =>
 		desc.length >= 70 ? desc.slice(0, desc.indexOf(' ', 70)) + '...' : desc;
 	// if (newDesc.length >= 80) {
 	// 	newDesc = newDesc.slice(0, newDesc.indexOf(' ', 79)) + '...';
 	// }
 	return (
-		<View style={styles.container}>
-			<Image source={{ uri: user.avatarUrl }} style={styles.avatar} />
-			<View>
-				<View style={styles.profilContainer}>
-					<Text style={styles.name}>{user.firstname}</Text>
-					<Text style={styles.city}>• {user.city.name}</Text>
+		<TouchableWithoutFeedback onPress={displayUserOnMap}>
+			<View style={[styles.container, selected && styles.selected]}>
+				<Image source={{ uri: user.avatarUrl }} style={styles.avatar} />
+				<View style={styles.infoContainer}>
+					<View style={styles.profilContainer}>
+						<Text style={styles.name}>{user.firstname}</Text>
+						<Text style={styles.city}>• {user.city.name}</Text>
+					</View>
+					<Text style={styles.desc}>{getDescription(user.description)}</Text>
 				</View>
-				<Text>{getDescription(user.description)}</Text>
+				<View style={styles.btnContainer}>
+					<ButtonIcon
+						onpress={handleClick}
+						name="arrow-forward-outline"
+						type="transparent"
+					/>
+				</View>
 			</View>
-			<View style={styles.btnContainer}>
-				<ButtonIcon
-					onpress={handleClick}
-					name="arrow-forward-outline"
-					type="transparent"
-				/>
-			</View>
-		</View>
+		</TouchableWithoutFeedback>
 	);
 };
 
 const styles = StyleSheet.create({
 	container: {
-		height: 78,
+		height: 80,
 		width: '90%',
 		flexDirection: 'row',
 		alignItems: 'center',
 		paddingHorizontal: 15,
+		marginBottom: 15,
 		borderRadius: RADIUS.card,
 		backgroundColor: 'white',
+	},
+	selected: {
+		borderWidth: 1,
+		borderColor: COLORS.pink,
+	},
+	infoContainer: {
+		width: 200,
+		alignItems: 'flex-start',
+		justifyContent: 'flex-start',
 	},
 	profilContainer: {
 		flex: 1,
@@ -58,6 +76,9 @@ const styles = StyleSheet.create({
 		paddingHorizontal: 10,
 	},
 	city: {
+		fontSize: 12,
+	},
+	desc: {
 		fontSize: 12,
 	},
 });
