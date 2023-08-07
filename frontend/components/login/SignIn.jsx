@@ -115,7 +115,7 @@ const SignIn = (props) => {
 				<View style={styles.secondTopLayer}></View>
 			</View>
 			<View style={styles.wrapper}>
-				<Text style={[STYLES_GLOBAL.title, styles.titleDark]}>CONNECTION</Text>
+				<Text style={[STYLES_GLOBAL.title, styles.titleDark]}>CONNEXION</Text>
 
 				<View style={styles.inputContainer}>
 					<Input
