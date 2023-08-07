@@ -32,7 +32,6 @@ router.delete('/:chatname/:username', (req, res) => {
 
 // Send message
 router.post('/message', async (req, res) => {
-  console.log(req.body.chatname);
   pusher.trigger(req.body.chatname, 'message', req.body);
 
   res.json({ result: true });
