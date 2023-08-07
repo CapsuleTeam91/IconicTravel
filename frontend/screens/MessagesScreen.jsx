@@ -20,16 +20,14 @@ const MessagesScreen = ({ navigation }, props) => {
   const user = useSelector((state) => state.user.value);
 
   useEffect(() => {
-    fetch(`${URL_EXPO}:3000/users/getId/${user.token}/${user.email}`)
-      .then(resp => resp.json())
-      .then(data => {
-        console.log(data)
-        fetch(`${URL_EXPO}:3000/bookings/traveler/${data.travelerId}`)
-          .then(resp => resp.json())
-          .then(userFound => {
-            console.log(userFound)
-          })
-      })
+
+    if (isFocused) {
+      fetch(`${URL_EXPO}:3000/chats/${user.token}`)
+        .then(resp => resp.json())
+        .then(chats => {
+          console.log(chats)
+        })
+    }
 
   }, [isFocused])
 

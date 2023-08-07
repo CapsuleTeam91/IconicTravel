@@ -37,21 +37,23 @@ const SearchScreen = ({ navigation }) => {
 	const [userSelected, setUserSelected] = useState(null);
 
 	useEffect(() => {
-		fetch(`${URL_EXPO}:3000/users`)
-			.then((response) =>
-				response.status > 400 ? response.status : response.json()
-			)
-			.then((users) => {
-				if (typeof users === 'number') {
-					setError(ERRORS[`err${users}`]);
-					return;
-				}
-				if (users.result) {
-					setUsersAroundDestination(users.data);
-				} else {
-					setError(ERRORS[`err${users.status}`]);
-				}
-			});
+		if (isFocused) {
+			fetch(`${URL_EXPO}:3000/users`)
+				.then((response) =>
+					response.status > 400 ? response.status : response.json()
+				)
+				.then((users) => {
+					if (typeof users === 'number') {
+						setError(ERRORS[`err${users}`]);
+						return;
+					}
+					if (users.result) {
+						setUsersAroundDestination(users.data);
+					} else {
+						setError(ERRORS[`err${users.status}`]);
+					}
+				});
+		}
 	}, [isFocused]);
 
 	const sortedUsers = usersAroundDestination;

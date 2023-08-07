@@ -59,7 +59,6 @@ router.get('/:token', (req, res) => {
         result: true,
         bookings: userFound.bookings
       })
-      console.log(userFound)
     })
 })
 
@@ -80,14 +79,14 @@ router.get(`/exists/:traveler/:host`, (req, res) => {
     })
 })
 
-router.get(`/traveler/:traveler`, (req, res) => {
-  Booking.find({ traveler: req.params.traveler })
+router.get(`/traveler/:token`, (req, res) => {
+  User.findOne({ token: req.params.token }).populate('chatChannels')
     .then(data => {
       console.log('data trouvé : ', data)
-      if (data.length !== 0) {
+      if (data) {
         res.json({
           result: true,
-          bookings: data
+          chats: data.chatChannels
         })
       } else {
         res.json({
