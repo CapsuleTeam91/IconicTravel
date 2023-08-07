@@ -26,8 +26,8 @@ const MessagesScreen = ({ navigation }, props) => {
         console.log(data)
         fetch(`${URL_EXPO}:3000/bookings/traveler/${data.travelerId}`)
           .then(resp => resp.json())
-          .then(bookings => {
-            console.log(bookings)
+          .then(userFound => {
+            console.log(userFound)
           })
       })
 

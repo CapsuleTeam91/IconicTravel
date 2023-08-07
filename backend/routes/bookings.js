@@ -24,43 +24,43 @@ router.post('/request', (req, res) => {
     babiesNumber,
   })
   newBooking.save().then(async (data) => {
-    console.log('les datas : ',data)
+    console.log('les datas : ', data)
     const travelerFound = await User.findOne({ _id: traveler });
     const hostFound = await User.findOne({ _id: host });
 
-	if(travelerFound.bookings.includes(data._id) || hostFound.bookings.includes(data._id)) {
-		res.json( {
-			result: false,
-			error: 'Booking déjà enregistré !'
-		})
-	}else {
-		travelerFound.bookings.push(data._id)
-    hostFound.bookings.push(data._id)
+    if (travelerFound.bookings.includes(data._id) || hostFound.bookings.includes(data._id)) {
+      res.json({
+        result: false,
+        error: 'Booking déjà enregistré !'
+      })
+    } else {
+      travelerFound.bookings.push(data._id)
+      hostFound.bookings.push(data._id)
 
-		const newTraveler = await travelerFound.save();
-    const newHost = await hostFound.save();
-	
-		if (!newTraveler || !newHost)
-			return res
-				.status(409)
-				.json({ result: false, error: 'Can not add booking id to user' });
+      const newTraveler = await travelerFound.save();
+      const newHost = await hostFound.save();
 
-        
-	
-		res.json({ result: true, travelerBookings: newTraveler.bookings, hostBookings: newHost.bookings });
-	}
+      if (!newTraveler || !newHost)
+        return res
+          .status(409)
+          .json({ result: false, error: 'Can not add booking id to user' });
+
+
+
+      res.json({ result: true, travelerBookings: newTraveler.bookings, hostBookings: newHost.bookings });
+    }
   })
 })
 
 router.get('/:token', (req, res) => {
-  User.find({ token: req.params.token})
-  .then(userFound => {
-    res.json({
-      result: true,
-      bookings: userFound
+  User.findOne({ token: req.params.token }).populate('bookings')
+    .then(userFound => {
+      res.json({
+        result: true,
+        bookings: userFound.bookings
+      })
+      console.log(userFound)
     })
-    console.log(userFound)
-  })
 })
 
 router.get(`/exists/:traveler/:host`, (req, res) => {
