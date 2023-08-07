@@ -27,6 +27,7 @@ export const Map = ({ mapRef, setUserSelected, user, markersList }) => {
 const styles = StyleSheet.create({
 	container: {
 		zIndex: -100,
+		height: '45%',
 	},
 	layer: {
 		...StyleSheet.absoluteFillObject,
@@ -40,7 +41,7 @@ const styles = StyleSheet.create({
 		borderBottomLeftRadius: 100,
 	},
 	map: {
-		height: 320,
+		height: 340,
 		width: '100%',
 	},
 });

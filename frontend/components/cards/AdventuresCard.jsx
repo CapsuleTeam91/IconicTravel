@@ -4,15 +4,23 @@ import { RADIUS } from '../../utils/styles';
 
 export const AdventureCard = ({
 	userMatched,
+	startDate,
+	endDate,
 	handleDismiss,
 	handleValidate,
 }) => {
 	return (
 		<View style={styles.container}>
 			<Image source={{ uri: userMatched.avatarUrl }} style={styles.avatar} />
-			<View style={styles.profilContainer}>
-				<Text style={styles.name}>{userMatched.firstname}</Text>
-				<Text style={styles.city}>• {userMatched.city.name}</Text>
+
+			<View style={styles.infoContainer}>
+				<View style={styles.profilContainer}>
+					<Text style={styles.name}>{userMatched.firstname}</Text>
+					<Text style={styles.city}>• {userMatched.city.name}</Text>
+				</View>
+				<Text style={styles.date}>
+					{startDate} - {endDate}
+				</Text>
 			</View>
 			<View style={styles.btnContainer}>
 				<ButtonIcon
@@ -40,13 +48,19 @@ const styles = StyleSheet.create({
 		borderRadius: RADIUS.card,
 		backgroundColor: 'white',
 	},
+	infoContainer: {
+		width: 200,
+		alignItems: 'flex-start',
+		justifyContent: 'flex-start',
+	},
 	profilContainer: {
-		flex: 1,
 		flexDirection: 'row',
 		alignItems: 'baseline',
 	},
 	btnContainer: {
+		width: 80,
 		flexDirection: 'row',
+		justifyContent: 'space-between',
 	},
 	avatar: {
 		width: 42,
@@ -59,6 +73,10 @@ const styles = StyleSheet.create({
 		paddingHorizontal: 10,
 	},
 	city: {
+		fontSize: 14,
+	},
+	date: {
 		fontSize: 12,
+		paddingHorizontal: 10,
 	},
 });
