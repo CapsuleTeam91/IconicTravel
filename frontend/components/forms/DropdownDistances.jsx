@@ -1,8 +1,8 @@
+import { StyleSheet } from 'react-native';
+import { COLORS } from '../../utils/styles';
+import { DISTANCES } from '../../utils/data';
 import { Dropdown } from 'react-native-element-dropdown';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
-import { DISTANCES } from '../../utils/data';
-import { COLORS } from '../../utils/styles';
 
 export const DropdownDistances = ({
 	distanceSelected,
@@ -40,37 +40,24 @@ export const DropdownDistances = ({
 
 const styles = StyleSheet.create({
 	dropdown: {
-		justifyContent: 'center',
-		alignItems: 'center',
-		// width: 120,
-		margin: 16,
-		height: 50,
+		height: 42,
 		borderRadius: 8,
-		borderBottomColor: 'gray',
-		borderBottomWidth: 0.5,
-		backgroundColor: COLORS.bgDark,
 		paddingHorizontal: 15,
-	},
-	icon: {
-		marginRight: 5,
-		color: COLORS.bg,
-	},
-
-	placeholderStyle: {
-		paddingHorizontal: 5,
-	},
-	selectedTextStyle: {
-		fontSize: 16,
-		color: COLORS.bg,
+		backgroundColor: COLORS.bgDark,
 	},
 	containerStyle: {
-		maxHeight: 300,
-		paddingTop: 15,
+		maxHeight: 230,
+		paddingVertical: 5,
 		borderRadius: 8,
-		backgroundColor: COLORS.lightBlue,
+		borderWidth: 0,
+		backgroundColor: COLORS.bgDark,
 	},
 	itemTextStyle: {
 		fontSize: 12,
-		color: COLORS.bg,
+		color: COLORS.lightBlue,
+	},
+	selectedTextStyle: {
+		fontSize: 12,
+		color: COLORS.bgDark,
 	},
 });
