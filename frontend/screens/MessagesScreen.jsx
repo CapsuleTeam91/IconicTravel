@@ -55,7 +55,7 @@ const MessagesScreen = ({ navigation }, props) => {
 	return (
 		<View style={styles.container}>
 			<Text style={styles.title}>Messages</Text>
-			<ScrollView style={styles.messagesContainer}>
+			<ScrollView style={styles.messagesContainer2}>
 				{chatList}
 			</ScrollView>
 		</View>
@@ -89,14 +89,9 @@ const styles = StyleSheet.create({
 		borderWidth: 1,
 		borderRadius: 20,
 	},
-	messageContainer: {
-		padding: 10,
+	messageContainer2: {
 		flexDirection: 'row',
 		alignItems: 'center',
-		width: '90%',
-		height: '20%',
-		borderWidth: 1,
-		borderRadius: 20,
 	},
 	avatar: {
 		width: 42,
