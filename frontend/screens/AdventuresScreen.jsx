@@ -15,14 +15,14 @@ const AdventuresScreen = ({ navigation }) => {
 	const isFocused = useIsFocused();
 	const thisUser = useSelector((state) => state.user.value);
 	const [currentTab, setCurrentTab] = useState(ADVENTURE_STATE.confirmed);
-	const [bookings, setBookings] = useState([]);
+	const [user, setUser] = useState({});
 
 	useEffect(() => {
 		if (isFocused) {
 			fetch(`${URL_EXPO}:3000/bookings/${thisUser.token}`)
 				.then((resp) => resp.json())
 				.then((result) => {
-					setBookings(result.bookings);
+					setUser(result.user);
 				});
 		}
 	}, [isFocused]);
@@ -34,10 +34,10 @@ const AdventuresScreen = ({ navigation }) => {
 	if (user.bookings) {
 		pendingBooksList = user.bookings.map((booking, index) => {
 			return (
-				booking.host === user._id && (
+				user.bookings.host === user._id && (
 					<AdventureCard
 						key={index}
-						userMatched={booking.traveler}
+						userMatched={user.bookings.traveler}
 						handleDismiss={() => {}}
 						handleValidate={() => {}}
 					/>
@@ -67,13 +67,7 @@ const AdventuresScreen = ({ navigation }) => {
 				/>
 			</View>
 
-			{currentTab === ADVENTURE_STATE.pending && (
-				<AdventureCard
-					userMatched={userMatched}
-					handleDismiss={() => {}}
-					handleValidate={() => {}}
-				/>
-			)}
+			{currentTab === ADVENTURE_STATE.pending && { pendingBooksList }}
 		</View>
 	);
 };
