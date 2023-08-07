@@ -5,7 +5,8 @@ import {
 	View,
 	FlatList,
 	TouchableOpacity,
-	Image
+	Image,
+	ScrollView
 } from 'react-native';
 import ButtonIcon from '../components/buttons/ButtonIcon';
 import { URL_EXPO } from '../environnement';
@@ -39,9 +40,15 @@ const MessagesScreen = ({ navigation }, props) => {
 		}
 
 		return (
+
 			<View key={i} style={styles.messageContainer}>
 				<Image source={{ uri: userToDisplay.avatarUrl }} style={styles.avatar} />
 				<Text style={styles.message}>{userToDisplay.firstname} · {userToDisplay.city.name}</Text>
+				<ButtonIcon
+					onpress={() => { }}
+					name="arrow-forward-outline"
+					type="transparent"
+				/>
 			</View>
 		)
 	})
@@ -53,9 +60,9 @@ const MessagesScreen = ({ navigation }, props) => {
 	return (
 		<View style={styles.container}>
 			<Text style={styles.title}>Messages</Text>
-			<View style={styles.messagesContainer}>
+			<ScrollView contentContainerStyle={styles.messagesContainer} style={styles.messagesContainer2}>
 				{chatList}
-			</View>
+			</ScrollView>
 		</View>
 	);
 };
@@ -76,16 +83,17 @@ const styles = StyleSheet.create({
 	},
 	messagesContainer: {
 		alignItems: 'center',
-		marginTop: 50,
 	},
 	messageContainer: {
+		marginVertical: 10,
 		padding: 10,
 		flexDirection: 'row',
+		justifyContent: 'space-between',
 		alignItems: 'center',
 		width: '90%',
-		height: '30%',
+		height: 50,
 		borderWidth: 1,
-		borderRadius: 20
+		borderRadius: 20,
 	},
 	avatar: {
 		width: 42,

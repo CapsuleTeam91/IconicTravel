@@ -23,7 +23,7 @@ export const HostCard = ({ user, selected, handleClick, displayUserOnMap }) => {
 					<View style={styles.infoContainer}>
 						<View style={styles.profilContainer}>
 							<Text style={styles.name}>{user.firstname}</Text>
-							<Text style={styles.city}>• {user.city.name}</Text>
+							<Text style={styles.city}> • {user.city.name}</Text>
 						</View>
 						<Text style={styles.desc}>{getDescription(user.description)}</Text>
 					</View>
