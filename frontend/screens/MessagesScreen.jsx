@@ -22,7 +22,7 @@ const MessagesScreen = ({ navigation }, props) => {
   useEffect(() => {
 
     if (isFocused) {
-      fetch(`${URL_EXPO}:3000/bookings/traveler/${user.token}`)
+      fetch(`${URL_EXPO}:3000/chats/${user.token}`)
         .then(resp => resp.json())
         .then(chats => {
           console.log(chats)
