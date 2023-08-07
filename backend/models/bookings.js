@@ -10,7 +10,6 @@ const bookingSchema = mongoose.Schema({
   adultsNumber: Number,
   childrenNumber: Number,
   babiesNumber: Number,
-  chat: { type: String, default: 'Demande en attente' }
 });
 
 const Booking = mongoose.model('bookings', bookingSchema);
