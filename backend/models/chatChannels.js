@@ -7,6 +7,8 @@ const messageSchema = mongoose.Schema({
 });
 
 const chatChannelSchema = mongoose.Schema({
+    host: { type: mongoose.Schema.Types.ObjectId, ref: 'users' },
+    traveler: { type: mongoose.Schema.Types.ObjectId, ref: 'users' },
     name: String,
     messages: [messageSchema],
     createdAt: Date

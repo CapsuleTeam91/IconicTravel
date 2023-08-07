@@ -34,6 +34,8 @@ router.post('/request', (req, res) => {
       })
     } else {
       const newChatChannel = new ChatChannel({
+        host: hostFound._id,
+        traveler: travelerFound._id,
         name: travelerFound._id + hostFound._id,
         messages: [],
         createdAt: new Date()

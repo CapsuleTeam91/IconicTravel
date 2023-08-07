@@ -37,7 +37,10 @@ router.post('/message/:chatname', async (req, res) => {
 });
 
 router.get(`/:token`, (req, res) => {
-  User.findOne({ token: req.params.token }).populate('chatChannels')
+  User.findOne({ token: req.params.token }).populate({
+    path: 'chatChannels',
+    populate: [{ path: 'traveler' }, { path: 'host' }]
+  })
     .then(data => {
       console.log('data trouvé : ', data)
       if (data) {
