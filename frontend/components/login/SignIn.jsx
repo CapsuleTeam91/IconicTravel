@@ -12,7 +12,8 @@ import PasswordInput from '../forms/PasswordInput';
 
 const SignIn = (props) => {
 	const dispatch = useDispatch();
-	const userLogs = useSelector((state) => state.user.logs);
+	const user = useSelector((state) => state.user.value);
+	// const userLogs = useSelector((state) => state.user.logs);
 	const translateAnim = useRef(new Animated.Value(0)).current;
 	const [email, setEmail] = useState('');
 	const [error, setError] = useState('');
@@ -61,6 +62,7 @@ const SignIn = (props) => {
 						spokenLanguages,
 						hobbies,
 						travels,
+						canHost,
 					} = userFound.data;
 					dispatch(
 						addData({
@@ -75,9 +77,11 @@ const SignIn = (props) => {
 							spokenLanguages,
 							hobbies,
 							travels,
+							canHost,
 						})
 					);
-					dispatch(rememberPassword({ email, password }));
+
+					// dispatch(rememberPassword({ email, password }));
 					setEmail('');
 					setPassword('');
 					props.navigate();
@@ -88,9 +92,12 @@ const SignIn = (props) => {
 	};
 
 	useEffect(() => {
-		if (userLogs.email) {
-			setEmail(userLogs.email);
-			setPassword(userLogs.password);
+		// if (userLogs.email) {
+		// 	setEmail(userLogs.email);
+		// 	setPassword(userLogs.password);
+		// }
+		if (user.token) {
+			props.navigate();
 		}
 	}, []);
 
@@ -119,7 +126,7 @@ const SignIn = (props) => {
 
 				<View style={styles.inputContainer}>
 					<Input
-						label={userLogs.email ? '' : 'Email'}
+						label={'Email'}
 						theme={COLORS_THEME.light}
 						autoFocus={false}
 						autoCapitalize="none"

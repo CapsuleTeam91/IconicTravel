@@ -59,6 +59,7 @@ const ProfileStepThreeScreen = ({ navigation }) => {
 						city,
 						spokenLanguages,
 						travels,
+						canHost,
 					} = userFound.data;
 
 					dispatch(
@@ -74,6 +75,7 @@ const ProfileStepThreeScreen = ({ navigation }) => {
 							spokenLanguages,
 							hobbies,
 							travels,
+							canHost,
 						})
 					);
 
