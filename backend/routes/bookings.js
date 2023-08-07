@@ -24,7 +24,6 @@ router.post('/request', (req, res) => {
     babiesNumber,
   })
   newBooking.save().then(async (data) => {
-    console.log('les datas : ', data)
     const travelerFound = await User.findOne({ _id: traveler });
     const hostFound = await User.findOne({ _id: host });
 
@@ -65,7 +64,6 @@ router.post('/request', (req, res) => {
 router.get('/:token', (req, res) => {
   User.findOne({ token: req.params.token }).populate({
     path: 'bookings',
-    // Get friends of friends - populate the 'friends' array for every friend
     populate: { path: 'traveler' }
   })
     .then(userFound => {
