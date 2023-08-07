@@ -27,16 +27,17 @@ export default function ChatScreen({ navigation, route: { params } }) {
   useEffect(() => {
     (() => {
       const chatname = params.chat.traveler._id + params.chat.host._id;
-      fetch(`${URL_EXPO}/chats/${chatname}/${user.firstname}`, { method: 'PUT' });
+      fetch(`${URL_EXPO}:3000/chats/${chatname}/${user.firstname}`, { method: 'PUT' });
+      console.log("et là ?")
 
-      const subscription = pusher.subscribe('chatname');
+      const subscription = pusher.subscribe(chatname);
       subscription.bind('pusher:subscription_succeeded', () => {
         subscription.bind('message', handleReceiveMessage);
       });
     })();
 
     return () =>
-      fetch(`${URL_EXPO}/chats/${user.firstname}`, {
+      fetch(`${URL_EXPO}:3000/chats/${user.firstname}`, {
         method: 'DELETE',
       });
   }, [user.firstname]);
@@ -53,11 +54,11 @@ export default function ChatScreen({ navigation, route: { params } }) {
     const payload = {
       text: messageText,
       username: user.firstname,
+      chatname: params.chat.traveler._id + params.chat.host._id,
       createdAt: new Date(),
       id: Math.floor(Math.random() * 100000),
     };
-
-    fetch(`${URL_EXPO}/message`, {
+    fetch(`${URL_EXPO}:3000/chats/message`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),

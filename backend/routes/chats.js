@@ -12,16 +12,17 @@ const pusher = new Pusher({
 });
 
 // Join chat
-router.put('/users/:chatname/:username', (req, res) => {
+router.put('/:chatname/:username', (req, res) => {
   pusher.trigger(req.params.chatname, 'join', {
     username: req.params.username,
   });
+  console.log('c passé par là');
 
   res.json({ result: true });
 });
 
 // Leave chat
-router.delete('/users/:chatname/:username', (req, res) => {
+router.delete('/:chatname/:username', (req, res) => {
   pusher.trigger(req.params.chatname, 'leave', {
     username: req.params.username,
   });
@@ -30,8 +31,9 @@ router.delete('/users/:chatname/:username', (req, res) => {
 });
 
 // Send message
-router.post('/message/:chatname', async (req, res) => {
-  pusher.trigger(req.params.chatname, 'message', req.body);
+router.post('/message', async (req, res) => {
+  console.log(req.body.chatname);
+  pusher.trigger(req.body.chatname, 'message', req.body);
 
   res.json({ result: true });
 });
