@@ -1,5 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { SafeAreaView, ScrollView, StyleSheet, Text, View, Image, TouchableOpacity, TouchableWithoutFeedback } from 'react-native';
+import {
+	SafeAreaView,
+	ScrollView,
+	StyleSheet,
+	Text,
+	View,
+	Image,
+	TouchableOpacity,
+	TouchableWithoutFeedback,
+} from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { addData } from '../reducers/user';
 import { RemoteDataSet } from '../components/RemoteDataSet';
@@ -11,23 +20,21 @@ import { ERRORS } from '../utils/constants';
 import { URL_EXPO } from '../environnement';
 import { DISTANCES } from '../utils/data';
 import { MaterialCommunityIcons, Ionicons } from '@expo/vector-icons';
-import { convertCoordsToKm } from '../utils/helper'
+import { convertCoordsToKm } from '../utils/helper';
 import { useIsFocused } from '@react-navigation/native';
+import { Map } from '../components/Map';
 
 const SearchScreen = ({ navigation }) => {
+	const isFocused = useIsFocused();
+	const mapRef = useRef(null);
+	const svRef = useRef(null);
+	const markersRef = useRef([]);
 	const user = useSelector((state) => state.user.value);
 	const [city, setCity] = useState(null);
 	const [usersAroundDestination, setUsersAroundDestination] = useState([]);
 	const [error, setError] = useState('');
 	const [distanceSelected, setDistanceSelected] = useState(null);
 	const [userSelected, setUserSelected] = useState(null);
-
-	const mapRef = useRef(null)
-	const svRef = useRef(null)
-	const markersRef = useRef([]);
-
-	const isFocused = useIsFocused()
-
 
 	useEffect(() => {
 		fetch(`${URL_EXPO}:3000/users`)
@@ -49,102 +56,151 @@ const SearchScreen = ({ navigation }) => {
 
 	const sortedUsers = usersAroundDestination;
 
-
-
 	if (usersAroundDestination.length > 0) {
 		for (let i = 0; i < sortedUsers.length; i++) {
-			const localCoords = { latitude: city ? city.latitude : user.city.latitude, longitude: city ? city.longitude : user.city.longitude }
-			const destCoords = { latitude: sortedUsers[i].city.latitude, longitude: sortedUsers[i].city.longitude }
+			const localCoords = {
+				latitude: city ? city.latitude : user.city.latitude,
+				longitude: city ? city.longitude : user.city.longitude,
+			};
+			const destCoords = {
+				latitude: sortedUsers[i].city.latitude,
+				longitude: sortedUsers[i].city.longitude,
+			};
 
-			let distance = convertCoordsToKm(localCoords, destCoords)
+			let distance = convertCoordsToKm(localCoords, destCoords);
 
-			Object.assign(sortedUsers[i], { distance })
-
-
+			Object.assign(sortedUsers[i], { distance });
 		}
-		sortedUsers.sort(
-			(p1, p2) => (Number(p1.distance) < Number(p2.distance)) ? -1 : (Number(p1.distance) > Number(p2.distance)) ? 1 : 0);
+		sortedUsers.sort((p1, p2) =>
+			Number(p1.distance) < Number(p2.distance)
+				? -1
+				: Number(p1.distance) > Number(p2.distance)
+				? 1
+				: 0
+		);
 	}
-
-
 
 	for (let i = 0; i < sortedUsers.length; i++) {
-		Object.assign(sortedUsers[i], { index: i })
+		Object.assign(sortedUsers[i], { index: i });
 	}
 
-
 	const usersList = sortedUsers.map((user, i) => {
-
 		var ageDate = new Date(Date.now() - new Date(user.dateOfBirth));
 		const age = Math.abs(ageDate.getUTCFullYear() - 1970);
 		let newDesc = user.description;
+
 		if (newDesc.length >= 80) {
-			newDesc = newDesc.slice(0, newDesc.indexOf(' ', 79)) + '...'
+			newDesc = newDesc.slice(0, newDesc.indexOf(' ', 79)) + '...';
 		}
 
-
 		if (city) {
-
 			if (distanceSelected) {
-				const distSearched = Number(distanceSelected.label.match(/\d+/)[0])
-
-
+				const distSearched = Number(distanceSelected.label.match(/\d+/)[0]);
 				if (user.distance <= distSearched) {
 					return (
-						<TouchableWithoutFeedback key={i} onPress={() => displayUserOnMap(user)}>
-							<View key={i} style={userSelected?.index === user.index ? styles.userContainerSelected : styles.userContainer}>
+						<TouchableWithoutFeedback
+							key={i}
+							onPress={() => displayUserOnMap(user)}>
+							<View
+								key={i}
+								style={
+									userSelected?.index === user.index
+										? styles.userContainerSelected
+										: styles.userContainer
+								}>
 								<Image source={{ uri: user.avatarUrl }} style={styles.avatar} />
 								<View style={styles.userDetailsContainer}>
-									<Text style={{ fontWeight: 600 }}>{`${user.firstname} • ${user.city.name}`}</Text>
+									<Text
+										style={{
+											fontWeight: 600,
+										}}>{`${user.firstname} • ${user.city.name}`}</Text>
 									<Text style={{ fontSize: 12 }}>{newDesc}</Text>
 								</View>
 								<View style={styles.userDetailsContainer2}>
-								<TouchableOpacity on onPress={() => navigation.navigate('Profile', { user })}>
-								<Ionicons name="arrow-forward-circle-outline" size={35} color="black" />
-							</TouchableOpacity>
+									<TouchableOpacity
+										on
+										onPress={() => navigation.navigate('Profile', { user })}>
+										<Ionicons
+											name="arrow-forward-circle-outline"
+											size={35}
+											color="black"
+										/>
+									</TouchableOpacity>
 								</View>
 							</View>
 						</TouchableWithoutFeedback>
-					)
+					);
 				}
 			} else {
 				return (
-					<TouchableWithoutFeedback key={i} onPress={() => displayUserOnMap(user)}>
-						<View key={i} style={userSelected?.index === user.index ? styles.userContainerSelected : styles.userContainer}>
+					<TouchableWithoutFeedback
+						key={i}
+						onPress={() => displayUserOnMap(user)}>
+						<View
+							key={i}
+							style={
+								userSelected?.index === user.index
+									? styles.userContainerSelected
+									: styles.userContainer
+							}>
 							<Image source={{ uri: user.avatarUrl }} style={styles.avatar} />
 							<View style={styles.userDetailsContainer}>
-								<Text style={{ fontWeight: 600 }}>{`${user.firstname} • ${user.city.name}`}</Text>
+								<Text
+									style={{
+										fontWeight: 600,
+									}}>{`${user.firstname} • ${user.city.name}`}</Text>
 								<Text style={{ fontSize: 12 }}>{newDesc}</Text>
 							</View>
 							<View style={styles.userDetailsContainer2}>
-							<TouchableOpacity on onPress={() => navigation.navigate('Profile', { user })}>
-								<Ionicons name="arrow-forward-circle-outline" size={35} color="black" />
-							</TouchableOpacity>
+								<TouchableOpacity
+									on
+									onPress={() => navigation.navigate('Profile', { user })}>
+									<Ionicons
+										name="arrow-forward-circle-outline"
+										size={35}
+										color="black"
+									/>
+								</TouchableOpacity>
 							</View>
 						</View>
 					</TouchableWithoutFeedback>
-				)
+				);
 			}
-
 		} else {
 			return (
-				<TouchableWithoutFeedback key={i} onPress={() => displayUserOnMap(user)}>
-					<View style={userSelected?.index === user.index ? styles.userContainerSelected : styles.userContainer}>
+				<TouchableWithoutFeedback
+					key={i}
+					onPress={() => displayUserOnMap(user)}>
+					<View
+						style={
+							userSelected?.index === user.index
+								? styles.userContainerSelected
+								: styles.userContainer
+						}>
 						<Image source={{ uri: user.avatarUrl }} style={styles.avatar} />
 						<View style={styles.userDetailsContainer}>
-							<Text style={{ fontWeight: 600 }}>{`${user.firstname} • ${user.city.name}`}</Text>
+							<Text
+								style={{
+									fontWeight: 600,
+								}}>{`${user.firstname} • ${user.city.name}`}</Text>
 							<Text style={{ fontSize: 12 }}>{newDesc}</Text>
 						</View>
 						<View style={styles.userDetailsContainer2}>
-							<TouchableOpacity on onPress={() => navigation.navigate('Profile', { user })}>
-								<Ionicons name="arrow-forward-circle-outline" size={35} color="black" />
+							<TouchableOpacity
+								on
+								onPress={() => navigation.navigate('Profile', { user })}>
+								<Ionicons
+									name="arrow-forward-circle-outline"
+									size={35}
+									color="black"
+								/>
 							</TouchableOpacity>
 						</View>
 					</View>
 				</TouchableWithoutFeedback>
-			)
+			);
 		}
-	})
+	});
 
 	const markersList = [];
 	if (usersAroundDestination.length > 0) {
@@ -158,13 +214,12 @@ const SearchScreen = ({ navigation }) => {
 						longitude: user.city.longitude,
 					}}
 					title={user.firstname}
-					pinColor="#fecb2d"
-					// icon={icons[user.type]}
+					pinColor="#F87575"
 					description={`${user.distance}km`}
 					onPress={() => displayUser(user)}
-				/>)
-				;
-		})
+				/>
+			);
+		});
 	}
 
 	const addCity = (newCity) => {
@@ -180,76 +235,91 @@ const SearchScreen = ({ navigation }) => {
 			longitude: newCity.longitude,
 			latitudeDelta: 0.2,
 			longitudeDelta: 0.2,
-		})
+		});
 	};
 
 	const clear = () => {
-		setCity(null)
-		setDistanceSelected(null)
+		setCity(null);
+		setDistanceSelected(null);
 		mapRef.current.animateToRegion({
 			latitude: user.city.latitude,
 			longitude: user.city.longitude,
 			latitudeDelta: 0.2,
 			longitudeDelta: 0.2,
-		})
-		setUserSelected(null)
-	}
+		});
+		setUserSelected(null);
+	};
 
 	const displayUser = (user) => {
-		setUserSelected({ index: user.index })
-		svRef.current.scrollTo({ x: 0, y: 96 * user.index, animated: true })
-	}
+		setUserSelected({ index: user.index });
+		svRef.current.scrollTo({ x: 0, y: 96 * user.index, animated: true });
+	};
 
 	const displayUserOnMap = (user) => {
-		setUserSelected({ index: user.index })
-		svRef.current.scrollTo({ x: 0, y: 96 * user.index, animated: true })
-		markersRef.current[user.index].showCallout()
+		setUserSelected({ index: user.index });
+		svRef.current.scrollTo({ x: 0, y: 96 * user.index, animated: true });
+		markersRef.current[user.index].showCallout();
 		mapRef.current.animateToRegion({
 			latitude: user.city.latitude,
 			longitude: user.city.longitude,
 			latitudeDelta: 0.2,
 			longitudeDelta: 0.2,
-		})
-	}
+		});
+	};
 
 	return (
 		<SafeAreaView style={{ flex: 1 }}>
-
 			<View style={styles.searchContainer}>
 				<AutocompleteDropdownContextProvider>
 					<RemoteDataSet
 						addCity={addCity}
 						label="Destination"
-						ligthTheme={true}
+						ligthTheme={false}
 						width={230}
 						clear={clear}
 					/>
 				</AutocompleteDropdownContextProvider>
-				{city && <Dropdown
-					style={styles.dropdown}
-					placeholderStyle={styles.placeholderStyle}
-					selectedTextStyle={styles.selectedTextStyle}
-					inputSearchStyle={styles.inputSearchStyle}
-					iconStyle={styles.iconStyle}
-					data={DISTANCES}
-					maxHeight={300}
-					labelField="label"
-					valueField="value"
-					placeholder="Distance"
-					value={distanceSelected}
-					onChange={item => {
-						item.label === 'Illimité' ? setDistanceSelected(null) :
-							setDistanceSelected(item);
-					}}
-					mode='default'
-					renderLeftIcon={() => (
-						<MaterialCommunityIcons name="map-marker-distance" size={24} color="black" />
-					)}
-				/>}
+
+				{city && (
+					<Dropdown
+						style={styles.dropdown}
+						placeholderStyle={styles.placeholderStyle}
+						selectedTextStyle={styles.selectedTextStyle}
+						inputSearchStyle={styles.inputSearchStyle}
+						iconStyle={styles.iconStyle}
+						data={DISTANCES}
+						maxHeight={300}
+						labelField="label"
+						valueField="value"
+						placeholder="Distance"
+						value={distanceSelected}
+						onChange={(item) => {
+							item.label === 'Illimité'
+								? setDistanceSelected(null)
+								: setDistanceSelected(item);
+						}}
+						mode="default"
+						renderLeftIcon={() => (
+							<MaterialCommunityIcons
+								name="map-marker-distance"
+								size={24}
+								color="black"
+							/>
+						)}
+					/>
+				)}
 			</View>
 			{error && <Text style={STYLES_GLOBAL.error}>{error}</Text>}
 
-			<MapView
+			{/* <View
+				style={{
+					borderBottomRightRadius: 100,
+					borderTopLeftRadius: 100,
+					overflow: 'hidden',
+					borderWidth: 1,
+					borderColor: 'red',
+				}}> */}
+			{/* <MapView
 				style={styles.map}
 				ref={mapRef}
 				onPress={() => setUserSelected(null)}
@@ -260,11 +330,20 @@ const SearchScreen = ({ navigation }) => {
 					longitudeDelta: 0.0421,
 				}}>
 				{markersList}
-			</MapView>
+			</MapView> */}
+			{/* </View> */}
 
-			<ScrollView ref={svRef} contentContainerStyle={styles.resultsContainer} style={styles.scrollViewItems}>
-				{usersList}
-			</ScrollView>
+			<Map {...{ mapRef, setUserSelected, user, markersList }} />
+
+			<View style={{ alignItems: 'center', marginTop: 15 }}>
+				<Text style={STYLES_GLOBAL.subTitle}>Iconic Hosts</Text>
+				<ScrollView
+					ref={svRef}
+					contentContainerStyle={styles.resultsContainer}
+					style={styles.scrollViewItems}>
+					{usersList}
+				</ScrollView>
+			</View>
 		</SafeAreaView>
 	);
 };
@@ -277,24 +356,25 @@ const styles = StyleSheet.create({
 		backgroundColor: COLORS.bg,
 	},
 	statusBar: {
-		backgroundColor: 'white'
+		backgroundColor: 'white',
 	},
 	searchContainer: {
-		flexDirection: 'row',
-		justifyContent: 'center',
-		alignItems: 'center',
-		width: '100%'
-	},
-	map: {
-		zIndex: -1,
 		width: '100%',
-		height: '50%',
-		shadowColor: 'black',
-		shadowOffset: { width: 20, height: 40 },
-		shadowOpacity: 0.2,
-		shadowRadius: 3,
-		elevation: 20,
+		flexDirection: 'row',
+		alignItems: 'center',
+		justifyContent: 'center',
+		backgroundColor: COLORS.darkBlue,
 	},
+	// map: {
+	// 	zIndex: -1,
+	// 	width: '100%',
+	// 	height: 350,
+	// 	shadowColor: 'black',
+	// 	shadowOffset: { width: 20, height: 40 },
+	// 	shadowOpacity: 0.2,
+	// 	shadowRadius: 3,
+	// 	elevation: 20,
+	// },
 	dropdown: {
 		justifyContent: 'center',
 		alignItems: 'center',
@@ -324,7 +404,8 @@ const styles = StyleSheet.create({
 	resultsContainer: {
 		width: '100%',
 		justifyContent: 'center',
-		alignItems: 'center'
+		alignItems: 'center',
+		backgroundColor: COLORS.bg,
 	},
 	scrollViewItems: {
 		width: '100%',
@@ -341,7 +422,7 @@ const styles = StyleSheet.create({
 		borderWidth: 0.5,
 		borderRadius: 10,
 		padding: 10,
-		marginBottom: 15
+		marginBottom: 15,
 	},
 	userContainerSelected: {
 		flexDirection: 'row',
@@ -354,24 +435,24 @@ const styles = StyleSheet.create({
 		borderWidth: 0.5,
 		borderRadius: 10,
 		padding: 10,
-		marginBottom: 15
+		marginBottom: 15,
 	},
 	avatar: {
-		width: "17%",
+		width: '17%',
 		height: '100%',
-		borderRadius: 250
+		borderRadius: 250,
 	},
 	userDetailsContainer: {
 		justifyContent: 'center',
 		alignItems: 'flex-start',
 		paddingLeft: 20,
-		width: '64%'
+		width: '64%',
 	},
 	userDetailsContainer2: {
 		justifyContent: 'center',
 		alignItems: 'center',
-		width: '19%'
-	}
+		width: '19%',
+	},
 });
 
 export default SearchScreen;
