@@ -41,7 +41,7 @@ const MessagesScreen = ({ navigation }, props) => {
 		return (
 			<View key={i} style={styles.messageContainer}>
 				<Image source={{ uri: userToDisplay.avatarUrl }} style={styles.avatar} />
-				<Text>{userToDisplay.firstname}</Text>
+				<Text style={styles.message}>{userToDisplay.firstname} · {userToDisplay.city.name}</Text>
 			</View>
 		)
 	})
@@ -92,6 +92,9 @@ const styles = StyleSheet.create({
 		height: 42,
 		borderRadius: 50,
 	},
+	message: {
+		marginStart: 20
+	}
 });
 
 export default MessagesScreen;
