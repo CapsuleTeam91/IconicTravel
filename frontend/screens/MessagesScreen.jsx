@@ -44,6 +44,11 @@ const MessagesScreen = ({ navigation }, props) => {
 			<View key={i} style={styles.messageContainer}>
 				<Image source={{ uri: userToDisplay.avatarUrl }} style={styles.avatar} />
 				<Text style={styles.message}>{userToDisplay.firstname} · {userToDisplay.city.name}</Text>
+				<ButtonIcon
+					onpress={() => { }}
+					name="arrow-forward-outline"
+					type="transparent"
+				/>
 			</View>
 		)
 	})
@@ -83,6 +88,7 @@ const styles = StyleSheet.create({
 		marginVertical: 10,
 		padding: 10,
 		flexDirection: 'row',
+		justifyContent: 'space-between',
 		alignItems: 'center',
 		width: '90%',
 		height: 50,
