@@ -12,7 +12,7 @@ export const AdventureCard = ({
 			<Image source={{ uri: userMatched.avatarUrl }} style={styles.avatar} />
 			<View style={styles.profilContainer}>
 				<Text style={styles.name}>{userMatched.firstname}</Text>
-				<Text style={styles.city}>• {userMatched.city}</Text>
+				<Text style={styles.city}>• {userMatched.city.name}</Text>
 			</View>
 			<View style={styles.btnContainer}>
 				<ButtonIcon

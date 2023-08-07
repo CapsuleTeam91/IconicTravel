@@ -34,10 +34,10 @@ const AdventuresScreen = ({ navigation }) => {
 	if (user.bookings) {
 		pendingBooksList = user.bookings.map((booking, index) => {
 			return (
-				user.bookings.host === user._id && (
+				booking.host === user._id && (
 					<AdventureCard
 						key={index}
-						userMatched={user.bookings.traveler}
+						userMatched={booking.traveler}
 						handleDismiss={() => {}}
 						handleValidate={() => {}}
 					/>
@@ -67,7 +67,7 @@ const AdventuresScreen = ({ navigation }) => {
 				/>
 			</View>
 
-			{currentTab === ADVENTURE_STATE.pending && { pendingBooksList }}
+			{currentTab === ADVENTURE_STATE.pending && pendingBooksList}
 		</View>
 	);
 };
