@@ -15,6 +15,10 @@ const initialState = {
 		hobbies: [],
 		travels: [],
 	},
+	logs: {
+		email: '',
+		password: ''
+	}
 };
 
 export const userSlice = createSlice({
@@ -26,6 +30,10 @@ export const userSlice = createSlice({
 		},
 		addAvatar: (state, action) => {
 			state.value.avatarUrl = action.payload;
+		},
+		rememberPassword: (state, action) => {
+			state.logs.email = action.payload.email;
+			state.logs.password = action.payload.password;
 		},
 		clearData: (state, action) => {
 			state.value = {
@@ -45,7 +53,7 @@ export const userSlice = createSlice({
 	},
 });
 
-export const { addData, addAvatar, clearData } = userSlice.actions;
+export const { addData, addAvatar, rememberPassword, clearData } = userSlice.actions;
 export default userSlice.reducer;
 
 /* REMINDER */
