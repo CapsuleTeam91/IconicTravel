@@ -59,9 +59,7 @@ const styles = StyleSheet.create({
 		height: 52,
 		margin: 5,
 		marginVertical: 20,
-		// paddingVertical: 15,
 		borderWidth: 2,
-		// backgroundColor: COLORS.lightBlue,
 		borderColor: COLORS.lightBlue,
 		backgroundColor: COLORS.bgModal,
 	},
@@ -70,7 +68,6 @@ const styles = StyleSheet.create({
 		borderWidth: 0,
 		padding: 5,
 		borderColor: 'transparent',
-		backgroundColor: COLORS.bg,
 	},
 	primaryTextBtn: {
 		color: COLORS.bg,

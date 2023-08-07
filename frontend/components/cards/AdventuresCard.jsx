@@ -22,7 +22,8 @@ export const AdventureCard = ({
 		<View style={styles.container}>
 			<Image source={{ uri: userMatched.avatarUrl }} style={styles.avatar} />
 			<View style={styles.profilContainer}>
-				<Text>{userMatched.firstname}</Text>
+				<Text style={styles.name}>{userMatched.firstname}</Text>
+				<Text style={styles.city}>• {userMatched.city}</Text>
 			</View>
 			<View style={styles.btnContainer}>
 				<ButtonIcon
@@ -43,27 +44,32 @@ export const AdventureCard = ({
 const styles = StyleSheet.create({
 	container: {
 		height: 78,
-		width: '80%',
+		width: '90%',
 		flexDirection: 'row',
 		alignItems: 'center',
 		paddingHorizontal: 15,
-
 		borderRadius: 20,
 		backgroundColor: 'white',
 	},
-
 	profilContainer: {
 		flex: 1,
-		// backgroundColor: 'red',
-		// width: '100%',
-		height: '50%',
+		flexDirection: 'row',
+		alignItems: 'baseline',
+	},
+	btnContainer: {
+		flexDirection: 'row',
 	},
 	avatar: {
 		width: 42,
 		height: 42,
 		borderRadius: 250,
 	},
-	btnContainer: {
-		flexDirection: 'row',
+	name: {
+		fontSize: 16,
+		fontWeight: '700',
+		paddingHorizontal: 10,
+	},
+	city: {
+		fontSize: 12,
 	},
 });
