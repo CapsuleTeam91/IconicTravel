@@ -13,20 +13,25 @@ import ButtonIcon from "../components/ButtonIcon";
 import { useDispatch, useSelector } from 'react-redux';
 import React, { useEffect, useState } from "react";
 import { URL_EXPO } from '../environnement';
+import { useIsFocused } from '@react-navigation/native';
 
 const AdventuresScreen = ({ navigation }) => {
   const thisUser = useSelector((state) => state.user.value);
-  
+
+  const isFocused = useIsFocused();
+
   const [currentTab, setCurrentTab] = useState("confirmes");
   const [bookings, setBookings] = useState([]);
 
   useEffect(() => {
-    fetch(`${URL_EXPO}:3000/bookings/${thisUser.token}`)
-    .then(resp => resp.json())
-    .then(bookings => {
-      console.log(bookings)
-    })
-  }, [])
+    if (isFocused) {
+      fetch(`${URL_EXPO}:3000/bookings/${thisUser.token}`)
+        .then(resp => resp.json())
+        .then(result => {
+          setBookings(result.bookings)
+        })
+    }
+  }, [isFocused])
 
   const styles = StyleSheet.create({
     container: {
@@ -68,7 +73,7 @@ const AdventuresScreen = ({ navigation }) => {
       marginVertical: 30,
       overflow: "hidden",
     },
-  
+
     enAttenteContainer: {
       backgroundColor: currentTab !== "confirmes" ? COLORS.darkBlue : "#ffff",
       borderRadius: 10,
@@ -85,7 +90,7 @@ const AdventuresScreen = ({ navigation }) => {
     },
     bookingContainer: {
       flexDirection: 'row',
-      alignItems:'center',
+      alignItems: 'center',
       padding: 5,
       width: '80%',
       height: '10%',
@@ -110,42 +115,44 @@ const AdventuresScreen = ({ navigation }) => {
   });
 
 
+
+
   return (
     <View style={styles.container}>
-        <Text style={styles.title}>Iconic Adventures</Text>
-        <View style={styles.tabContainer}>
-          <TouchableOpacity
-            style={[styles.tab]}
-            onPress={() => setCurrentTab("confirmes")}
-          >
-            <Text style={styles.confirmesContainer}>Confirmés</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[styles.tab]}
-            onPress={() => setCurrentTab("en_attente")}
-          >
-            <Text style={styles.enAttenteContainer}>En Attente</Text>
-          </TouchableOpacity>
-        </View>
+      <Text style={styles.title}>Iconic Adventures</Text>
+      <View style={styles.tabContainer}>
+        <TouchableOpacity
+          style={[styles.tab]}
+          onPress={() => setCurrentTab("confirmes")}
+        >
+          <Text style={styles.confirmesContainer}>Confirmés</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.tab]}
+          onPress={() => setCurrentTab("en_attente")}
+        >
+          <Text style={styles.enAttenteContainer}>En Attente</Text>
+        </TouchableOpacity>
+      </View>
 
-        {currentTab === "confirmes" ? (
-          <></>
-        ) : (
-          <View style={styles.bookingContainer}>
-            <Image source={{ uri: thisUser.avatarUrl }} style={styles.avatar} />
-            <View style={styles.profilContainer}>
-              <Text>Laura</Text>
-              <View style={styles.btnContainer}>
-                <TouchableOpacity>
-                  <Text>Accepter</Text>
-                </TouchableOpacity>
-                <TouchableOpacity>
-                  <Text>Refuser</Text>
-                </TouchableOpacity>
-              </View>
+      {currentTab === "confirmes" ? (
+        <></>
+      ) : (
+        <View style={styles.bookingContainer}>
+          <Image source={{ uri: thisUser.avatarUrl }} style={styles.avatar} />
+          <View style={styles.profilContainer}>
+            <Text>Laura</Text>
+            <View style={styles.btnContainer}>
+              <TouchableOpacity>
+                <Text>Accepter</Text>
+              </TouchableOpacity>
+              <TouchableOpacity>
+                <Text>Refuser</Text>
+              </TouchableOpacity>
             </View>
           </View>
-        )}
+        </View>
+      )}
     </View>
   );
 };
