@@ -45,7 +45,9 @@ const SearchScreen = ({ navigation }) => {
 		}
 	}, [isFocused]);
 
-	const sortedUsers = usersAroundDestination;
+	const sortedUsers = usersAroundDestination.filter(traveler =>
+		traveler.canHost && traveler.email !== user.email
+	);
 
 	if (usersAroundDestination.length > 0) {
 		for (let i = 0; i < sortedUsers.length; i++) {
@@ -66,8 +68,8 @@ const SearchScreen = ({ navigation }) => {
 			Number(p1.distance) < Number(p2.distance)
 				? -1
 				: Number(p1.distance) > Number(p2.distance)
-				? 1
-				: 0
+					? 1
+					: 0
 		);
 	}
 
