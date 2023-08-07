@@ -34,6 +34,7 @@ const AdventuresScreen = ({ navigation }) => {
 	if (user.bookings) {
 		pendingBooksList = user.bookings.map((booking, index) => {
 			return (
+				//Créer une scrollview pour les hostings requests et une pour les user's requests en attente
 				booking.host === user._id && (
 					<AdventureCard
 						key={index}

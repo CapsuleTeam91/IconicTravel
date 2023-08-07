@@ -10,28 +10,30 @@ import { COLORS, RADIUS } from '../../utils/styles';
 
 export const HostCard = ({ user, selected, handleClick, displayUserOnMap }) => {
 	const getDescription = (desc) =>
-		desc.length >= 70 ? desc.slice(0, desc.indexOf(' ', 70)) + '...' : desc;
-	// if (newDesc.length >= 80) {
-	// 	newDesc = newDesc.slice(0, newDesc.indexOf(' ', 79)) + '...';
-	// }
+		//TODO
+		desc.length >= 70
+			? desc.slice(0, desc.indexOf(' ' || '\r', 70)) + '...'
+			: desc;
+
 	return (
 		<TouchableWithoutFeedback onPress={displayUserOnMap}>
 			<View style={[styles.container, selected && styles.selected]}>
-				<Image source={{ uri: user.avatarUrl }} style={styles.avatar} />
-				<View style={styles.infoContainer}>
-					<View style={styles.profilContainer}>
-						<Text style={styles.name}>{user.firstname}</Text>
-						<Text style={styles.city}>• {user.city.name}</Text>
+				<View style={styles.wrapper}>
+					<Image source={{ uri: user.avatarUrl }} style={styles.avatar} />
+					<View style={styles.infoContainer}>
+						<View style={styles.profilContainer}>
+							<Text style={styles.name}>{user.firstname}</Text>
+							<Text style={styles.city}>• {user.city.name}</Text>
+						</View>
+						<Text style={styles.desc}>{getDescription(user.description)}</Text>
 					</View>
-					<Text style={styles.desc}>{getDescription(user.description)}</Text>
 				</View>
-				<View style={styles.btnContainer}>
-					<ButtonIcon
-						onpress={handleClick}
-						name="arrow-forward-outline"
-						type="transparent"
-					/>
-				</View>
+
+				<ButtonIcon
+					onpress={handleClick}
+					name="arrow-forward-outline"
+					type="transparent"
+				/>
 			</View>
 		</TouchableWithoutFeedback>
 	);
@@ -41,10 +43,11 @@ const styles = StyleSheet.create({
 	container: {
 		height: 80,
 		width: '90%',
+		marginBottom: 15,
+		paddingHorizontal: 15,
 		flexDirection: 'row',
 		alignItems: 'center',
-		paddingHorizontal: 15,
-		marginBottom: 15,
+		justifyContent: 'space-between',
 		borderRadius: RADIUS.card,
 		backgroundColor: 'white',
 	},
@@ -52,18 +55,18 @@ const styles = StyleSheet.create({
 		borderWidth: 1,
 		borderColor: COLORS.pink,
 	},
+	wrapper: {
+		flexDirection: 'row',
+		alignItems: 'center',
+	},
 	infoContainer: {
-		width: 200,
+		width: 250,
 		alignItems: 'flex-start',
-		justifyContent: 'flex-start',
+		paddingHorizontal: 10,
 	},
 	profilContainer: {
-		flex: 1,
 		flexDirection: 'row',
 		alignItems: 'baseline',
-	},
-	btnContainer: {
-		flexDirection: 'row',
 	},
 	avatar: {
 		width: 42,
@@ -73,10 +76,9 @@ const styles = StyleSheet.create({
 	name: {
 		fontSize: 16,
 		fontWeight: '700',
-		paddingHorizontal: 10,
 	},
 	city: {
-		fontSize: 12,
+		fontSize: 12.99,
 	},
 	desc: {
 		fontSize: 12,

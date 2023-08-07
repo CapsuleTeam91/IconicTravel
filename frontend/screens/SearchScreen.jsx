@@ -1,29 +1,17 @@
 import React, { useEffect, useRef, useState } from 'react';
-import {
-	SafeAreaView,
-	ScrollView,
-	StyleSheet,
-	Text,
-	View,
-	Image,
-	TouchableOpacity,
-	TouchableWithoutFeedback,
-} from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
-import { addData } from '../reducers/user';
+import { SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { useSelector } from 'react-redux';
 import { RemoteDataSet } from '../components/RemoteDataSet';
-import { COLORS, COLORS_THEME, STYLES_GLOBAL } from '../utils/styles';
+import { COLORS, STYLES_GLOBAL } from '../utils/styles';
 import { AutocompleteDropdownContextProvider } from 'react-native-autocomplete-dropdown';
-import { Dropdown } from 'react-native-element-dropdown';
-import MapView, { Marker } from 'react-native-maps';
+import { Marker } from 'react-native-maps';
 import { ERRORS } from '../utils/constants';
 import { URL_EXPO } from '../environnement';
-import { DISTANCES } from '../utils/data';
-import { MaterialCommunityIcons, Ionicons } from '@expo/vector-icons';
 import { convertCoordsToKm } from '../utils/helper';
 import { useIsFocused } from '@react-navigation/native';
 import { Map } from '../components/Map';
 import { HostCard } from '../components/cards/HostCard';
+import { DropdownDistances } from '../components/forms/DropdownDistances';
 
 const SearchScreen = ({ navigation }) => {
 	const isFocused = useIsFocused();
@@ -88,20 +76,13 @@ const SearchScreen = ({ navigation }) => {
 	}
 
 	const usersList = sortedUsers.map((user, i) => {
-		var ageDate = new Date(Date.now() - new Date(user.dateOfBirth));
-		// const age = Math.abs(ageDate.getUTCFullYear() - 1970);
-		let newDesc = user.description;
-
-		if (newDesc.length >= 80) {
-			newDesc = newDesc.slice(0, newDesc.indexOf(' ', 79)) + '...';
-		}
-
 		if (city) {
 			if (distanceSelected) {
 				const distSearched = Number(distanceSelected.label.match(/\d+/)[0]);
 				if (user.distance <= distSearched) {
 					return (
 						<HostCard
+							key={i}
 							user={user}
 							displayUserOnMap={() => displayUserOnMap(user)}
 							selected={userSelected?.index === user.index}
@@ -112,6 +93,7 @@ const SearchScreen = ({ navigation }) => {
 			} else {
 				return (
 					<HostCard
+						key={i}
 						user={user}
 						displayUserOnMap={() => displayUserOnMap(user)}
 						selected={userSelected?.index === user.index}
@@ -122,6 +104,7 @@ const SearchScreen = ({ navigation }) => {
 		} else {
 			return (
 				<HostCard
+					key={i}
 					user={user}
 					displayUserOnMap={() => displayUserOnMap(user)}
 					selected={userSelected?.index === user.index}
@@ -198,7 +181,7 @@ const SearchScreen = ({ navigation }) => {
 
 	return (
 		<SafeAreaView style={{ flex: 1 }}>
-			<View style={styles.searchContainer}>
+			<View style={styles.container}>
 				<AutocompleteDropdownContextProvider>
 					<RemoteDataSet
 						addCity={addCity}
@@ -210,57 +193,11 @@ const SearchScreen = ({ navigation }) => {
 				</AutocompleteDropdownContextProvider>
 
 				{city && (
-					<Dropdown
-						style={styles.dropdown}
-						placeholderStyle={styles.placeholderStyle}
-						selectedTextStyle={styles.selectedTextStyle}
-						inputSearchStyle={styles.inputSearchStyle}
-						iconStyle={styles.iconStyle}
-						data={DISTANCES}
-						maxHeight={300}
-						labelField="label"
-						valueField="value"
-						placeholder="Distance"
-						value={distanceSelected}
-						onChange={(item) => {
-							item.label === 'Illimité'
-								? setDistanceSelected(null)
-								: setDistanceSelected(item);
-						}}
-						mode="default"
-						renderLeftIcon={() => (
-							<MaterialCommunityIcons
-								name="map-marker-distance"
-								size={24}
-								color="black"
-							/>
-						)}
-					/>
+					<DropdownDistances {...{ distanceSelected, setDistanceSelected }} />
 				)}
 			</View>
-			{error && <Text style={STYLES_GLOBAL.error}>{error}</Text>}
 
-			{/* <View
-				style={{
-					borderBottomRightRadius: 100,
-					borderTopLeftRadius: 100,
-					overflow: 'hidden',
-					borderWidth: 1,
-					borderColor: 'red',
-				}}> */}
-			{/* <MapView
-				style={styles.map}
-				ref={mapRef}
-				onPress={() => setUserSelected(null)}
-				initialRegion={{
-					latitude: user.city.latitude,
-					longitude: user.city.longitude,
-					latitudeDelta: 0.0922,
-					longitudeDelta: 0.0421,
-				}}>
-				{markersList}
-			</MapView> */}
-			{/* </View> */}
+			{error && <Text style={STYLES_GLOBAL.error}>{error}</Text>}
 
 			<Map {...{ mapRef, setUserSelected, user, markersList }} />
 
@@ -277,17 +214,17 @@ const SearchScreen = ({ navigation }) => {
 	);
 };
 const styles = StyleSheet.create({
+	// container: {
+	// 	flexGrow: 1,
+	// 	paddingVertical: 30,
+	// 	alignItems: 'center',
+	// 	justifyContent: 'flex-start',
+	// 	backgroundColor: COLORS.bg,
+	// },
+	// statusBar: {
+	// 	backgroundColor: 'white',
+	// },
 	container: {
-		flexGrow: 1,
-		paddingVertical: 30,
-		justifyContent: 'flex-start',
-		alignItems: 'center',
-		backgroundColor: COLORS.bg,
-	},
-	statusBar: {
-		backgroundColor: 'white',
-	},
-	searchContainer: {
 		width: '100%',
 		flexDirection: 'row',
 		alignItems: 'center',
@@ -304,32 +241,32 @@ const styles = StyleSheet.create({
 	// 	shadowRadius: 3,
 	// 	elevation: 20,
 	// },
-	dropdown: {
-		justifyContent: 'center',
-		alignItems: 'center',
-		width: 120,
-		margin: 16,
-		height: 50,
-		borderBottomColor: 'gray',
-		borderBottomWidth: 0.5,
-	},
-	icon: {
-		marginRight: 5,
-	},
-	placeholderStyle: {
-		fontSize: 16,
-	},
-	selectedTextStyle: {
-		fontSize: 16,
-	},
-	iconStyle: {
-		width: 20,
-		height: 20,
-	},
-	inputSearchStyle: {
-		height: 40,
-		fontSize: 16,
-	},
+	// dropdown: {
+	// 	justifyContent: 'center',
+	// 	alignItems: 'center',
+	// 	width: 120,
+	// 	margin: 16,
+	// 	height: 50,
+	// 	borderBottomColor: 'gray',
+	// 	borderBottomWidth: 0.5,
+	// },
+	// icon: {
+	// 	marginRight: 5,
+	// },
+	// placeholderStyle: {
+	// 	fontSize: 16,
+	// },
+	// selectedTextStyle: {
+	// 	fontSize: 16,
+	// },
+	// iconStyle: {
+	// 	width: 20,
+	// 	height: 20,
+	// },
+	// inputSearchStyle: {
+	// 	height: 40,
+	// 	fontSize: 16,
+	// },
 	resultsContainer: {
 		width: '100%',
 		justifyContent: 'center',
@@ -342,6 +279,17 @@ const styles = StyleSheet.create({
 		height: '40%',
 		paddingVertical: 15,
 	},
+	// userDetailsContainer: {
+	// 	justifyContent: 'center',
+	// 	alignItems: 'flex-start',
+	// 	paddingLeft: 20,
+	// 	width: '64%',
+	// },
+	// userDetailsContainer2: {
+	// 	justifyContent: 'center',
+	// 	alignItems: 'center',
+	// 	width: '19%',
+	// },
 	// userContainer: {
 	// 	flexDirection: 'row',
 	// 	justifyContent: 'center',
@@ -368,22 +316,11 @@ const styles = StyleSheet.create({
 	// 	padding: 10,
 	// 	marginBottom: 15,
 	// },
-	avatar: {
-		width: '17%',
-		height: '100%',
-		borderRadius: 250,
-	},
-	userDetailsContainer: {
-		justifyContent: 'center',
-		alignItems: 'flex-start',
-		paddingLeft: 20,
-		width: '64%',
-	},
-	userDetailsContainer2: {
-		justifyContent: 'center',
-		alignItems: 'center',
-		width: '19%',
-	},
+	// avatar: {
+	// 	width: '17%',
+	// 	height: '100%',
+	// 	borderRadius: 250,
+	// },
 });
 
 export default SearchScreen;
