@@ -3,7 +3,7 @@ import { Text, View } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { clearData } from '../reducers/user';
 import { STYLES_GLOBAL } from '../utils/styles';
-import Button from '../components/Button';
+import Button from '../components/buttons/Button';
 import StrokeAnimation from '../components/animations/StrokeAnimation';
 
 const LoginScreen = ({ navigation }) => {

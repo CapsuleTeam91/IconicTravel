@@ -6,7 +6,7 @@ import {
 	Text,
 	TouchableOpacity,
 	View,
-	Pressable
+	Pressable,
 } from 'react-native';
 import { useEffect, useState } from 'react';
 import { getAge } from '../utils/helper';
@@ -15,8 +15,8 @@ import { ERRORS } from '../utils/constants';
 import { URL_EXPO } from '../environnement';
 import { useDispatch, useSelector } from 'react-redux';
 import { COLORS, STYLES_GLOBAL } from '../utils/styles';
-import ButtonIcon from '../components/ButtonIcon';
-import DatePicker from '../components/DatePicker'
+import ButtonIcon from '../components/buttons/ButtonIcon';
+import DatePicker from '../components/DatePicker';
 import { AntDesign } from '@expo/vector-icons';
 
 const UserProfileScreen = ({ route, navigation }) => {
@@ -24,44 +24,48 @@ const UserProfileScreen = ({ route, navigation }) => {
 	const thisUser = useSelector((state) => state.user.value);
 	const [modalVisible, setModalVisible] = useState(false);
 	const [startDate, setStartDate] = useState(new Date());
-	const [endDate, setEndDate] = useState(new Date(new Date().setDate(new Date().getDate() + 1)));
-	const [adultsNumber, setAdultsNumber] = useState(1)
-	const [childrenNumber, setChildrenNumber] = useState(0)
-	const [babiesNumber, setBabiesNumber] = useState(0)
-	const [error, setError] = useState('')
-	const [bookingStatus, setBookingStatus] = useState(null)
+	const [endDate, setEndDate] = useState(
+		new Date(new Date().setDate(new Date().getDate() + 1))
+	);
+	const [adultsNumber, setAdultsNumber] = useState(1);
+	const [childrenNumber, setChildrenNumber] = useState(0);
+	const [babiesNumber, setBabiesNumber] = useState(0);
+	const [error, setError] = useState('');
+	const [bookingStatus, setBookingStatus] = useState(null);
 
 	useEffect(() => {
 		fetch(`${URL_EXPO}:3000/users/getId/${thisUser.token}/${user.email}`)
-			.then(resp => resp.json())
-			.then(data => {
+			.then((resp) => resp.json())
+			.then((data) => {
 				if (data.result) {
-					fetch(`${URL_EXPO}:3000/bookings/exists/${data.travelerId}/${data.hostId}`)
-						.then(resp => resp.json())
-						.then(bookFound => {
+					fetch(
+						`${URL_EXPO}:3000/bookings/exists/${data.travelerId}/${data.hostId}`
+					)
+						.then((resp) => resp.json())
+						.then((bookFound) => {
 							if (bookFound.result && !bookFound.booking.done) {
-								setBookingStatus(bookFound.booking.status)
+								setBookingStatus(bookFound.booking.status);
 							}
-						})
+						});
 				}
-			})
-	}, [])
+			});
+	}, []);
 
 	const startDateValidated = (date) => {
-		setStartDate(date)
+		setStartDate(date);
 		if (endDate <= date) {
-			setEndDate(new Date(new Date().setDate(date.getDate() + 1)))
+			setEndDate(new Date(new Date().setDate(date.getDate() + 1)));
 		}
-	}
+	};
 
 	const calculateNextdate = (date) => {
 		return new Date(new Date().setDate(date.getDate() + 1));
-	}
+	};
 
 	const validateContact = () => {
 		fetch(`${URL_EXPO}:3000/users/getId/${thisUser.token}/${user.email}`)
-			.then(resp => resp.json())
-			.then(data => {
+			.then((resp) => resp.json())
+			.then((data) => {
 				const travelDatas = {
 					traveler: data.travelerId,
 					host: data.hostId,
@@ -69,27 +73,26 @@ const UserProfileScreen = ({ route, navigation }) => {
 					endDate,
 					adultsNumber,
 					childrenNumber,
-					babiesNumber
-				}
+					babiesNumber,
+				};
 				fetch(`${URL_EXPO}:3000/bookings/request`, {
 					method: 'POST',
 					headers: { 'Content-Type': 'application/json' },
 					body: JSON.stringify({
-						travelDatas
+						travelDatas,
 					}),
 				})
-					.then(resp => resp.json())
-					.then(data => {
+					.then((resp) => resp.json())
+					.then((data) => {
 						if (data.result) {
-							setModalVisible(!modalVisible)
-							setBookingStatus('Demande en attente')
+							setModalVisible(!modalVisible);
+							setBookingStatus('Demande en attente');
 						} else {
-							setError(data.error)
+							setError(data.error);
 						}
-					})
-			})
-
-	}
+					});
+			});
+	};
 
 	return (
 		<SafeAreaView style={styles.container}>
@@ -106,7 +109,9 @@ const UserProfileScreen = ({ route, navigation }) => {
 					animationType="fade"
 					transparent={true}
 					visible={modalVisible}
-					onRequestClose={() => { setModalVisible(!modalVisible) }}>
+					onRequestClose={() => {
+						setModalVisible(!modalVisible);
+					}}>
 					<View style={styles.centeredView}>
 						<View style={styles.modalView}>
 							<View style={styles.categoryContainer}>
@@ -114,13 +119,25 @@ const UserProfileScreen = ({ route, navigation }) => {
 								<View style={styles.datePickersContainer}>
 									<View style={styles.date}>
 										<Text>Départ</Text>
-										<DatePicker theme='dark' width='95%' date={startDate} label={startDate.toLocaleDateString()}
-											onconfirm={(date) => startDateValidated(date)} minimumDate={new Date()} />
+										<DatePicker
+											theme="dark"
+											width="95%"
+											date={startDate}
+											label={startDate.toLocaleDateString()}
+											onconfirm={(date) => startDateValidated(date)}
+											minimumDate={new Date()}
+										/>
 									</View>
 									<View style={styles.date}>
 										<Text>Retour</Text>
-										<DatePicker theme='dark' width='95%' date={endDate} label={endDate.toLocaleDateString()}
-											onconfirm={(date) => setEndDate(date)} minimumDate={calculateNextdate(startDate)} />
+										<DatePicker
+											theme="dark"
+											width="95%"
+											date={endDate}
+											label={endDate.toLocaleDateString()}
+											onconfirm={(date) => setEndDate(date)}
+											minimumDate={calculateNextdate(startDate)}
+										/>
 									</View>
 								</View>
 							</View>
@@ -130,14 +147,28 @@ const UserProfileScreen = ({ route, navigation }) => {
 								<View style={styles.modalDetailsContainer}>
 									<View style={styles.travelersDetailsContainer}>
 										<View style={styles.travelerDetailTitle}>
-											<Text style={{ textAlign: 'center', textAlignVertical: 'center' }}>Adultes</Text>
+											<Text
+												style={{
+													textAlign: 'center',
+													textAlignVertical: 'center',
+												}}>
+												Adultes
+											</Text>
 										</View>
 										<View style={styles.travelerDetailParams}>
-											<TouchableOpacity onPress={() => adultsNumber > 0 && setAdultsNumber(adultsNumber - 1)}>
-												<AntDesign name="minuscircleo" size={24} color="black" />
+											<TouchableOpacity
+												onPress={() =>
+													adultsNumber > 0 && setAdultsNumber(adultsNumber - 1)
+												}>
+												<AntDesign
+													name="minuscircleo"
+													size={24}
+													color="black"
+												/>
 											</TouchableOpacity>
 											<Text>{adultsNumber}</Text>
-											<TouchableOpacity onPress={() => setAdultsNumber(adultsNumber + 1)}>
+											<TouchableOpacity
+												onPress={() => setAdultsNumber(adultsNumber + 1)}>
 												<AntDesign name="pluscircleo" size={24} color="black" />
 											</TouchableOpacity>
 										</View>
@@ -145,14 +176,29 @@ const UserProfileScreen = ({ route, navigation }) => {
 
 									<View style={styles.travelersDetailsContainer}>
 										<View style={styles.travelerDetailTitle}>
-											<Text style={{ textAlign: 'center', textAlignVertical: 'center' }}>Enfants</Text>
+											<Text
+												style={{
+													textAlign: 'center',
+													textAlignVertical: 'center',
+												}}>
+												Enfants
+											</Text>
 										</View>
 										<View style={styles.travelerDetailParams}>
-											<TouchableOpacity onPress={() => childrenNumber > 0 && setChildrenNumber(childrenNumber - 1)}>
-												<AntDesign name="minuscircleo" size={24} color="black" />
+											<TouchableOpacity
+												onPress={() =>
+													childrenNumber > 0 &&
+													setChildrenNumber(childrenNumber - 1)
+												}>
+												<AntDesign
+													name="minuscircleo"
+													size={24}
+													color="black"
+												/>
 											</TouchableOpacity>
 											<Text>{childrenNumber}</Text>
-											<TouchableOpacity onPress={() => setChildrenNumber(childrenNumber + 1)}>
+											<TouchableOpacity
+												onPress={() => setChildrenNumber(childrenNumber + 1)}>
 												<AntDesign name="pluscircleo" size={24} color="black" />
 											</TouchableOpacity>
 										</View>
@@ -160,23 +206,38 @@ const UserProfileScreen = ({ route, navigation }) => {
 
 									<View style={styles.travelersDetailsContainer}>
 										<View style={styles.travelerDetailTitle}>
-											<Text style={{ textAlign: 'center', textAlignVertical: 'center' }}>Bébés</Text>
+											<Text
+												style={{
+													textAlign: 'center',
+													textAlignVertical: 'center',
+												}}>
+												Bébés
+											</Text>
 										</View>
 										<View style={styles.travelerDetailParams}>
-											<TouchableOpacity onPress={() => babiesNumber > 0 && setBabiesNumber(babiesNumber - 1)}>
-												<AntDesign name="minuscircleo" size={24} color="black" />
+											<TouchableOpacity
+												onPress={() =>
+													babiesNumber > 0 && setBabiesNumber(babiesNumber - 1)
+												}>
+												<AntDesign
+													name="minuscircleo"
+													size={24}
+													color="black"
+												/>
 											</TouchableOpacity>
 											<Text>{babiesNumber}</Text>
-											<TouchableOpacity onPress={() => setBabiesNumber(babiesNumber + 1)}>
+											<TouchableOpacity
+												onPress={() => setBabiesNumber(babiesNumber + 1)}>
 												<AntDesign name="pluscircleo" size={24} color="black" />
 											</TouchableOpacity>
 										</View>
 									</View>
-									{error && <View style={{ alignItems: 'center', width: '100%' }}>
-										<Text style={{ color: 'red' }}>{error}</Text>
-									</View>}
+									{error && (
+										<View style={{ alignItems: 'center', width: '100%' }}>
+											<Text style={{ color: 'red' }}>{error}</Text>
+										</View>
+									)}
 								</View>
-
 							</View>
 							<View style={styles.btnContainer}>
 								<TouchableOpacity
@@ -193,17 +254,20 @@ const UserProfileScreen = ({ route, navigation }) => {
 						</View>
 					</View>
 				</Modal>
-				{!bookingStatus ?
-					<TouchableOpacity style={styles.hostingBtn} onPress={() => setModalVisible(true)}>
+				{!bookingStatus ? (
+					<TouchableOpacity
+						style={styles.hostingBtn}
+						onPress={() => setModalVisible(true)}>
 						<Text style={styles.hostingTxt}>Contact</Text>
-					</TouchableOpacity> :
+					</TouchableOpacity>
+				) : (
 					<View style={styles.hostingBtn}>
 						<Text style={styles.hostingTxt}>{bookingStatus}</Text>
-					</View>}
+					</View>
+				)}
 			</View>
 
 			<View style={styles.detailsContainer}>
-
 				<View style={styles.optionsContainer}>
 					<Text style={STYLES_GLOBAL.textDark}>{user.description}</Text>
 				</View>
@@ -225,7 +289,9 @@ const UserProfileScreen = ({ route, navigation }) => {
 					</Text>
 					<View style={styles.languagesContainer}>
 						{user.spokenLanguages.map((language, i) => (
-							<Text key={i} style={[STYLES_GLOBAL.textDark, styles.details, styles.hobby]}>
+							<Text
+								key={i}
+								style={[STYLES_GLOBAL.textDark, styles.details, styles.hobby]}>
 								{language}
 							</Text>
 						))}
@@ -239,11 +305,12 @@ const UserProfileScreen = ({ route, navigation }) => {
 				</View>
 				<View style={styles.hobbiesContainer}>
 					{user.hobbies.map((h, i) => (
-						<Text key={i} style={styles.hobby}>{h}</Text>
+						<Text key={i} style={styles.hobby}>
+							{h}
+						</Text>
 					))}
 				</View>
 			</View>
-
 		</SafeAreaView>
 	);
 };
@@ -258,13 +325,13 @@ const styles = StyleSheet.create({
 	username: {
 		color: COLORS.darkBlue,
 		fontSize: 30,
-		alignItems: 'center'
+		alignItems: 'center',
 	},
 	hostingBtn: {
 		justifyContent: 'center',
 		alignItems: 'center',
 		height: 80,
-		width: 80
+		width: 80,
 	},
 	hostingTxt: {
 		backgroundColor: '#95B8D1',
@@ -272,7 +339,7 @@ const styles = StyleSheet.create({
 		width: '100%',
 		textAlign: 'center',
 		textAlignVertical: 'center',
-		borderRadius: 30
+		borderRadius: 30,
 	},
 	optionsContainer: {
 		width: Platform.OS === 'ios' ? '90%' : '100%',
@@ -285,8 +352,7 @@ const styles = StyleSheet.create({
 		width: '100%',
 		flexDirection: 'row',
 		justifyContent: 'space-around',
-		alignItems: 'center'
-
+		alignItems: 'center',
 	},
 	switchContainer: {
 		alignItems: 'center',
@@ -295,7 +361,7 @@ const styles = StyleSheet.create({
 		width: Platform.OS === 'ios' ? '90%' : '100%',
 	},
 	passionsContainer: {
-		width: '100%'
+		width: '100%',
 	},
 	languagesContainer: {
 		flex: 1,
@@ -312,7 +378,7 @@ const styles = StyleSheet.create({
 		borderRadius: 250,
 	},
 	age: {
-		fontSize: 18
+		fontSize: 18,
 	},
 	name: {
 		fontSize: 24,
@@ -328,7 +394,7 @@ const styles = StyleSheet.create({
 	hobbiesContainer: {
 		width: '100%',
 		flexDirection: 'row',
-		flexWrap: 'wrap'
+		flexWrap: 'wrap',
 	},
 	hobby: {
 		textAlign: 'center',
@@ -390,7 +456,7 @@ const styles = StyleSheet.create({
 		textAlign: 'center',
 	},
 	categoryContainer: {
-		width: '100%'
+		width: '100%',
 	},
 	datePickersContainer: {
 		marginVertical: 10,
@@ -398,39 +464,39 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 		alignItems: 'center',
 		flexDirection: 'row',
-		justifyContent: 'space-evenly'
+		justifyContent: 'space-evenly',
 	},
 	date: {
 		justifyContent: 'center',
 		alignItems: 'center',
-		width: '50%'
+		width: '50%',
 	},
 	modalDetailsContainer: {
 		marginTop: 10,
-		marginBottom: 20
+		marginBottom: 20,
 	},
 	travelersDetailsContainer: {
 		width: '100%',
 		flexDirection: 'row',
-		marginVertical: 5
+		marginVertical: 5,
 	},
 	travelerDetailTitle: {
 		paddingLeft: 10,
 		justifyContent: 'center',
 		alignItems: 'flex-start',
-		width: '60%'
+		width: '60%',
 	},
 	travelerDetailParams: {
 		width: '40%',
 		flexDirection: 'row',
-		justifyContent: 'space-around'
+		justifyContent: 'space-around',
 	},
 	btnContainer: {
 		width: '100%',
 		flexDirection: 'row',
 		justifyContent: 'center',
-		alignItems: 'center'
-	}
+		alignItems: 'center',
+	},
 });
 
 export default UserProfileScreen;

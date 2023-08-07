@@ -1,7 +1,7 @@
 import { StyleSheet, View } from 'react-native';
 import { COLORS } from '../../utils/styles';
-import ButtonIcon from '../ButtonIcon';
-import Button from '../Button';
+import ButtonIcon from '../buttons/ButtonIcon';
+import Button from '../buttons/Button';
 
 const FooterCreateProfile = ({
 	step,

@@ -1,6 +1,6 @@
 import { StyleSheet, View } from 'react-native';
 import { COLORS_THEME } from '../../utils/styles';
-import ButtonIcon from '../ButtonIcon';
+import ButtonIcon from '../buttons/ButtonIcon';
 import Textarea from '../forms/Textarea';
 
 export const UpdateDescriptionChildren = ({

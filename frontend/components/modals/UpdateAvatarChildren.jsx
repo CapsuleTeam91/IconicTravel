@@ -2,7 +2,7 @@ import { StyleSheet, View, Image } from 'react-native';
 import { Camera } from 'expo-camera';
 import { useEffect, useState } from 'react';
 import Snap from '../camera/Snap';
-import ButtonIcon from '../ButtonIcon';
+import ButtonIcon from '../buttons/ButtonIcon';
 import * as ImagePicker from 'expo-image-picker';
 
 export const UpdateAvatarChildren = ({

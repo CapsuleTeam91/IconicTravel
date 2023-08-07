@@ -1,5 +1,5 @@
 import { StyleSheet, TouchableOpacity, View, Text } from 'react-native';
-import ButtonIcon from '../ButtonIcon';
+import ButtonIcon from '../buttons/ButtonIcon';
 import HobbiesAutoCompleteHomeMade from '../forms/HobbiesAutoCompleteHomeMade';
 import MultiSelectComponent from '../forms/HobbiesAutoComplete';
 import { useState } from 'react';

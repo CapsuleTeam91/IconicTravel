@@ -1,5 +1,5 @@
 import { SafeAreaView, StyleSheet, Text, View, Switch } from 'react-native';
-import ButtonIcon from '../components/ButtonIcon';
+import ButtonIcon from '../components/buttons/ButtonIcon';
 import { COLORS, STYLES_GLOBAL } from '../utils/styles';
 import { useState } from 'react';
 

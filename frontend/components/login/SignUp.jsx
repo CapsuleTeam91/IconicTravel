@@ -6,7 +6,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import { EMAIL_REGEX, ERRORS } from '../../utils/constants';
 import { COLORS, COLORS_THEME, STYLES_GLOBAL } from '../../utils/styles';
 import Input from '../forms/Input';
-import Button from '../Button';
+import Button from '../buttons/Button';
 import PasswordInput from '../forms/PasswordInput';
 import DatePicker from '../DatePicker';
 

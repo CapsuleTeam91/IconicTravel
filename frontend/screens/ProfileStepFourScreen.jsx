@@ -1,7 +1,7 @@
 import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
 import { COLORS, STYLES_GLOBAL } from '../utils/styles';
-import Button from '../components/Button';
-import ButtonIcon from '../components/ButtonIcon';
+import Button from '../components/buttons/Button';
+import ButtonIcon from '../components/buttons/ButtonIcon';
 
 const ProfileStepFourScreen = ({ navigation }) => {
 	return (

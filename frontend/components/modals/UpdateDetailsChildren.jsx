@@ -10,7 +10,7 @@ import { useCallback, useState } from 'react';
 import { COLORS, COLORS_THEME } from '../../utils/styles';
 import Input from '../forms/Input';
 import DatePicker from '../DatePicker';
-import ButtonIcon from '../ButtonIcon';
+import ButtonIcon from '../buttons/ButtonIcon';
 
 export const UpdateDetailesChildren = ({
 	user,

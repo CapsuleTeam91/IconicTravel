@@ -1,5 +1,5 @@
 import { StyleSheet, View } from 'react-native';
-import ButtonIcon from '../ButtonIcon';
+import ButtonIcon from '../buttons/ButtonIcon';
 import DropdownLanguage from '../forms/DropdownLanguage';
 
 export const UpdateLanguagesChildren = ({

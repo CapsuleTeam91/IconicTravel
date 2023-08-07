@@ -9,7 +9,7 @@ import {
 import { URL_EXPO } from '../../environnement';
 import { COLORS, COLORS_THEME } from '../../utils/styles';
 import Input from './Input';
-import ButtonIcon from '../ButtonIcon';
+import ButtonIcon from '../buttons/ButtonIcon';
 
 const HobbiesAutoCompleteHomeMade = ({
 	hobbies,

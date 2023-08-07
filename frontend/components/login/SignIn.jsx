@@ -7,13 +7,13 @@ import { COLORS, COLORS_THEME, STYLES_GLOBAL } from '../../utils/styles';
 import { EMAIL_REGEX, ERRORS, SIGN_VIEW } from '../../utils/constants';
 import { URL_EXPO } from '../../environnement';
 import Input from '../forms/Input';
-import Button from '../Button';
+import Button from '../buttons/Button';
 import PasswordInput from '../forms/PasswordInput';
 
 const SignIn = (props) => {
 	const dispatch = useDispatch();
 	const userLogs = useSelector((state) => state.user.logs);
-	console.log(userLogs)
+	console.log(userLogs);
 	const translateAnim = useRef(new Animated.Value(0)).current;
 	const [email, setEmail] = useState('');
 	const [error, setError] = useState('');
@@ -78,7 +78,7 @@ const SignIn = (props) => {
 							travels,
 						})
 					);
-					dispatch(rememberPassword({ email, password }))
+					dispatch(rememberPassword({ email, password }));
 					setEmail('');
 					setPassword('');
 					props.navigate();
@@ -90,10 +90,10 @@ const SignIn = (props) => {
 
 	useEffect(() => {
 		if (userLogs.email) {
-			setEmail(userLogs.email)
-			setPassword(userLogs.password)
+			setEmail(userLogs.email);
+			setPassword(userLogs.password);
 		}
-	}, [])
+	}, []);
 
 	useEffect(() => {
 		Animated.timing(translateAnim, {

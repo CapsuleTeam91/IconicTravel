@@ -9,7 +9,7 @@ import {
 import { LINKS } from '../utils/data';
 import { useSelector } from 'react-redux';
 import { COLORS, STYLES_GLOBAL } from '../utils/styles';
-import Button from '../components/Button';
+import Button from '../components/buttons/Button';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const SettingsScreen = ({ navigation }) => {

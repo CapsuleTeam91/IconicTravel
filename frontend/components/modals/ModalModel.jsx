@@ -1,6 +1,6 @@
 import { COLORS, STYLES_GLOBAL } from '../../utils/styles';
 import { StyleSheet, Text, View, Modal } from 'react-native';
-import ButtonIcon from '../ButtonIcon';
+import ButtonIcon from '../buttons/ButtonIcon';
 
 const ModalModel = ({ visible, setVisible, title, children }) => {
 	return (

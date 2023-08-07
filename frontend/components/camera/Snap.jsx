@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Camera, CameraType, FlashMode } from 'expo-camera';
-import ButtonIcon from '../../components/ButtonIcon';
+import ButtonIcon from '../../components/buttons/ButtonIcon';
 
 const Snap = (props) => {
 	let cameraRef = useRef(null);

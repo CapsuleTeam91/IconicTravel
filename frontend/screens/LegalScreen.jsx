@@ -1,6 +1,6 @@
 import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
 import { STYLES_GLOBAL } from '../utils/styles';
-import ButtonIcon from '../components/ButtonIcon';
+import ButtonIcon from '../components/buttons/ButtonIcon';
 
 const LegalScreen = ({ navigation }) => {
 	return (

@@ -16,7 +16,7 @@ import {
 } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import Snap from '../components/camera/Snap';
-import ButtonIcon from '../components/ButtonIcon';
+import ButtonIcon from '../components/buttons/ButtonIcon';
 import HeaderCreateProfile from '../components/boxes/HeaderCreateProfile';
 import FooterCreateProfile from '../components/boxes/FooterCreateProfile';
 

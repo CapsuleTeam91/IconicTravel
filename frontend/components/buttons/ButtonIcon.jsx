@@ -1,5 +1,5 @@
 import React from 'react';
-import { COLORS } from '../utils/styles';
+import { COLORS } from '../../utils/styles';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 

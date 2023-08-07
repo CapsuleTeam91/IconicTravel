@@ -20,7 +20,7 @@ import { UpdateHobbiesChildren } from '../components/modals/UpdateHobbiesChildre
 import { UpdateDetailesChildren } from '../components/modals/UpdateDetailsChildren';
 import { UpdateLanguagesChildren } from '../components/modals/UpdateLanguagesChildren';
 import { UpdateDescriptionChildren } from '../components/modals/UpdateDescriptionChildren';
-import ButtonIcon from '../components/ButtonIcon';
+import ButtonIcon from '../components/buttons/ButtonIcon';
 import ModalModel from '../components/modals/ModalModel';
 import HeaderUpdateProfile from '../components/boxes/HeaderUpdateProfile';
 import FooterUpdateProfile from '../components/boxes/FooterUpdateProfile';

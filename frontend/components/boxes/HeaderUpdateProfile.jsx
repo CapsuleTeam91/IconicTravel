@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View } from 'react-native';
 import { COLORS, STYLES_GLOBAL } from '../../utils/styles';
-import ButtonIcon from '../ButtonIcon';
+import ButtonIcon from '../buttons/ButtonIcon';
 
 const HeaderUpdateProfile = ({
 	handleNagitaion,

@@ -4,8 +4,8 @@ import { ERRORS } from '../utils/constants';
 import { URL_EXPO } from '../environnement';
 import { COLORS, COLORS_THEME, STYLES_GLOBAL } from '../utils/styles';
 import { SafeAreaView, StyleSheet, Text, View, Modal } from 'react-native';
-import Button from '../components/Button';
-import ButtonIcon from '../components/ButtonIcon';
+import Button from '../components/buttons/Button';
+import ButtonIcon from '../components/buttons/ButtonIcon';
 import ModalModel from '../components/modals/ModalModel';
 import PasswordInput from '../components/forms/PasswordInput';
 
