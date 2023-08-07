@@ -20,8 +20,6 @@ const pusher = new Pusher('61007bd879a7928d12d9', { cluster: 'eu' });
 export default function ChatScreen({ navigation, route: { params } }) {
   const [messages, setMessages] = useState([]);
   const [messageText, setMessageText] = useState('');
-  const [traveler, setTraveler] = useState({});
-  const [host, setHost] = useState({});
 
   const user = useSelector((state) => state.user.value);
 
@@ -31,7 +29,7 @@ export default function ChatScreen({ navigation, route: { params } }) {
       const chatname = params.chat.traveler._id + params.chat.host._id;
       fetch(`${URL_EXPO}/chats/${chatname}/${user.firstname}`, { method: 'PUT' });
 
-      const subscription = pusher.subscribe('chat');
+      const subscription = pusher.subscribe('chatname');
       subscription.bind('pusher:subscription_succeeded', () => {
         subscription.bind('message', handleReceiveMessage);
       });
