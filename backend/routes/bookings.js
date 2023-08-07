@@ -3,7 +3,7 @@ var router = express.Router();
 
 const Booking = require('../models/bookings');
 const User = require('../models/users');
-const chatChannel = require('../models/chatChannels');
+const ChatChannel = require('../models/chatChannels');
 
 router.post('/request', (req, res) => {
   const {
@@ -34,20 +34,30 @@ router.post('/request', (req, res) => {
         error: 'Booking déjà enregistré !'
       })
     } else {
-      travelerFound.bookings.push(data._id)
-      hostFound.bookings.push(data._id)
+      const newChatChannel = new ChatChannel({
+        name: travelerFound._id + hostFound._id,
+        messages: [],
+        createdAt: new Date()
+      })
 
-      const newTraveler = await travelerFound.save();
-      const newHost = await hostFound.save();
+      newChatChannel.save().then(async (resp) => {
+        travelerFound.chatChannels.push(resp._id)
+        travelerFound.bookings.push(data._id)
+        hostFound.chatChannels.push(resp._id)
+        hostFound.bookings.push(data._id)
 
-      if (!newTraveler || !newHost)
-        return res
-          .status(409)
-          .json({ result: false, error: 'Can not add booking id to user' });
+        const newTraveler = await travelerFound.save();
+        const newHost = await hostFound.save();
+
+        if (!newTraveler || !newHost)
+          return res
+            .status(409)
+            .json({ result: false, error: 'Can not add booking id to user' });
 
 
 
-      res.json({ result: true, travelerBookings: newTraveler.bookings, hostBookings: newHost.bookings });
+        res.json({ result: true, travelerBookings: newTraveler.bookings, hostBookings: newHost.bookings });
+      })
     }
   })
 })
