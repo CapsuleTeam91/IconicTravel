@@ -16,10 +16,10 @@ const initialState = {
 		travels: [],
 		canHost: false,
 	},
-	logs: {
-		email: '',
-		password: '',
-	},
+	// logs: {
+	// 	email: '',
+	// 	password: '',
+	// },
 };
 
 export const userSlice = createSlice({
@@ -32,16 +32,16 @@ export const userSlice = createSlice({
 		addAvatar: (state, action) => {
 			state.value.avatarUrl = action.payload;
 		},
-		rememberPassword: (state, action) => {
-			state.logs = { ...action.payload };
-		},
+		// rememberPassword: (state, action) => {
+		// 	state.logs = { ...action.payload };
+		// },
 		clearData: (state, action) => {
 			state.value = {
 				firstname: null,
 				lastname: null,
 				dateOfBirth: null,
 				email: null,
-				token: null,
+				// token: null,
 				avatarUrl: null,
 				description: null,
 				city: { name: null, latitude: null, longitude: null },
