@@ -4,6 +4,7 @@ import { RADIUS } from '../../utils/styles';
 
 export const AdventureCard = ({
 	userMatched,
+	isHost,
 	startDate,
 	endDate,
 	handleDismiss,
@@ -22,18 +23,20 @@ export const AdventureCard = ({
 					{startDate} - {endDate}
 				</Text>
 			</View>
-			<View style={styles.btnContainer}>
-				<ButtonIcon
-					onpress={handleDismiss}
-					name="close-outline"
-					type="transparent"
-				/>
-				<ButtonIcon
-					onpress={handleValidate}
-					name="checkmark-outline"
-					type="transparent"
-				/>
-			</View>
+			{isHost && (
+				<View style={styles.btnContainer}>
+					<ButtonIcon
+						onpress={handleDismiss}
+						name="close-outline"
+						type="transparent"
+					/>
+					<ButtonIcon
+						onpress={handleValidate}
+						name="checkmark-outline"
+						type="transparent"
+					/>
+				</View>
+			)}
 		</View>
 	);
 };

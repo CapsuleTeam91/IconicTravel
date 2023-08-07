@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, ScrollView } from 'react-native';
 import { COLORS, STYLES_GLOBAL } from '../utils/styles';
 import Button from '../components/buttons/Button';
 import { useSelector } from 'react-redux';
@@ -29,25 +29,36 @@ const AdventuresScreen = ({ navigation }) => {
 
 	console.log('User Trouvé : ', user);
 
-	let pendingBooksList = [];
+	let pendingTravels = [];
+	let pendingHosts = [];
 
 	if (user.bookings) {
-		pendingBooksList = user.bookings.map((booking, index) => {
-			return (
-				//Créer une scrollview pour les hostings requests et une pour les user's requests en attente
-				booking.host === user._id && (
-					<AdventureCard
-						key={index}
-						userMatched={booking.traveler}
-						startDate={new Date(booking.startDate).toLocaleDateString()}
-						endDate={new Date(booking.endDate).toLocaleDateString()}
-						handleDismiss={() => {}}
-						handleValidate={() => {}}
-					/>
-				)
-			);
-		});
+		pendingTravels = user.bookings.filter(
+			(booking) => booking.host !== user._id
+		);
+		pendingHosts = user.bookings.filter((booking) => booking.host === user._id);
 	}
+
+	// if (user.bookings) {
+	// 	pendingBooksList = user.bookings.map((booking, index) => {
+	// 		return (
+	// 			//Créer une scrollview pour les hostings requests et une pour les user's requests en attente
+	// 			booking.host === user._id && (
+	// 				<ScrollView>
+	// 					{/* <Text>Hosts</Text> */}
+	// 					<AdventureCard
+	// 						key={index}
+	// 						userMatched={booking.traveler}
+	// 						startDate={new Date(booking.startDate).toLocaleDateString()}
+	// 						endDate={new Date(booking.endDate).toLocaleDateString()}
+	// 						handleDismiss={() => {}}
+	// 						handleValidate={() => {}}
+	// 					/>
+	// 				</ScrollView>
+	// 			)
+	// 		);
+	// 	});
+	// }
 
 	return (
 		<View style={styles.container}>
@@ -70,7 +81,38 @@ const AdventuresScreen = ({ navigation }) => {
 				/>
 			</View>
 
-			{currentTab === ADVENTURE_STATE.pending && pendingBooksList}
+			{currentTab === ADVENTURE_STATE.pending && pendingHosts.length > 0 && (
+				<ScrollView>
+					<Text>Hosts</Text>
+					{pendingHosts.map((booking, index) => (
+						<AdventureCard
+							key={index}
+							isHost={true}
+							userMatched={booking.traveler}
+							startDate={new Date(booking.startDate).toLocaleDateString()}
+							endDate={new Date(booking.endDate).toLocaleDateString()}
+							handleDismiss={() => {}}
+							handleValidate={() => {}}
+						/>
+					))}
+				</ScrollView>
+			)}
+			{currentTab === ADVENTURE_STATE.pending && pendingTravels.length > 0 && (
+				<ScrollView>
+					<Text>Travels</Text>
+					{pendingTravels.map((booking, index) => (
+						<AdventureCard
+							key={index}
+							userMatched={booking.traveler}
+							startDate={new Date(booking.startDate).toLocaleDateString()}
+							endDate={new Date(booking.endDate).toLocaleDateString()}
+							isHost={false}
+							handleDismiss={() => {}}
+							handleValidate={() => {}}
+						/>
+					))}
+				</ScrollView>
+			)}
 		</View>
 	);
 };

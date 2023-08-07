@@ -55,32 +55,8 @@ const styles = StyleSheet.create({
 		marginRight: 5,
 		color: COLORS.bg,
 	},
-	placeholderStyle: {
-		fontSize: 16,
-	},
-	selectedTextStyle: {
-		fontSize: 16,
-	},
-	iconStyle: {
-		width: 20,
-		height: 20,
-		color: COLORS.bg,
-	},
-	// inputSearchStyle: {
-	// 	height: 40,
-	// 	fontSize: 16,
-	// },
-	// dropdown: {
-	// 	// height: 50,
-	// 	width: '70%',
 
-	// 	color: COLORS.bg,
-	// 	paddingVertical: 3,
-	// 	paddingHorizontal: 10,
-
-	// },
 	placeholderStyle: {
-		// color: COLORS.bg,
 		paddingHorizontal: 5,
 	},
 	selectedTextStyle: {
