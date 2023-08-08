@@ -87,6 +87,7 @@ const UserProfileScreen = ({ route, navigation }) => {
 				})
 					.then((resp) => resp.json())
 					.then((data) => {
+						console.log(data);
 						if (data.result) {
 							setModalVisible(!modalVisible);
 							setBookingStatus('Demande en attente');

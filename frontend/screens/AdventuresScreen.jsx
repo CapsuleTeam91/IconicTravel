@@ -18,6 +18,9 @@ const AdventuresScreen = ({ navigation }) => {
 	const [user, setUser] = useState({});
 	const [pendingTravels, setPendingTravels] = useState([]);
 	const [pendingHosts, setPendingHosts] = useState([]);
+	const [confirmedTravels, setConfirmedTravels] = useState([]);
+	const [confirmedHosts, setConfirmedHosts] = useState([]);
+	const [needReload, setNeedReload] = useState(false);
 
 	useEffect(() => {
 		if (isFocused) {
@@ -25,21 +28,56 @@ const AdventuresScreen = ({ navigation }) => {
 				.then((resp) => resp.json())
 				.then((result) => {
 					setUser(result.user);
+
 					if (result.user.bookings) {
+						setConfirmedTravels(
+							result.user.bookings.filter(
+								(booking) =>
+									booking.status === 'Confirmé' &&
+									booking.host._id !== result.user._id
+							)
+						);
+						setConfirmedHosts(
+							result.user.bookings.filter(
+								(booking) =>
+									booking.status === 'Confirmé' &&
+									booking.host._id === result.user._id
+							)
+						);
 						setPendingTravels(
 							result.user.bookings.filter(
-								(booking) => booking.host._id !== result.user._id
+								(booking) =>
+									booking.status !== 'Confirmé' &&
+									booking.host._id !== result.user._id
 							)
 						);
 						setPendingHosts(
 							result.user.bookings.filter(
-								(booking) => booking.host._id === result.user._id
+								(booking) =>
+									booking.status !== 'Confirmé' &&
+									booking.host._id === result.user._id
 							)
 						);
 					}
 				});
 		}
-	}, [isFocused]);
+	}, [isFocused, needReload]);
+
+	const deleteBooking = (id) => {
+		fetch(`${URL_EXPO}:3000/bookings/delete/${id}`, { method: 'DELETE' })
+			.then((resp) => resp.json())
+			.then(() => {
+				setNeedReload(!needReload);
+			});
+	};
+
+	const validateBooking = (id) => {
+		fetch(`${URL_EXPO}:3000/bookings/update/${id}`, { method: 'PATCH' })
+			.then((resp) => resp.json())
+			.then(() => {
+				setNeedReload(!needReload);
+			});
+	};
 
 	return (
 		<View style={styles.container}>
@@ -78,8 +116,8 @@ const AdventuresScreen = ({ navigation }) => {
 								userMatched={booking.traveler}
 								startDate={new Date(booking.startDate).toLocaleDateString()}
 								endDate={new Date(booking.endDate).toLocaleDateString()}
-								handleDismiss={() => {}}
-								handleValidate={() => {}}
+								handleDismiss={() => deleteBooking(booking._id)}
+								handleValidate={() => validateBooking(booking._id)}
 							/>
 						))}
 					</ScrollView>
@@ -101,13 +139,61 @@ const AdventuresScreen = ({ navigation }) => {
 								startDate={new Date(booking.startDate).toLocaleDateString()}
 								endDate={new Date(booking.endDate).toLocaleDateString()}
 								isHost={false}
-								handleDismiss={() => {}}
+								handleDismiss={() => deleteBooking(booking._id)}
 								handleValidate={() => {}}
 							/>
 						))}
 					</ScrollView>
 				</>
 			)}
+			{currentTab === ADVENTURE_STATE.confirmed &&
+				confirmedHosts.length > 0 && (
+					<>
+						<View style={styles.titleContainer}>
+							<Text style={styles.title}>Hosts</Text>
+							<Text>({pendingHosts.length})</Text>
+						</View>
+						<ScrollView
+							contentContainerStyle={styles.resultsContainer}
+							style={styles.scrollViewItems}>
+							{confirmedHosts.map((booking, index) => (
+								<AdventureCard
+									key={index}
+									isHost={false}
+									userMatched={booking.traveler}
+									startDate={new Date(booking.startDate).toLocaleDateString()}
+									endDate={new Date(booking.endDate).toLocaleDateString()}
+									handleDismiss={() => {}}
+									handleValidate={() => {}}
+								/>
+							))}
+						</ScrollView>
+					</>
+				)}
+			{currentTab === ADVENTURE_STATE.pending &&
+				confirmedTravels.length > 0 && (
+					<>
+						<View style={styles.titleContainer}>
+							<Text style={styles.title}>Travels</Text>
+							<Text>({confirmedTravels.length})</Text>
+						</View>
+						<ScrollView
+							contentContainerStyle={styles.resultsContainer}
+							style={styles.scrollViewItems}>
+							{confirmedTravels.map((booking, index) => (
+								<AdventureCard
+									key={index}
+									userMatched={booking.host}
+									startDate={new Date(booking.startDate).toLocaleDateString()}
+									endDate={new Date(booking.endDate).toLocaleDateString()}
+									isHost={false}
+									handleDismiss={() => {}}
+									handleValidate={() => {}}
+								/>
+							))}
+						</ScrollView>
+					</>
+				)}
 		</View>
 	);
 };
