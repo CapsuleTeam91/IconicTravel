@@ -28,20 +28,18 @@ const AdventuresScreen = ({ navigation }) => {
 					if (result.user.bookings) {
 						setPendingTravels(
 							result.user.bookings.filter(
-								(booking) => booking.host !== result.user._id
+								(booking) => booking.host._id !== result.user._id
 							)
 						);
 						setPendingHosts(
 							result.user.bookings.filter(
-								(booking) => booking.host === result.user._id
+								(booking) => booking.host._id === result.user._id
 							)
 						);
 					}
 				});
 		}
 	}, [isFocused]);
-
-	console.log('Booking trouvé : ', pendingTravels)
 
 	return (
 		<View style={styles.container}>
@@ -80,8 +78,8 @@ const AdventuresScreen = ({ navigation }) => {
 								userMatched={booking.traveler}
 								startDate={new Date(booking.startDate).toLocaleDateString()}
 								endDate={new Date(booking.endDate).toLocaleDateString()}
-								handleDismiss={() => { }}
-								handleValidate={() => { }}
+								handleDismiss={() => {}}
+								handleValidate={() => {}}
 							/>
 						))}
 					</ScrollView>
@@ -103,8 +101,8 @@ const AdventuresScreen = ({ navigation }) => {
 								startDate={new Date(booking.startDate).toLocaleDateString()}
 								endDate={new Date(booking.endDate).toLocaleDateString()}
 								isHost={false}
-								handleDismiss={() => { }}
-								handleValidate={() => { }}
+								handleDismiss={() => {}}
+								handleValidate={() => {}}
 							/>
 						))}
 					</ScrollView>
