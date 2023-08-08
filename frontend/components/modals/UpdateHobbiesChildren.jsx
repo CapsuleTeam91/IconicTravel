@@ -55,7 +55,7 @@ export const UpdateHobbiesChildren = ({
 				<ButtonIcon
 					type="secondary"
 					size={18}
-					name="arrow-undo-outline"
+					name="arrow-back-outline"
 					onpress={() => {
 						setUpdateHobbiesVisible(false);
 					}}
@@ -81,6 +81,8 @@ const styles = StyleSheet.create({
 		width: '100%',
 		alignItems: 'center',
 		justifyContent: 'center',
+		borderColor: 'red',
+		borderWidth: 1,
 	},
 	optionsContainer: {
 		width: Platform.OS === 'ios' ? '70%' : '80%',
@@ -93,6 +95,7 @@ const styles = StyleSheet.create({
 		width: '70%',
 		height: 48,
 		flexDirection: 'row',
+		flexWrap: 'wrap',
 		alignItems: 'center',
 		justifyContent: 'center',
 	},

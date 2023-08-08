@@ -92,12 +92,46 @@ const SignIn = (props) => {
 	};
 
 	useEffect(() => {
-		// if (userLogs.email) {
-		// 	setEmail(userLogs.email);
-		// 	setPassword(userLogs.password);
-		// }
 		if (user.token) {
-			props.navigate();
+			// send request for authentication if token saved in store
+			fetch(`${URL_EXPO}:3000/users/${user.token}`)
+				.then((response) => response.json())
+				.then((userFound) => {
+					if (userFound.result) {
+						const {
+							firstname,
+							lastname,
+							dateOfBirth,
+							email,
+							token,
+							avatarUrl,
+							description,
+							city,
+							spokenLanguages,
+							hobbies,
+							travels,
+							canHost,
+						} = userFound.data;
+						dispatch(
+							addData({
+								firstname,
+								lastname,
+								dateOfBirth,
+								email,
+								token,
+								avatarUrl,
+								description,
+								city,
+								spokenLanguages,
+								hobbies,
+								travels,
+								canHost,
+							})
+						);
+
+						props.navigate();
+					}
+				});
 		}
 	}, []);
 

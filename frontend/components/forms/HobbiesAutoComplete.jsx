@@ -85,7 +85,7 @@ export default MultiSelectComponent;
 
 const styles = StyleSheet.create({
 	container: {
-		width: '70%',
+		width: '80%',
 	},
 	dropdown: {
 		height: 48,
