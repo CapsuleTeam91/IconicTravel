@@ -137,7 +137,7 @@ router.post('/request', async (req, res) => {
 		});
 	});
 });
-
+// Obtenir les détails de l'utilisateur avec un jeton donné
 router.get('/:token', (req, res) => {
 	User.findOne({ token: req.params.token })
 		.populate({
@@ -152,6 +152,7 @@ router.get('/:token', (req, res) => {
 		});
 });
 
+// Vérifier l'existence d'une réservation entre un voyageur et un hôte
 router.get(`/exists/:traveler/:host`, (req, res) => {
 	Booking.findOne({
 		traveler: req.params.traveler,
@@ -171,6 +172,7 @@ router.get(`/exists/:traveler/:host`, (req, res) => {
 	});
 });
 
+//Obtenir les canaux de discussion d'un voyageur
 router.get(`/traveler/:token`, (req, res) => {
 	User.findOne({ token: req.params.token })
 		.populate('chatChannels')
