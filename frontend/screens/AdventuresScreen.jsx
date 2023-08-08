@@ -151,7 +151,7 @@ const AdventuresScreen = ({ navigation }) => {
 					<>
 						<View style={styles.titleContainer}>
 							<Text style={styles.title}>Hosts</Text>
-							<Text>({pendingHosts.length})</Text>
+							<Text>({confirmedHosts.length})</Text>
 						</View>
 						<ScrollView
 							contentContainerStyle={styles.resultsContainer}
@@ -170,7 +170,7 @@ const AdventuresScreen = ({ navigation }) => {
 						</ScrollView>
 					</>
 				)}
-			{currentTab === ADVENTURE_STATE.pending &&
+			{currentTab === ADVENTURE_STATE.confirmed &&
 				confirmedTravels.length > 0 && (
 					<>
 						<View style={styles.titleContainer}>
