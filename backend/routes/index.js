@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 const API_KEY = process.env.MAP_API_KEY;
+
 /* GET /:city */
 router.get('/city/:city', async (req, res) => {
 	const URL = `https://www.mapquestapi.com/geocoding/v1/address?key=${API_KEY}&location=${req.params.city}`;
@@ -15,7 +16,7 @@ router.get('/city/:city', async (req, res) => {
 		latitude: city.displayLatLng.lat,
 		longitude: city.displayLatLng.lng,
 	}));
-	console.log(suggestions);
+
 	res.json({ result: true, suggestions });
 });
 

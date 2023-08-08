@@ -113,6 +113,7 @@ const AdventuresScreen = ({ navigation }) => {
 							<AdventureCard
 								key={index}
 								isHost={true}
+								isConfirmed={false}
 								userMatched={booking.traveler}
 								startDate={new Date(booking.startDate).toLocaleDateString()}
 								endDate={new Date(booking.endDate).toLocaleDateString()}
@@ -135,10 +136,11 @@ const AdventuresScreen = ({ navigation }) => {
 						{pendingTravels.map((booking, index) => (
 							<AdventureCard
 								key={index}
+								isHost={false}
+								isConfirmed={false}
 								userMatched={booking.host}
 								startDate={new Date(booking.startDate).toLocaleDateString()}
 								endDate={new Date(booking.endDate).toLocaleDateString()}
-								isHost={false}
 								handleDismiss={() => deleteBooking(booking._id)}
 								handleValidate={() => {}}
 							/>
@@ -160,6 +162,7 @@ const AdventuresScreen = ({ navigation }) => {
 								<AdventureCard
 									key={index}
 									isHost={false}
+									isConfirmed={true}
 									userMatched={booking.traveler}
 									startDate={new Date(booking.startDate).toLocaleDateString()}
 									endDate={new Date(booking.endDate).toLocaleDateString()}
@@ -183,10 +186,11 @@ const AdventuresScreen = ({ navigation }) => {
 							{confirmedTravels.map((booking, index) => (
 								<AdventureCard
 									key={index}
+									isHost={false}
+									isConfirmed={true}
 									userMatched={booking.host}
 									startDate={new Date(booking.startDate).toLocaleDateString()}
 									endDate={new Date(booking.endDate).toLocaleDateString()}
-									isHost={false}
 									handleDismiss={() => {}}
 									handleValidate={() => {}}
 								/>
