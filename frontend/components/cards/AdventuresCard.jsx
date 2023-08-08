@@ -23,20 +23,21 @@ export const AdventureCard = ({
 					{startDate} - {endDate}
 				</Text>
 			</View>
-			{isHost && (
-				<View style={styles.btnContainer}>
-					<ButtonIcon
-						onpress={handleDismiss}
-						name="close-outline"
-						type="transparent"
-					/>
+
+			<View style={styles.btnContainer}>
+				<ButtonIcon
+					onpress={handleDismiss}
+					name="close-outline"
+					type="transparent"
+				/>
+				{isHost && (
 					<ButtonIcon
 						onpress={handleValidate}
 						name="checkmark-outline"
 						type="transparent"
 					/>
-				</View>
-			)}
+				)}
+			</View>
 		</View>
 	);
 };
