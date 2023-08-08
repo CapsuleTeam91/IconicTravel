@@ -17,7 +17,7 @@ import { URL_EXPO } from '../environnement';
 import { useDispatch, useSelector } from 'react-redux';
 import { COLORS, STYLES_GLOBAL } from '../utils/styles';
 import ButtonIcon from '../components/buttons/ButtonIcon';
-import DatePicker from '../components/DatePicker';
+import DatePicker from '../components/forms/DatePicker';
 import { AntDesign } from '@expo/vector-icons';
 
 const UserProfileScreen = ({ route, navigation }) => {

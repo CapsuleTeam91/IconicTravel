@@ -7,9 +7,10 @@ import {
 } from 'react-native';
 import { checkDOB } from '../../utils/helper';
 import { useCallback, useState } from 'react';
+import { URL_EXPO } from '../../environnement';
 import { COLORS, COLORS_THEME } from '../../utils/styles';
 import Input from '../forms/Input';
-import DatePicker from '../DatePicker';
+import DatePicker from '../forms/DatePicker';
 import ButtonIcon from '../buttons/ButtonIcon';
 
 export const UpdateDetailesChildren = ({
@@ -32,30 +33,17 @@ export const UpdateDetailesChildren = ({
 
 	const getSuggestions = useCallback(async (q) => {
 		setNewCity(q);
-		const filterToken = q.toLowerCase();
+		const cityLetters = q.toLowerCase();
 
 		if (typeof q !== 'string' || q.length < 3) {
 			setRemoteDataSet([]);
 			return;
 		}
+		const response = await fetch(`${URL_EXPO}:3000/city/${cityLetters}`);
+		const result = await response.json();
 
-		// setLoading(true);
-
-		const URL = `https://www.mapquestapi.com/geocoding/v1/address?key=WvE5tMdxgRUWtFIPcZXO1qITivOTwk7V&location=${filterToken}`;
-		const response = await fetch(URL);
-		const items = await response.json();
-		const detailedCities = items.results[0].locations;
-
-		const suggestions = detailedCities.map((city, i) => ({
-			id: i,
-			title: `${city.adminArea5}, ${city.adminArea4}`,
-			name: city.adminArea5,
-			latitude: city.displayLatLng.lat,
-			longitude: city.displayLatLng.lng,
-		}));
-
-		setRemoteDataSet(suggestions);
-		// setLoading(false);
+		console.log(result);
+		setRemoteDataSet(result.suggestions);
 	}, []);
 
 	return (

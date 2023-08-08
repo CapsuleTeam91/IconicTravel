@@ -1,6 +1,7 @@
 import React, { memo, useCallback, useState } from 'react';
 import { Text } from 'react-native';
-import { COLORS } from '../utils/styles';
+import { COLORS } from '../../utils/styles';
+import { URL_EXPO } from '../../environnement';
 import { AutocompleteDropdown } from 'react-native-autocomplete-dropdown';
 
 export const RemoteDataSet = memo((props) => {
@@ -8,7 +9,7 @@ export const RemoteDataSet = memo((props) => {
 	const [remoteDataSet, setRemoteDataSet] = useState(null);
 
 	const getSuggestions = useCallback(async (q) => {
-		const filterToken = q.toLowerCase();
+		const cityLetters = q.toLowerCase();
 
 		if (typeof q !== 'string' || q.length < 3) {
 			setRemoteDataSet(null);
@@ -17,20 +18,11 @@ export const RemoteDataSet = memo((props) => {
 
 		setLoading(true);
 
-		const URL = `https://www.mapquestapi.com/geocoding/v1/address?key=WvE5tMdxgRUWtFIPcZXO1qITivOTwk7V&location=${filterToken}`;
-		const response = await fetch(URL);
-		const items = await response.json();
-		const detailedCities = items.results[0].locations;
+		const response = await fetch(`${URL_EXPO}:3000/city/${cityLetters}`);
+		const result = await response.json();
 
-		const suggestions = detailedCities.map((city, i) => ({
-			id: i,
-			title: `${city.adminArea5}, ${city.adminArea4}`,
-			name: city.adminArea5,
-			latitude: city.displayLatLng.lat,
-			longitude: city.displayLatLng.lng,
-		}));
+		setRemoteDataSet(result.suggestions);
 
-		setRemoteDataSet(suggestions);
 		setLoading(false);
 	}, []);
 

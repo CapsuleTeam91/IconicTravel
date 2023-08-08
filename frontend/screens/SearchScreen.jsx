@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useSelector } from 'react-redux';
-import { RemoteDataSet } from '../components/RemoteDataSet';
+import { RemoteDataSet } from '../components/forms/RemoteDataSet';
 import { COLORS, STYLES_GLOBAL } from '../utils/styles';
 import { AutocompleteDropdownContextProvider } from 'react-native-autocomplete-dropdown';
 import { Marker } from 'react-native-maps';

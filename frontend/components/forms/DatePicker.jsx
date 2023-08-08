@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { COLORS } from '../utils/styles';
+import { COLORS } from '../../utils/styles';
 import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';

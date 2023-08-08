@@ -8,7 +8,7 @@ import { COLORS, COLORS_THEME, STYLES_GLOBAL } from '../../utils/styles';
 import Input from '../forms/Input';
 import Button from '../buttons/Button';
 import PasswordInput from '../forms/PasswordInput';
-import DatePicker from '../DatePicker';
+import DatePicker from '../forms/DatePicker';
 
 const SignUp = (props) => {
 	const dispatch = useDispatch();

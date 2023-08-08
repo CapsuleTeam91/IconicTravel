@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { addData } from '../reducers/user';
-import { RemoteDataSet } from '../components/RemoteDataSet';
+import { RemoteDataSet } from '../components/forms/RemoteDataSet';
 import { COLORS, COLORS_THEME, STYLES_GLOBAL } from '../utils/styles';
 import {
 	SafeAreaView,
