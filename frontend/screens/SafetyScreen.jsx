@@ -60,8 +60,6 @@ const SafetyScreen = ({ navigation }) => {
 			.then((data) => {
 				if (data.result) {
 					navigation.navigate('Login');
-				} else {
-					console.log('Profil: Oh ooh !');
 				}
 			});
 	};
@@ -141,7 +139,7 @@ const SafetyScreen = ({ navigation }) => {
 					<Button
 						type="primary"
 						label="Désactiver le compte"
-						onpress={() => {}}
+						onpress={() => { }}
 					/>
 					<Button
 						type="secondary"
