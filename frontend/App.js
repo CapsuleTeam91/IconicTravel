@@ -63,19 +63,19 @@ const TabNavigator = () => (
 				let iconName = '';
 
 				switch (route.name) {
-					case 'History':
+					case 'Historique':
 						iconName = 'earth';
 						break;
-					case 'Adventures':
+					case 'Aventures':
 						iconName = 'airplane';
 						break;
-					case 'Search':
+					case 'Recherche':
 						iconName = 'search';
 						break;
 					case 'Messages':
 						iconName = 'chatbox-ellipses';
 						break;
-					case 'Settings':
+					case 'Paramètres':
 						iconName = 'person-circle';
 						break;
 					default:
@@ -89,11 +89,11 @@ const TabNavigator = () => (
 			headerShown: false,
 			tabBarHideOnKeyboard: true,
 		})}>
-		<Tab.Screen name="History" component={HistoryScreen} />
-		<Tab.Screen name="Adventures" component={AdventuresScreen} />
-		<Tab.Screen name="Search" component={SearchScreen} />
+		<Tab.Screen name="Historique" component={HistoryScreen} />
+		<Tab.Screen name="Aventures" component={AdventuresScreen} />
+		<Tab.Screen name="Recherche" component={SearchScreen} />
 		<Tab.Screen name="Messages" component={MessagesScreen} />
-		<Tab.Screen name="Settings" component={SettingsScreen} />
+		<Tab.Screen name="Paramètres" component={SettingsScreen} />
 	</Tab.Navigator>
 );
 
