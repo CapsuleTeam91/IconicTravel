@@ -16,7 +16,6 @@ router.put('/:chatname/:username', (req, res) => {
   pusher.trigger(req.params.chatname, 'join', {
     username: req.params.username,
   });
-  console.log('c passé par là');
 
   res.json({ result: true });
 });
@@ -43,7 +42,6 @@ router.get(`/:token`, (req, res) => {
     populate: [{ path: 'traveler' }, { path: 'host' }]
   })
     .then(data => {
-      console.log('data trouvé : ', data)
       if (data) {
         res.json({
           result: true,

@@ -43,7 +43,6 @@ const UserProfileScreen = ({ route, navigation }) => {
 					)
 						.then((resp) => resp.json())
 						.then((bookFound) => {
-							console.log(bookFound)
 							if (bookFound.result && !bookFound.booking.done) {
 								setBookingStatus(bookFound.booking.status);
 							}

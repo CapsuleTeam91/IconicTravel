@@ -31,7 +31,6 @@ export default function ChatScreen({ navigation, route: { params } }) {
 			fetch(`${URL_EXPO}:3000/chats/${chatname}/${user.firstname}`, {
 				method: 'PUT',
 			});
-			console.log('et là ?');
 
 			const subscription = pusher.subscribe(chatname);
 			subscription.bind('pusher:subscription_succeeded', () => {

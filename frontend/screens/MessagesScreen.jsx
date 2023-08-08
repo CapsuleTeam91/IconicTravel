@@ -26,7 +26,6 @@ const MessagesScreen = ({ navigation }, props) => {
 			fetch(`${URL_EXPO}:3000/chats/${user.token}`)
 				.then((resp) => resp.json())
 				.then((resp) => {
-					console.log('chat trouvé : ', resp.chats);
 					setChats(resp.chats)
 				});
 		}

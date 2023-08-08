@@ -104,7 +104,6 @@ const UserProfileScreen = ({ navigation }) => {
 	};
 
 	const handleUpdate = (data) => {
-		console.log(data);
 		fetch(`${URL_EXPO}:3000/users/update/${user.token}`, {
 			method: 'PUT',
 			headers: { 'Content-Type': 'application/json' },

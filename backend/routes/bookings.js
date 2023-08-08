@@ -96,7 +96,6 @@ router.get(`/exists/:traveler/:host`, (req, res) => {
 router.get(`/traveler/:token`, (req, res) => {
   User.findOne({ token: req.params.token }).populate('chatChannels')
     .then(data => {
-      console.log('data trouvé : ', data)
       if (data) {
         res.json({
           result: true,
