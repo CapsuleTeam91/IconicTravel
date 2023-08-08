@@ -28,7 +28,6 @@ export default function ChatScreen({ navigation, route: { params } }) {
     (() => {
       const chatname = params.chat.traveler._id + params.chat.host._id;
       fetch(`${URL_EXPO}:3000/chats/${chatname}/${user.firstname}`, { method: 'PUT' });
-      console.log("et là ?")
 
       const subscription = pusher.subscribe(chatname);
       subscription.bind('pusher:subscription_succeeded', () => {

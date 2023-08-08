@@ -41,7 +41,6 @@ const AdventuresScreen = ({ navigation }) => {
 		}
 	}, [isFocused]);
 
-	console.log('User Trouvé : ', user);
 
 	return (
 		<View style={styles.container}>
@@ -80,8 +79,8 @@ const AdventuresScreen = ({ navigation }) => {
 								userMatched={booking.traveler}
 								startDate={new Date(booking.startDate).toLocaleDateString()}
 								endDate={new Date(booking.endDate).toLocaleDateString()}
-								handleDismiss={() => {}}
-								handleValidate={() => {}}
+								handleDismiss={() => { }}
+								handleValidate={() => { }}
 							/>
 						))}
 					</ScrollView>
@@ -103,8 +102,8 @@ const AdventuresScreen = ({ navigation }) => {
 								startDate={new Date(booking.startDate).toLocaleDateString()}
 								endDate={new Date(booking.endDate).toLocaleDateString()}
 								isHost={false}
-								handleDismiss={() => {}}
-								handleValidate={() => {}}
+								handleDismiss={() => { }}
+								handleValidate={() => { }}
 							/>
 						))}
 					</ScrollView>
