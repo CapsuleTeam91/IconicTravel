@@ -204,24 +204,23 @@ router.put('/update/:token', async (req, res) => {
 router.put('/booking/:token/:bookingId', async (req, res) => {
 	const user = await User.findOne({ token: req.params.token });
 
-	if(user.bookings.includes(req.params.bookingId)) {
-		res.json( {
+	if (user.bookings.includes(req.params.bookingId)) {
+		res.json({
 			result: false,
-			error: 'Booking déjà enregistré !'
-		})
-	}else {
-		user.bookings.push(req.params.bookingId)
+			error: 'Booking déjà enregistré !',
+		});
+	} else {
+		user.bookings.push(req.params.bookingId);
 
 		const newUser = await user.save();
-	
+
 		if (!newUser)
 			return res
 				.status(409)
 				.json({ result: false, error: 'Can not add booking id' });
-	
+
 		res.json({ result: true, canHost: newUser.canHost });
 	}
-	
 });
 
 /* DELETE /delete/:token - remove all data from user in db (pusher ?) */
@@ -247,7 +246,7 @@ router.delete('/deletepicture/:token', (req, res) => {
 			const publicId = user.avatarUrl.match(regex);
 
 			// check that publicId is not the default one before removing from cloudinary
-			publicId !== 'cld-sample' &&
+			publicId !== 'ezulphnetoa65bodxzwn' &&
 				cloudinary.api
 					.delete_resources([publicId[1]], {
 						type: 'upload',
@@ -270,19 +269,19 @@ router.get('/getId/:token/:email', (req, res) => {
 					res.json({
 						result: true,
 						hostId: userFound._id,
-						travelerId: user._id
-					})
+						travelerId: user._id,
+					});
 				} else {
 					res.json({
 						result: false,
-						error: 'Aucun utilisateur trouvé'
-					})
+						error: 'Aucun utilisateur trouvé',
+					});
 				}
-			})
+			});
 		} else {
 			res.json({ result: false, error: 'Invalid token' });
 		}
-	})
-})
+	});
+});
 
 module.exports = router;

@@ -1,6 +1,6 @@
 /* DATA */
 export const DEFAULT_AVATAR =
-	'https://res.cloudinary.com/dvmipcwy7/image/upload/v1690571975/cld-sample.jpg';
+	'https://res.cloudinary.com/dvmipcwy7/image/upload/v1690571975/ezulphnetoa65bodxzwn.jpg';
 
 /* VIEW STATES */
 export const SIGN_VIEW = {
