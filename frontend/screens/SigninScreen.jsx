@@ -30,7 +30,7 @@ const SigninScreen = ({ navigation, view = SIGN_VIEW.in }) => {
 					<SignIn
 						signView={signView}
 						navigate={() =>
-							navigation.navigate('TabNavigator', { screen: 'Search' })
+							navigation.navigate('TabNavigator', { screen: 'Recherche' })
 						}
 					/>
 					<SignUp navigate={() => navigation.navigate('ProfileStepOne')} />

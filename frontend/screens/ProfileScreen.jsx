@@ -95,6 +95,7 @@ const UserProfileScreen = ({ route, navigation }) => {
 						}
 					});
 			});
+		setLoading(false);
 	};
 
 	return (
@@ -262,17 +263,17 @@ const UserProfileScreen = ({ route, navigation }) => {
 						</View>
 					</View>
 				</Modal>
-				{!bookingStatus ? (
-					<TouchableOpacity
-						style={styles.hostingBtn}
-						onPress={() => setModalVisible(true)}>
-						<Text style={styles.hostingTxt}>Contact</Text>
-					</TouchableOpacity>
-				) : (
+				{/* {!bookingStatus ? ( */}
+				<TouchableOpacity
+					style={styles.hostingBtn}
+					onPress={() => setModalVisible(true)}>
+					<Text style={styles.hostingTxt}>Contact</Text>
+				</TouchableOpacity>
+				{/* ) : (
 					<View style={styles.hostingBtn}>
 						<Text style={styles.hostingTxt}>{bookingStatus}</Text>
 					</View>
-				)}
+				)} */}
 			</View>
 
 			<View style={styles.detailsContainer}>
