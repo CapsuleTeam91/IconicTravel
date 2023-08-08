@@ -7,6 +7,7 @@ import {
 	TouchableOpacity,
 	View,
 	Pressable,
+	ActivityIndicator,
 } from 'react-native';
 import { useEffect, useState } from 'react';
 import { getAge } from '../utils/helper';
@@ -32,6 +33,7 @@ const UserProfileScreen = ({ route, navigation }) => {
 	const [babiesNumber, setBabiesNumber] = useState(0);
 	const [error, setError] = useState('');
 	const [bookingStatus, setBookingStatus] = useState(null);
+	const [loading, setLoading] = useState(false);
 
 	useEffect(() => {
 		fetch(`${URL_EXPO}:3000/users/getId/${thisUser.token}/${user.email}`)
@@ -63,6 +65,7 @@ const UserProfileScreen = ({ route, navigation }) => {
 	};
 
 	const validateContact = () => {
+		setLoading(true);
 		fetch(`${URL_EXPO}:3000/users/getId/${thisUser.token}/${user.email}`)
 			.then((resp) => resp.json())
 			.then((data) => {
@@ -238,6 +241,11 @@ const UserProfileScreen = ({ route, navigation }) => {
 										</View>
 									)}
 								</View>
+								{loading && (
+									<View style={styles.activityindicatorContainer}>
+										<ActivityIndicator size="large" color={COLORS.lightBlue} />
+									</View>
+								)}
 							</View>
 							<View style={styles.btnContainer}>
 								<TouchableOpacity
@@ -315,6 +323,16 @@ const UserProfileScreen = ({ route, navigation }) => {
 	);
 };
 const styles = StyleSheet.create({
+	activityindicatorContainer: {
+		...StyleSheet.absoluteFillObject,
+		top: '100%',
+		left: 0,
+		zIndex: 10,
+		width: '100%',
+		height: 50,
+		justifyContent: 'space-around',
+		backgroundColor: 'white',
+	},
 	container: {
 		flex: 1,
 		paddingVertical: 40,

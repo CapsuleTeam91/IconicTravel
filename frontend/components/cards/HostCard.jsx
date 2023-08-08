@@ -10,10 +10,7 @@ import { COLORS, RADIUS } from '../../utils/styles';
 
 export const HostCard = ({ user, selected, handleClick, displayUserOnMap }) => {
 	const getDescription = (desc) =>
-		//TODO
-		desc.length >= 70
-			? desc.slice(0, desc.indexOf(' ' || '\r', 70)) + '...'
-			: desc;
+		desc.length >= 70 ? desc.slice(0, desc.indexOf(' ', 70)) + '...' : desc;
 
 	return (
 		<TouchableWithoutFeedback onPress={displayUserOnMap}>
