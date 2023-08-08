@@ -27,24 +27,6 @@ router.post('/signup', async (req, res) => {
 		hobbies,
 	} = req.body;
 
-	// TODO : A TESTER
-	// if missing datas or unsaved avatar - return
-	// if (
-	// 	!checkBody(req.body, [
-	// 		'firstname',
-	// 		'lastname',
-	// 		'dateOfBirth',
-	// 		'email',
-	// 		'avatar',
-	// 		'password',
-	// 		'city',
-	// 		'hobbies',
-	// 	])
-	// ) {
-	// 	res.status(403).json({ result: false, error: 'Missing or empty fields' });
-	// 	return;
-	// }
-
 	// Check if the user has not already been registered
 	User.findOne({ email: { $regex: new RegExp(email, 'i') } }).then((data) => {
 		if (data === null) {
@@ -139,7 +121,7 @@ router.get('/', (req, res) => {
 router.get('/:token', (req, res) => {
 	User.findOne({ token: req.params.token }).then((data) => {
 		if (data) {
-			res.json({ result: true, data }); //TODO : CHOSE DATA TO RETURN
+			res.json({ result: true, data });
 		} else {
 			res.json({ result: false, error: 'User not found' });
 		}

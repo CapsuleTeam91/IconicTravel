@@ -36,7 +36,7 @@ const ProfileStepThreeScreen = ({ navigation }) => {
 		fetch(`${URL_EXPO}:3000/users/signup`, {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify(user),
+			body: JSON.stringify({ ...user, hobbies }),
 		})
 			.then((response) =>
 				response.status > 400 ? response.status : response.json()
