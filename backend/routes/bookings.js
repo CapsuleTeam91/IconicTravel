@@ -66,7 +66,7 @@ router.post('/request', (req, res) => {
 router.get('/:token', (req, res) => {
   User.findOne({ token: req.params.token }).populate({
     path: 'bookings',
-    populate: { path: 'traveler' }
+    populate: [{ path: 'traveler' }, { path: 'host' }]
   })
     .then(userFound => {
       res.json({

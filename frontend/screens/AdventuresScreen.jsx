@@ -41,6 +41,7 @@ const AdventuresScreen = ({ navigation }) => {
 		}
 	}, [isFocused]);
 
+	console.log('Booking trouvé : ', pendingTravels)
 
 	return (
 		<View style={styles.container}>
@@ -98,7 +99,7 @@ const AdventuresScreen = ({ navigation }) => {
 						{pendingTravels.map((booking, index) => (
 							<AdventureCard
 								key={index}
-								userMatched={booking.traveler}
+								userMatched={booking.host}
 								startDate={new Date(booking.startDate).toLocaleDateString()}
 								endDate={new Date(booking.endDate).toLocaleDateString()}
 								isHost={false}
