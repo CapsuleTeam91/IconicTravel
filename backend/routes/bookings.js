@@ -221,6 +221,7 @@ router.patch('/update/:bookingId', (req, res) => {
 	const { bookingId } = req.params;
 
 	Booking.findByIdAndUpdate(bookingId, { status: 'Confirmé' }).exec();
+	res.json({ result: true })
 });
 
 /* DELETE /delete/:bookingId - remove the booking using its id */
