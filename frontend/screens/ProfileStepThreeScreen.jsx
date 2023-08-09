@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import {
 	SafeAreaView,
-	StatusBar,
 	StyleSheet,
 	Text,
 	TouchableOpacity,
@@ -88,7 +87,6 @@ const ProfileStepThreeScreen = ({ navigation }) => {
 
 	return (
 		<SafeAreaView style={{ flex: 1 }}>
-			<StatusBar backgroundColor={'white'} />
 			<KeyboardAwareScrollView
 				extraScrollHeight={100} // (when scroll)to have extra height between keyboard and text input
 				enableOnAndroid={true}
@@ -112,8 +110,8 @@ const ProfileStepThreeScreen = ({ navigation }) => {
 						onPress={() =>
 							hobbies.length === 5
 								? setError(
-										'Vous avez déjà choisi 5 hobbies, supprimez en pour continuer.'
-								  )
+									'Vous avez déjà choisi 5 hobbies, supprimez en pour continuer.'
+								)
 								: setIsEditable(!isEditable)
 						}
 						activeOpacity={0.8}>

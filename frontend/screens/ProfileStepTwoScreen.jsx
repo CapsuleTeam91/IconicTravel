@@ -5,8 +5,6 @@ import { RemoteDataSet } from '../components/forms/RemoteDataSet';
 import { COLORS, COLORS_THEME, STYLES_GLOBAL } from '../utils/styles';
 import {
 	SafeAreaView,
-	ScrollView,
-	StatusBar,
 	StyleSheet,
 	Text,
 	View,
@@ -55,7 +53,6 @@ const ProfileStepTwoScreen = ({ navigation }) => {
 
 	return (
 		<SafeAreaView style={{ flex: 1 }}>
-			<StatusBar backgroundColor={'white'} />
 			<KeyboardAwareScrollView
 				extraScrollHeight={100} // (when scroll)to have extra height between keyboard and text input
 				enableOnAndroid={true}
