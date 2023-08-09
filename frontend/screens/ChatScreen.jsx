@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
 	KeyboardAvoidingView,
 	Platform,
@@ -94,7 +94,7 @@ export default function ChatScreen({ navigation, route: { params } }) {
 			</View>
 
 			<View style={styles.inset}>
-				<ScrollView style={styles.scroller}>
+				<ScrollView ref={ref => {this.scrollView = ref}} onContentSizeChange={() => this.scrollView.scrollToEnd({animated: true})} style={styles.scroller}>
 					{messages.map((message, i) => (
 						<View
 							key={i}
