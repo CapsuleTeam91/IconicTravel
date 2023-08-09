@@ -8,13 +8,16 @@ import {
 	TextInput,
 	TouchableOpacity,
 	View,
+	Button,
+	Image,
 } from 'react-native';
 import { URL_EXPO } from '../utils/constants';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Pusher from 'pusher-js/react-native';
 import { useSelector } from 'react-redux';
-import { COLORS } from '../utils/styles';
+import { COLORS, RADIUS } from '../utils/styles';
 import { useIsFocused } from '@react-navigation/native';
+import ButtonIcon from '../components/buttons/ButtonIcon';
 
 const ChatScreen = ({ navigation, route: { params } }) => {
 	let pusher = null;
@@ -86,17 +89,36 @@ const ChatScreen = ({ navigation, route: { params } }) => {
 			style={styles.container}
 			behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
 			<View style={styles.banner}>
-				<MaterialIcons
+				{/* <MaterialIcons
 					name="keyboard-backspace"
 					color="#ffffff"
 					size={24}
 					onPress={() => navigation.goBack()}
+				/> */}
+				<ButtonIcon
+					type="primary"
+					size={18}
+					name="arrow-back-outline"
+					onpress={() => navigation.goBack()}
 				/>
-				<Text style={styles.greetingText}>Welcome {user.firstname} 👋</Text>
+				<Image
+					source={{ uri: params.chat.traveler.avatarUrl }}
+					style={styles.avatar}
+				/>
+				<Text style={styles.greetingText}>
+					{params.chat.traveler.firstname} • {params.chat.traveler.city.name}
+				</Text>
 			</View>
 
 			<View style={styles.inset}>
-				<ScrollView ref={ref => {this.scrollView = ref}} onContentSizeChange={() => this.scrollView.scrollToEnd({animated: true})} style={styles.scroller}>
+				<ScrollView
+					ref={(ref) => {
+						this.scrollView = ref;
+					}}
+					onContentSizeChange={() =>
+						this.scrollView.scrollToEnd({ animated: true })
+					}
+					style={styles.scroller}>
 					{messages.map((message, i) => (
 						<View
 							key={i}
@@ -137,11 +159,17 @@ const ChatScreen = ({ navigation, route: { params } }) => {
 						style={styles.input}
 						autoFocus
 					/>
-					<TouchableOpacity
+					{/* <TouchableOpacity
 						onPress={() => handleSendMessage()}
 						style={styles.sendButton}>
 						<MaterialIcons name="send" color="#ffffff" size={24} />
-					</TouchableOpacity>
+					</TouchableOpacity> */}
+					<ButtonIcon
+						name="send-outline"
+						size={24}
+						type="primary"
+						onpress={() => handleSendMessage()}
+					/>
 				</View>
 			</View>
 		</KeyboardAvoidingView>
@@ -155,19 +183,19 @@ const styles = StyleSheet.create({
 		flex: 1,
 		alignItems: 'center',
 		justifyContent: 'space-between',
-		backgroundColor: '#000',
+		backgroundColor: COLORS.darkBlue,
 	},
 	inset: {
 		flex: 1,
 		borderTopLeftRadius: 50,
 		borderTopRightRadius: 50,
-		backgroundColor: '#ffffff',
+		backgroundColor: COLORS.bg,
 		width: '100%',
 		paddingTop: 20,
 		position: 'relative',
-		borderTopColor: '#ffe099',
-		borderLeftColor: '#ffe099',
-		borderRightColor: '#ffe099',
+		borderTopColor: COLORS.lightBlue,
+		borderLeftColor: COLORS.lightBlue,
+		borderRightColor: COLORS.lightBlue,
 		borderTopWidth: 4,
 		borderRightWidth: 0.1,
 		borderLeftWidth: 0.1,
@@ -219,9 +247,11 @@ const styles = StyleSheet.create({
 	},
 	messageSentBg: {
 		backgroundColor: '#ffad99',
+		// backgroundColor: COLORS.extralightPink,
 	},
 	messageRecievedBg: {
 		backgroundColor: '#d6fff9',
+		// backgroundColor: COLORS.lightBlue,
 	},
 	messageText: {
 		color: '#506568',
@@ -238,7 +268,8 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		justifyContent: 'center',
 		justifySelf: 'flex-end',
-		alignContent: 'flex-start',
+		alignItems: 'center',
+		// alignContent: 'flex-start',
 		marginBottom: 30,
 		marginTop: 'auto',
 		background: 'transparent',
@@ -249,7 +280,8 @@ const styles = StyleSheet.create({
 		backgroundColor: '#f0f0f0',
 		width: '60%',
 		padding: 14,
-		borderRadius: 30,
+		marginRight: 10,
+		borderRadius: RADIUS.card,
 		shadowColor: '#000',
 		shadowOffset: {
 			width: 0,
@@ -259,43 +291,49 @@ const styles = StyleSheet.create({
 		shadowRadius: 6.41,
 		elevation: 1.2,
 	},
-	recordButton: {
-		borderRadius: 50,
-		padding: 16,
-		backgroundColor: '#ff5c5c',
-		marginLeft: 12,
-		alignItems: 'center',
-		justifyContent: 'center',
-		shadowColor: '#000',
-		shadowOffset: {
-			width: 0,
-			height: 1,
-		},
-		shadowOpacity: 0.2,
-		shadowRadius: 6.41,
-		elevation: 1.2,
+	avatar: {
+		width: 62,
+		height: 62,
+		marginLeft: 20,
+		borderRadius: RADIUS.image,
 	},
-	sendButton: {
-		borderRadius: 50,
-		padding: 16,
-		backgroundColor: '#ffe099',
-		marginLeft: 12,
-		alignItems: 'center',
-		justifyContent: 'center',
-		shadowColor: '#000',
-		shadowOffset: {
-			width: 0,
-			height: 1,
-		},
-		shadowOpacity: 0.2,
-		shadowRadius: 6.41,
-		elevation: 1.2,
-	},
-	buttonText: {
-		color: '#ffffff',
-		fontWeight: '800',
-		textTransform: 'uppercase',
-	},
+	// recordButton: {
+	// 	borderRadius: 50,
+	// 	padding: 16,
+	// 	backgroundColor: '#ff5c5c',
+	// 	marginLeft: 12,
+	// 	alignItems: 'center',
+	// 	justifyContent: 'center',
+	// 	shadowColor: '#000',
+	// 	shadowOffset: {
+	// 		width: 0,
+	// 		height: 1,
+	// 	},
+	// 	shadowOpacity: 0.2,
+	// 	shadowRadius: 6.41,
+	// 	elevation: 1.2,
+	// },
+	// sendButton: {
+	// 	borderRadius: 50,
+	// 	padding: 16,
+	// 	backgroundColor: '#ffe099',
+	// 	marginLeft: 12,
+	// 	alignItems: 'center',
+	// 	justifyContent: 'center',
+	// 	shadowColor: '#000',
+	// 	shadowOffset: {
+	// 		width: 0,
+	// 		height: 1,
+	// 	},
+	// 	shadowOpacity: 0.2,
+	// 	shadowRadius: 6.41,
+	// 	elevation: 1.2,
+	// },
+	// buttonText: {
+	// 	color: '#ffffff',
+	// 	fontWeight: '800',
+	// 	textTransform: 'uppercase',
+	// },
 	scroller: {
 		paddingLeft: 20,
 		paddingRight: 20,
