@@ -99,6 +99,12 @@ const UserProfileScreen = ({ route, navigation }) => {
 
 	return (
 		<SafeAreaView style={styles.container}>
+			<ButtonIcon
+				type="secondary"
+				size={18}
+				name="arrow-back-outline"
+				onpress={() => navigation.goBack()}
+			/>
 			<Text style={styles.username}>{user.firstname}</Text>
 			<Text style={styles.age}>{getAge(user.dateOfBirth)} ans</Text>
 			<View style={styles.headerContainer}>
