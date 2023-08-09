@@ -3,41 +3,53 @@ import ButtonIcon from '../buttons/ButtonIcon';
 import { RADIUS } from '../../utils/styles';
 
 export const AdventureCard = ({
-	userMatched,
+	// userMatched,
+	booking,
 	isHost,
 	isConfirmed,
 	navigation,
-	startDate,
-	endDate,
+
 	handleDismiss,
 	handleValidate,
 }) => {
 	return (
 		<View style={styles.container}>
 			<TouchableOpacity
-				onPress={() => navigation.navigate('Profile', { userMatched })}
+				onPress={() =>
+					navigation.navigate('Profile', {
+						user: booking[isHost ? 'traveler' : 'host'],
+					})
+				}
 				activeOpacity={0.8}>
-				<Image source={{ uri: userMatched.avatarUrl }} style={styles.avatar} />
+				<Image
+					source={{ uri: booking[isHost ? 'traveler' : 'host'].avatarUrl }}
+					style={styles.avatar}
+				/>
 			</TouchableOpacity>
 
 			<View style={styles.infoContainer}>
 				<View style={styles.profilContainer}>
-					<Text style={styles.name}>{userMatched.firstname}</Text>
-					<Text style={styles.city}>• {userMatched.city.name}</Text>
+					<Text style={styles.name}>
+						{booking[isHost ? 'traveler' : 'host'].firstname}
+					</Text>
+					<Text style={styles.city}>
+						• {booking[isHost ? 'traveler' : 'host'].city.name}
+					</Text>
 				</View>
 				<Text style={styles.date}>
-					{startDate} - {endDate}
+					{new Date(booking.startDate).toLocaleDateString()} -{' '}
+					{new Date(booking.endDate).toLocaleDateString()}
 				</Text>
 			</View>
 
-			{!isConfirmed && (
+			{new Date(booking.endDate) >= new Date() && (
 				<View style={styles.btnContainer}>
 					<ButtonIcon
 						onpress={handleDismiss}
 						name="close-outline"
 						type="transparent"
 					/>
-					{isHost && (
+					{isHost && !isConfirmed && (
 						<ButtonIcon
 							onpress={handleValidate}
 							name="checkmark-outline"

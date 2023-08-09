@@ -1,15 +1,14 @@
-import { StyleSheet, Text, View, ScrollView } from 'react-native';
-import { COLORS, RADIUS, STYLES_GLOBAL } from '../utils/styles';
 import { useSelector } from 'react-redux';
-import React, { useEffect, useState } from 'react';
 import { URL_EXPO } from '../utils/constants';
+import React, { useEffect, useState } from 'react';
 import { useIsFocused } from '@react-navigation/native';
+import { COLORS, RADIUS, STYLES_GLOBAL } from '../utils/styles';
+import { StyleSheet, Text, View, ScrollView } from 'react-native';
 import { AdventureCard } from '../components/cards/AdventuresCard';
 
 const HistoryScreen = ({ navigation }) => {
 	const isFocused = useIsFocused();
 	const thisUser = useSelector((state) => state.user.value);
-	const [user, setUser] = useState({});
 	const [doneTravels, setDoneTravels] = useState([]);
 	const [doneHosts, setDoneHosts] = useState([]);
 	const [needReload, setNeedReload] = useState(false);
@@ -19,10 +18,7 @@ const HistoryScreen = ({ navigation }) => {
 			fetch(`${URL_EXPO}/bookings/${thisUser.token}`)
 				.then((resp) => resp.json())
 				.then((result) => {
-					setUser(result.user);
-
 					if (result.user.bookings) {
-						console.log(result.user.bookings);
 						setDoneTravels(
 							result.user.bookings.filter(
 								(booking) =>
@@ -44,7 +40,7 @@ const HistoryScreen = ({ navigation }) => {
 
 	return (
 		<View style={styles.container}>
-			<Text style={STYLES_GLOBAL.subTitle}>Iconic History</Text>
+			<Text style={STYLES_GLOBAL.subTitle}>Iconic Story</Text>
 
 			{!doneHosts.length && !doneTravels.length && (
 				<View style={styles.emptyContainer}>
@@ -68,11 +64,10 @@ const HistoryScreen = ({ navigation }) => {
 								key={index}
 								isHost={true}
 								isConfirmed={true}
-								userMatched={booking.traveler}
-								startDate={new Date(booking.startDate).toLocaleDateString()}
-								endDate={new Date(booking.endDate).toLocaleDateString()}
-								handleDismiss={() => deleteBooking(booking._id)}
-								handleValidate={() => validateBooking(booking._id)}
+								booking={booking}
+								navigation={navigation}
+								handleDismiss={() => {}}
+								handleValidate={() => {}}
 							/>
 						))}
 					</ScrollView>
@@ -92,10 +87,9 @@ const HistoryScreen = ({ navigation }) => {
 								key={index}
 								isHost={false}
 								isConfirmed={true}
-								userMatched={booking.host}
-								startDate={new Date(booking.startDate).toLocaleDateString()}
-								endDate={new Date(booking.endDate).toLocaleDateString()}
-								handleDismiss={() => deleteBooking(booking._id)}
+								booking={booking}
+								navigation={navigation}
+								handleDismiss={() => {}}
 								handleValidate={() => {}}
 							/>
 						))}
