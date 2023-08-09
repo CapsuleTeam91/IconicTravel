@@ -61,6 +61,7 @@ const SearchScreen = ({ navigation }) => {
 			};
 
 			let distance = convertCoordsToKm(localCoords, destCoords);
+			console.log('distance : ', distance)
 
 			Object.assign(sortedUsers[i], { distance });
 		}
@@ -72,6 +73,8 @@ const SearchScreen = ({ navigation }) => {
 				: 0
 		);
 	}
+
+	console.log('sorted users : ', sortedUsers)
 
 	for (let i = 0; i < sortedUsers.length; i++) {
 		Object.assign(sortedUsers[i], { index: i });
@@ -117,8 +120,8 @@ const SearchScreen = ({ navigation }) => {
 	});
 
 	const markersList = [];
-	// if (usersAroundDestination.length > 0) {
-	usersAroundDestination?.map((user, i) => {
+	if (usersAroundDestination.length > 0) {
+	sortedUsers.map((user, i) => {
 		markersList.push(
 			<Marker
 				key={i}
@@ -134,7 +137,7 @@ const SearchScreen = ({ navigation }) => {
 			/>
 		);
 	});
-	// }
+	}
 
 	const addCity = (newCity) => {
 		if (!newCity) return;
