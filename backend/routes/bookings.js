@@ -6,6 +6,7 @@ const User = require('../models/users');
 const ChatChannel = require('../models/chatChannels');
 
 router.post('/request', async (req, res) => {
+	// Récupération des données de voyage depuis la requête
 	const {
 		traveler,
 		host,
@@ -17,13 +18,14 @@ router.post('/request', async (req, res) => {
 	} = req.body.travelDatas;
 
 	// Vérifie si le traveler à déjà demandé un hosting à cette personne
-	const sameBookings = await Booking.find({ $and: [{ traveler }, { host }] }); //vous avez déjà fait une demande
+	const sameBookings = await Booking.find({ $and: [{ traveler }, { host }] }); // Recherche des réservations avec le même voyageur et le même hôte
 	const reverseBookings = await Booking.find({
 		$and: [{ traveler: host }, { host: traveler }],
-	}); //il a dejà fait une demande à vous
+	}); // Recherche des réservations où le voyageur est maintenant l'hôte et vice versa
 
 	console.log('Reverse : ', reverseBookings);
 
+	// Fonction pour obtenir les dates entre une date de début et une date de fin
 	const getDates = (startDate, endDate) => {
 		let datesToCheckFromReq = [];
 		let dif = new Date(endDate).getTime() - new Date(startDate).getTime();
@@ -36,7 +38,7 @@ router.post('/request', async (req, res) => {
 		return datesToCheckFromReq;
 	};
 
-	// tableau de dates à checker de la requete
+	// Tableau de dates à vérifier à partir de la requête
 	const datesFromReq = getDates(startDate, endDate);
 
 	//Si oui, vérifier si les dates se chevauchent
@@ -48,6 +50,7 @@ router.post('/request', async (req, res) => {
 				new Date(sameBookings[i].startDate).getTime();
 			let daysNbr = dif / (1000 * 3600 * 24);
 
+			// Vérifier les chevauchements de dates
 			for (let j = 0; j <= daysNbr; j++) {
 				const result = new Date(sameBookings[i].startDate);
 				const dateToCheck = result.setDate(result.getDate() + j);
