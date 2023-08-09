@@ -1,138 +1,159 @@
-import {
-  FlatList,
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  View,
-  Image,
-} from "react-native";
-import React, { useEffect, useRef, useState } from "react";
-import { ERRORS, URL_EXPO } from "../utils/constants";
-import { COLORS, COLORS_THEME, STYLES_GLOBAL } from "../utils/styles";
+import { StyleSheet, Text, View, ScrollView } from 'react-native';
+import { COLORS, STYLES_GLOBAL } from '../utils/styles';
+import Button from '../components/buttons/Button';
+import { useSelector } from 'react-redux';
+import React, { useEffect, useState } from 'react';
+import { URL_EXPO } from '../environnement';
+import { useIsFocused } from '@react-navigation/native';
+import { AdventureCard } from '../components/cards/AdventuresCard';
 
 const HistoryScreen = ({ navigation }) => {
-  // Fausse donnée pour tester la fonctionnalité du code
-  const fakeData = [
-    {
-      destination: "Paris",
-      date: "2023-07-15",
-      avatar: "../assets/avatar.png",
-    },
-    {
-      destination: "New York",
-      date: "2023-08-05",
-      avatar: "../assets/avatar.png",
-    },
-    {
-      destination: "Tokyo",
-      date: "2024-02-20",
-      avatar: "../assets/avatar.png",
-    },
-    {
-      destination: "Barcelone",
-      date: "2024-05-10",
-      avatar: "../assets/avatar.png",
-    },
-  ];
+	const isFocused = useIsFocused();
+	const thisUser = useSelector((state) => state.user.value);
+	const [user, setUser] = useState({});
+	const [doneTravels, setDoneTravels] = useState([]);
+	const [doneHosts, setDoneHosts] = useState([]);
+	const [needReload, setNeedReload] = useState(false);
 
-  // Affichage de l'historique avec fakeData
-  const renderItem = ({ item }) => (
-    <View style={styles.voyage}>
-      <Image source={{ uri: item.avatar }} style={styles.avatar} />
-      <View style={styles.voyageInfo}>
-        <Text style={styles.destination}>
-          {" "}
-          ✈️ Destination : {item.destination}
-        </Text>
-        <Text style={styles.date}>Date : {item.date}</Text>
-      </View>
-    </View>
-  );
+	useEffect(() => {
+		if (isFocused) {
+			fetch(`${URL_EXPO}:3000/bookings/${thisUser.token}`)
+				.then((resp) => resp.json())
+				.then((result) => {
+					setUser(result.user);
 
-  // Variable d'états
-  const [voyages, setVoyages] = useState(fakeData);
+					if (result.user.bookings) {
+						setDoneTravels(
+							result.user.bookings.filter(
+								(booking) =>
+									booking.endDate <= new Date() &&
+									booking.host._id !== result.user._id
+							)
+						);
+						setDoneHosts(
+							result.user.bookings.filter(
+								(booking) =>
+									booking.endDate <= new Date() &&
+									booking.host._id === result.user._id
+							)
+						);
+					}
+				});
+		}
+	}, [isFocused, needReload]);
 
-  // Message d'erreur / conditions
-  const afficherHistorique = () => {
-    if (voyages.length === 0) {
-      return (
-        <Text style={styles.message}>
-          Oh non mon pauvre chaton 🥹 ! Tu n’es pas encore un Iconic Traveler ...
-        </Text>
-      );
-    } else {
-      return (
-        // FlatList qui affiche une liste des voyages effectués
-        <FlatList
-          data={voyages}
-          // keyExtractor  utilisée pour attribuer une clé unique pour chaque élément de la liste.
-          keyExtractor={(item, index) => index.toString()}
-          // renderItem définit la maniere dont chaque élément de la liste sera rendu à l'écran
-          renderItem={({ item }) => (
-            <View style={styles.voyage}>
-              <View style={styles.voyageInfo}>
-                <Text style={styles.destination}>
-                  Destination : {item.destination}
-                </Text>
-                <Text style={styles.date}>Date : {item.date}</Text>
-              </View>
-            </View>
-          )}
-        />
-      );
-    }
-  };
+	return (
+		<View style={styles.container}>
+			<Text style={STYLES_GLOBAL.subTitle}>Iconic Adventures</Text>
 
-  return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Mes Précédents Voyages</Text>
-      {/* {afficherHistorique()} */}
-      <FlatList
-        data={voyages}
-        keyExtractor={(item, index) => index.toString()}
-        renderItem={renderItem}
-        contentContainerStyle={styles.listContainer}
-      />
-    </View>
-  );
+			{/* <View style={styles.tabContainer}>
+				<Button
+					label="Confirmés"
+					type={
+						currentTab === ADVENTURE_STATE.confirmed ? 'primary' : 'secondary'
+					}
+					onpress={() => setCurrentTab(ADVENTURE_STATE.confirmed)}
+				/>
+				<Button
+					label="En attente"
+					type={
+						currentTab === ADVENTURE_STATE.pending ? 'primary' : 'secondary'
+					}
+					onpress={() => setCurrentTab(ADVENTURE_STATE.pending)}
+				/>
+			</View> */}
+
+			{doneHosts.length > 0 && (
+				<>
+					<View style={styles.titleContainer}>
+						<Text style={styles.title}>Hosts</Text>
+						<Text>({doneHosts.length})</Text>
+					</View>
+					<ScrollView
+						contentContainerStyle={styles.resultsContainer}
+						style={styles.scrollViewItems}>
+						{doneHosts.map((booking, index) => (
+							<AdventureCard
+								key={index}
+								isHost={true}
+								isConfirmed={true}
+								userMatched={booking.traveler}
+								startDate={new Date(booking.startDate).toLocaleDateString()}
+								endDate={new Date(booking.endDate).toLocaleDateString()}
+								handleDismiss={() => deleteBooking(booking._id)}
+								handleValidate={() => validateBooking(booking._id)}
+							/>
+						))}
+					</ScrollView>
+				</>
+			)}
+			{doneTravels.length > 0 && (
+				<>
+					<View style={styles.titleContainer}>
+						<Text style={styles.title}>Travels</Text>
+						<Text>({doneTravels.length})</Text>
+					</View>
+					<ScrollView
+						contentContainerStyle={styles.resultsContainer}
+						style={styles.scrollViewItems}>
+						{doneTravels.map((booking, index) => (
+							<AdventureCard
+								key={index}
+								isHost={false}
+								isConfirmed={true}
+								userMatched={booking.host}
+								startDate={new Date(booking.startDate).toLocaleDateString()}
+								endDate={new Date(booking.endDate).toLocaleDateString()}
+								handleDismiss={() => deleteBooking(booking._id)}
+								handleValidate={() => {}}
+							/>
+						))}
+					</ScrollView>
+				</>
+			)}
+		</View>
+	);
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 20,
-    backgroundColor: "#f0f0f0",
-  },
-  title: {
-    color: COLORS.darkBlue,
-    fontSize: 20,
-    letterSpacing: 1.2,
-    fontWeight: "700",
-    textAlign: "center",
-    textTransform: "uppercase",
-  },
-  message: {
-    textAlign: "center",
-    fontSize: 16,
-    fontStyle: "italic",
-    marginTop: "80%",
-  },
-  voyage: {
-    borderBottomWidth: 1, //Bordure grisé
-    borderBottomColor: "#ccc",
-    paddingVertical: 10,
-  },
-  destination: {
-    fontSize: 18,
-    fontWeight: "bold",
-    color: COLORS.darkBlue,
-  },
-  date: {
-    fontSize: 16,
-  },
-  listContainer: {
-    marginTop: "50%",
-  },
-});
-
 export default HistoryScreen;
+
+const styles = StyleSheet.create({
+	container: {
+		flex: 1,
+		paddingVertical: 40,
+		alignItems: 'center',
+		justifyContent: 'flex-start',
+		backgroundColor: COLORS.bg,
+	},
+	tabContainer: {
+		width: '100%',
+		marginTop: 10,
+		flexDirection: 'row',
+		justifyContent: 'space-evenly',
+	},
+	resultsContainer: {
+		width: '100%',
+		alignItems: 'center',
+		justifyContent: 'center',
+	},
+	scrollViewItems: {
+		width: '100%',
+		height: 260,
+	},
+	titleContainer: {
+		width: '90%',
+		marginVertical: 15,
+		paddingHorizontal: 5,
+		borderBottomWidth: 2,
+		flexDirection: 'row',
+		alignItems: 'center',
+		justifyContent: 'space-between',
+		borderRadius: 8,
+		borderColor: COLORS.bgDark,
+	},
+	title: {
+		fontSize: 18,
+		paddingRight: 5,
+		fontWeight: '700',
+	},
+});

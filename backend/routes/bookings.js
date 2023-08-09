@@ -127,9 +127,22 @@ router.post('/request', async (req, res) => {
 			});
 
 			newChatChannel.save().then(async (resp) => {
+				console.log('ChatChannel crée : ', resp);
 				travelerFound.chatChannels.push(resp._id);
 				hostFound.chatChannels.push(resp._id);
+				const newTraveler = await travelerFound.save();
+				const newHost = await hostFound.save();
+
+				if (!newTraveler || !newHost)
+					return res
+						.status(409)
+						.json({ result: false, error: 'Can not add booking id to user' });
+
+				res.json({
+					result: true,
+				});
 			});
+			return;
 		}
 
 		const newTraveler = await travelerFound.save();
@@ -222,31 +235,36 @@ router.delete('/delete/:bookingId', async (req, res) => {
 
 	const traveler = await User.findById(booking.traveler);
 	const host = await User.findById(booking.host);
-	const bookingsFound = await Booking.find({
-		$and: [{ traveler }, { host }],
+
+	//delete booking
+	await Booking.deleteOne({ _id: bookingId }).exec();
+
+	// if other bookings exists
+	const hostBookingsFound = await Booking.find({
+		$and: [{ traveler: traveler._id }, { host: host._id }],
+	});
+	const travelerBookingsFound = await Booking.find({
+		$and: [{ traveler: host._id }, { host: traveler._id }],
 	});
 
+	console.log('bookings trouvés 1 : ', hostBookingsFound);
+	console.log('bookings trouvés 2 : ', travelerBookingsFound);
+
 	//delete chatchannel
-	if (bookingsFound.length > 0) {
-		ChatChannel.findOneAndDelete({ $and: [{ traveler }, { host }] }).then(
-			(resp) => {
-				User.findByIdAndUpdate(booking.traveler, {
-					$pull: { chatChannels: resp._id },
-				}).exec();
-				User.findByIdAndUpdate(booking.host, {
-					$pull: { chatChannels: resp._id },
-				}).exec();
-			}
-		);
+	if (hostBookingsFound.length === 0 && travelerBookingsFound.length === 0) {
+		ChatChannel.findOneAndDelete({
+			$and: [{ traveler: traveler._id }, { host: host._id }],
+		}).then((resp) => {
+			console.log('Chat supprimé : ', resp);
+			User.findByIdAndUpdate(booking.traveler, {
+				$pull: { chatChannels: resp._id },
+			}).exec();
+			User.findByIdAndUpdate(booking.host, {
+				$pull: { chatChannels: resp._id },
+			}).exec();
+		});
 	}
-	//delete booking
-	Booking.deleteOne({ _id: bookingId }).then((deletedDoc) => {
-		if (deletedDoc.deletedCount > 0) {
-			res.json({ result: true });
-		} else {
-			res.json({ result: false });
-		}
-	});
+	res.json({ result: true });
 });
 
 module.exports = router;
