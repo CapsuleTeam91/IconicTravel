@@ -88,8 +88,7 @@ const UserProfileScreen = ({ route, navigation }) => {
 					.then((resp) => resp.json())
 					.then((data) => {
 						if (data.result) {
-							setModalVisible(!modalVisible);
-							setBookingStatus('Demande en attente');
+							navigation.navigate('Aventures')
 						} else {
 							setError(data.error);
 						}
