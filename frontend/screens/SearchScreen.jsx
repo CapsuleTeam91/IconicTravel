@@ -61,7 +61,6 @@ const SearchScreen = ({ navigation }) => {
 			};
 
 			let distance = convertCoordsToKm(localCoords, destCoords);
-			console.log('distance : ', distance)
 
 			Object.assign(sortedUsers[i], { distance });
 		}
@@ -73,8 +72,6 @@ const SearchScreen = ({ navigation }) => {
 				: 0
 		);
 	}
-
-	console.log('sorted users : ', sortedUsers)
 
 	for (let i = 0; i < sortedUsers.length; i++) {
 		Object.assign(sortedUsers[i], { index: i });
