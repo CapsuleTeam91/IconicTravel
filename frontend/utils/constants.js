@@ -1,4 +1,6 @@
-export const URL_EXPO = 'https://iconic-travel-backend-git-main-iconic-travel.vercel.app';
+/* VERCEL */
+export const URL_EXPO =
+	'https://iconic-travel-backend-git-main-iconic-travel.vercel.app';
 
 /* DATA */
 export const DEFAULT_AVATAR =
@@ -13,7 +15,6 @@ export const SIGN_VIEW = {
 /* ERRORS */
 export const ERRORS = {
 	err400: 'Les données sont incorrectes',
-	// err401: 'Mauvais mot de passe',
 	err403: `Veuillez remplir tous les champs`,
 	err404: 'Aucun compte rattaché à cet email ou mauvais mot de passe',
 	err409: `Vous avez déjà un compte`,

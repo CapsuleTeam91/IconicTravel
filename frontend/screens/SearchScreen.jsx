@@ -1,17 +1,17 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Map } from '../components/Map';
 import { useSelector } from 'react-redux';
-import { RemoteDataSet } from '../components/forms/RemoteDataSet';
-import { COLORS, STYLES_GLOBAL } from '../utils/styles';
-import { AutocompleteDropdownContextProvider } from 'react-native-autocomplete-dropdown';
 import { Marker } from 'react-native-maps';
 import { ERRORS } from '../utils/constants';
 import { URL_EXPO } from '../utils/constants';
+import { STYLES_GLOBAL } from '../utils/styles';
 import { convertCoordsToKm } from '../utils/helper';
 import { useIsFocused } from '@react-navigation/native';
-import { Map } from '../components/Map';
 import { HostCard } from '../components/cards/HostCard';
+import { RemoteDataSet } from '../components/forms/RemoteDataSet';
 import { DropdownDistances } from '../components/forms/DropdownDistances';
+import { SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { AutocompleteDropdownContextProvider } from 'react-native-autocomplete-dropdown';
 
 const SearchScreen = ({ navigation }) => {
 	const isFocused = useIsFocused();
@@ -24,117 +24,6 @@ const SearchScreen = ({ navigation }) => {
 	const [error, setError] = useState('');
 	const [distanceSelected, setDistanceSelected] = useState(null);
 	const [userSelected, setUserSelected] = useState(null);
-
-	useEffect(() => {
-		if (isFocused) {
-			fetch(`${URL_EXPO}/users`)
-				.then((response) =>
-					response.status > 400 ? response.status : response.json()
-				)
-				.then((users) => {
-					if (typeof users === 'number') {
-						setError(ERRORS[`err${users}`]);
-						return;
-					}
-					if (users.result) {
-						setUsersAroundDestination(users.data);
-					} else {
-						setError(ERRORS[`err${users.status}`]);
-					}
-				});
-		}
-	}, [isFocused]);
-
-	const sortedUsers = usersAroundDestination.filter(
-		(traveler) => traveler.canHost && traveler.email !== user.email
-	);
-
-	if (usersAroundDestination.length > 0) {
-		for (let i = 0; i < sortedUsers.length; i++) {
-			const localCoords = {
-				latitude: city ? city.latitude : user.city.latitude,
-				longitude: city ? city.longitude : user.city.longitude,
-			};
-			const destCoords = {
-				latitude: sortedUsers[i].city.latitude,
-				longitude: sortedUsers[i].city.longitude,
-			};
-
-			let distance = convertCoordsToKm(localCoords, destCoords);
-
-			Object.assign(sortedUsers[i], { distance });
-		}
-		sortedUsers.sort((p1, p2) =>
-			Number(p1.distance) < Number(p2.distance)
-				? -1
-				: Number(p1.distance) > Number(p2.distance)
-				? 1
-				: 0
-		);
-	}
-
-	for (let i = 0; i < sortedUsers.length; i++) {
-		Object.assign(sortedUsers[i], { index: i });
-	}
-
-	const usersList = sortedUsers.map((user, i) => {
-		if (city) {
-			if (distanceSelected) {
-				const distSearched = Number(distanceSelected.label.match(/\d+/)[0]);
-				if (user.distance <= distSearched) {
-					return (
-						<HostCard
-							key={i}
-							user={user}
-							displayUserOnMap={() => displayUserOnMap(user)}
-							selected={userSelected?.index === user.index}
-							handleClick={() => navigation.navigate('Profile', { user })}
-						/>
-					);
-				}
-			} else {
-				return (
-					<HostCard
-						key={i}
-						user={user}
-						displayUserOnMap={() => displayUserOnMap(user)}
-						selected={userSelected?.index === user.index}
-						handleClick={() => navigation.navigate('Profile', { user })}
-					/>
-				);
-			}
-		} else {
-			return (
-				<HostCard
-					key={i}
-					user={user}
-					displayUserOnMap={() => displayUserOnMap(user)}
-					selected={userSelected?.index === user.index}
-					handleClick={() => navigation.navigate('Profile', { user })}
-				/>
-			);
-		}
-	});
-
-	const markersList = [];
-	// if (usersAroundDestination.length > 0) {
-	usersAroundDestination?.map((user, i) => {
-		markersList.push(
-			<Marker
-				key={i}
-				ref={(ref) => (markersRef.current[i] = ref)}
-				coordinate={{
-					latitude: user.city.latitude,
-					longitude: user.city.longitude,
-				}}
-				title={user.firstname}
-				pinColor="#F87575"
-				description={`${user.distance}km`}
-				onPress={() => displayUser(user)}
-			/>
-		);
-	});
-	// }
 
 	const addCity = (newCity) => {
 		if (!newCity) return;
@@ -181,6 +70,113 @@ const SearchScreen = ({ navigation }) => {
 		});
 	};
 
+	useEffect(() => {
+		if (isFocused) {
+			fetch(`${URL_EXPO}/users`)
+				.then((response) =>
+					response.status > 400 ? response.status : response.json()
+				)
+				.then((users) => {
+					if (typeof users === 'number') {
+						setError(ERRORS[`err${users}`]);
+						return;
+					}
+					if (users.result) {
+						setUsersAroundDestination(users.data);
+					} else {
+						setError(ERRORS[`err${users.status}`]);
+					}
+				});
+		}
+	}, [isFocused]);
+
+	const sortedUsers = usersAroundDestination.filter(
+		(traveler) => traveler.canHost && traveler.email !== user.email
+	);
+
+	if (usersAroundDestination.length > 0) {
+		for (let i = 0; i < sortedUsers.length; i++) {
+			const localCoords = {
+				latitude: city ? city.latitude : user.city.latitude,
+				longitude: city ? city.longitude : user.city.longitude,
+			};
+			const destCoords = {
+				latitude: sortedUsers[i].city.latitude,
+				longitude: sortedUsers[i].city.longitude,
+			};
+
+			let distance = convertCoordsToKm(localCoords, destCoords);
+
+			Object.assign(sortedUsers[i], { distance });
+		}
+
+		sortedUsers.sort((p1, p2) =>
+			Number(p1.distance) < Number(p2.distance)
+				? -1
+				: Number(p1.distance) > Number(p2.distance)
+				? 1
+				: 0
+		);
+
+		sortedUsers.map((sortedUser, index) =>
+			Object.assign(sortedUser, { index })
+		);
+	}
+
+	const usersList = sortedUsers.map((user, i) => {
+		if (city) {
+			if (distanceSelected) {
+				const distSearched = Number(distanceSelected.label.match(/\d+/)[0]);
+				if (user.distance <= distSearched) {
+					return (
+						<HostCard
+							key={i}
+							user={user}
+							displayUserOnMap={() => displayUserOnMap(user)}
+							selected={userSelected?.index === user.index}
+							handleClick={() => navigation.navigate('Profile', { user })}
+						/>
+					);
+				}
+			} else {
+				return (
+					<HostCard
+						key={i}
+						user={user}
+						displayUserOnMap={() => displayUserOnMap(user)}
+						selected={userSelected?.index === user.index}
+						handleClick={() => navigation.navigate('Profile', { user })}
+					/>
+				);
+			}
+		} else {
+			return (
+				<HostCard
+					key={i}
+					user={user}
+					displayUserOnMap={() => displayUserOnMap(user)}
+					selected={userSelected?.index === user.index}
+					handleClick={() => navigation.navigate('Profile', { user })}
+				/>
+			);
+		}
+	});
+
+	const markersList = sortedUsers?.map((user, i) => (
+		<Marker
+			key={i}
+			ref={(ref) => (markersRef.current[i] = ref)}
+			coordinate={{
+				latitude: user.city.latitude,
+				longitude: user.city.longitude,
+			}}
+			title={user.firstname}
+			pinColor="#F87575"
+			description={`${user.distance}km`}
+			onPress={() => displayUser(user)}
+		/>
+	));
+
 	return (
 		<SafeAreaView style={{ flex: 1 }}>
 			<View style={styles.container}>
@@ -216,113 +212,25 @@ const SearchScreen = ({ navigation }) => {
 	);
 };
 const styles = StyleSheet.create({
-	// container: {
-	// 	flexGrow: 1,
-	// 	paddingVertical: 30,
-	// 	alignItems: 'center',
-	// 	justifyContent: 'flex-start',
-	// 	backgroundColor: COLORS.bg,
-	// },
-	// statusBar: {
-	// 	backgroundColor: 'white',
-	// },
 	container: {
+		...StyleSheet.absoluteFillObject,
 		width: '100%',
+		height: 60,
 		flexDirection: 'row',
 		alignItems: 'center',
 		justifyContent: 'center',
-		// backgroundColor: COLORS.darkBlue,
 	},
-	// map: {
-	// 	zIndex: -1,
-	// 	width: '100%',
-	// 	height: 350,
-	// 	shadowColor: 'black',
-	// 	shadowOffset: { width: 20, height: 40 },
-	// 	shadowOpacity: 0.2,
-	// 	shadowRadius: 3,
-	// 	elevation: 20,
-	// },
-	// dropdown: {
-	// 	justifyContent: 'center',
-	// 	alignItems: 'center',
-	// 	width: 120,
-	// 	margin: 16,
-	// 	height: 50,
-	// 	borderBottomColor: 'gray',
-	// 	borderBottomWidth: 0.5,
-	// },
-	// icon: {
-	// 	marginRight: 5,
-	// },
-	// placeholderStyle: {
-	// 	fontSize: 16,
-	// },
-	// selectedTextStyle: {
-	// 	fontSize: 16,
-	// },
-	// iconStyle: {
-	// 	width: 20,
-	// 	height: 20,
-	// },
-	// inputSearchStyle: {
-	// 	height: 40,
-	// 	fontSize: 16,
-	// },
 	resultsContainer: {
 		width: '100%',
 		justifyContent: 'center',
 		alignItems: 'center',
-		// paddingBottom: 1000,
-		// backgroundColor: COLORS.bg,
+		paddingBottom: 1000,
 	},
 	scrollViewItems: {
 		width: '100%',
 		height: '40%',
 		paddingVertical: 15,
 	},
-	// userDetailsContainer: {
-	// 	justifyContent: 'center',
-	// 	alignItems: 'flex-start',
-	// 	paddingLeft: 20,
-	// 	width: '64%',
-	// },
-	// userDetailsContainer2: {
-	// 	justifyContent: 'center',
-	// 	alignItems: 'center',
-	// 	width: '19%',
-	// },
-	// userContainer: {
-	// 	flexDirection: 'row',
-	// 	justifyContent: 'center',
-	// 	alignItems: 'center',
-	// 	backgroundColor: '#E3E8ED',
-	// 	width: '100%',
-	// 	height: 80,
-	// 	borderColor: 'black',
-	// 	borderWidth: 0.5,
-	// 	borderRadius: 10,
-	// 	padding: 10,
-	// 	marginBottom: 15,
-	// },
-	// userContainerSelected: {
-	// 	flexDirection: 'row',
-	// 	justifyContent: 'center',
-	// 	alignItems: 'center',
-	// 	backgroundColor: '#95B8D1',
-	// 	width: '100%',
-	// 	height: 80,
-	// 	borderColor: 'black',
-	// 	borderWidth: 0.5,
-	// 	borderRadius: 10,
-	// 	padding: 10,
-	// 	marginBottom: 15,
-	// },
-	// avatar: {
-	// 	width: '17%',
-	// 	height: '100%',
-	// 	borderRadius: 250,
-	// },
 });
 
 export default SearchScreen;

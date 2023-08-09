@@ -40,16 +40,17 @@ export const DropdownDistances = ({
 
 const styles = StyleSheet.create({
 	dropdown: {
-		height: 42,
+		height: 43,
 		borderRadius: 8,
 		paddingHorizontal: 15,
 		backgroundColor: COLORS.bgDark,
+		borderWidth: 1,
+		borderColor: COLORS.bg,
 	},
 	containerStyle: {
 		maxHeight: 230,
 		paddingVertical: 5,
 		borderRadius: 8,
-		borderWidth: 0,
 		backgroundColor: COLORS.bgDark,
 	},
 	itemTextStyle: {
