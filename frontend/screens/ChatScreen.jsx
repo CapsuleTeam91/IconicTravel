@@ -17,7 +17,7 @@ import { useSelector } from 'react-redux';
 import { COLORS } from '../utils/styles';
 import { useIsFocused } from '@react-navigation/native';
 
-export default function ChatScreen({ navigation, route: { params } }) {
+const ChatScreen = ({ navigation, route: { params } }) => {
 	const pusher = new Pusher('61007bd879a7928d12d9', { cluster: 'eu' });
 	const isFocused = useIsFocused();
 	const user = useSelector((state) => state.user.value);
@@ -145,6 +145,8 @@ export default function ChatScreen({ navigation, route: { params } }) {
 		</KeyboardAvoidingView>
 	);
 }
+
+export default ChatScreen;
 
 const styles = StyleSheet.create({
 	container: {
