@@ -2,7 +2,7 @@ import { StyleSheet, Text, View, ScrollView } from 'react-native';
 import { COLORS, RADIUS, STYLES_GLOBAL } from '../utils/styles';
 import { useSelector } from 'react-redux';
 import React, { useEffect, useState } from 'react';
-import { URL_EXPO } from '../environnement';
+import { URL_EXPO } from '../utils/constants';
 import { useIsFocused } from '@react-navigation/native';
 import { AdventureCard } from '../components/cards/AdventuresCard';
 
@@ -16,7 +16,7 @@ const HistoryScreen = ({ navigation }) => {
 
 	useEffect(() => {
 		if (isFocused) {
-			fetch(`${URL_EXPO}:3000/bookings/${thisUser.token}`)
+			fetch(`${URL_EXPO}/bookings/${thisUser.token}`)
 				.then((resp) => resp.json())
 				.then((result) => {
 					setUser(result.user);

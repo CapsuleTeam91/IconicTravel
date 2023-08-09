@@ -6,7 +6,7 @@ import { COLORS, STYLES_GLOBAL } from '../utils/styles';
 import { AutocompleteDropdownContextProvider } from 'react-native-autocomplete-dropdown';
 import { Marker } from 'react-native-maps';
 import { ERRORS } from '../utils/constants';
-import { URL_EXPO } from '../environnement';
+import { URL_EXPO } from '../utils/constants';
 import { convertCoordsToKm } from '../utils/helper';
 import { useIsFocused } from '@react-navigation/native';
 import { Map } from '../components/Map';
@@ -27,7 +27,7 @@ const SearchScreen = ({ navigation }) => {
 
 	useEffect(() => {
 		if (isFocused) {
-			fetch(`${URL_EXPO}:3000/users`)
+			fetch(`${URL_EXPO}/users`)
 				.then((response) =>
 					response.status > 400 ? response.status : response.json()
 				)

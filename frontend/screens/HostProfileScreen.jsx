@@ -10,7 +10,7 @@ import { useState } from 'react';
 import { getAge } from '../utils/helper';
 import { addData } from '../reducers/user';
 import { ERRORS } from '../utils/constants';
-import { URL_EXPO } from '../environnement';
+import { URL_EXPO } from '../utils/constants';
 import { useDispatch, useSelector } from 'react-redux';
 import { COLORS, STYLES_GLOBAL } from '../utils/styles';
 import ButtonIcon from '../components/buttons/ButtonIcon';
@@ -25,7 +25,7 @@ const UserProfileScreen = ({ navigation }) => {
 
 	// Fonction pour gérer le changement d'état du Switch "Iconic Host"
 	const toggleSwitch = () => {
-		fetch(`${URL_EXPO}:3000/users/hosting/${user.token}`, { method: 'PUT' })
+		fetch(`${URL_EXPO}/users/hosting/${user.token}`, { method: 'PUT' })
 			.then((response) => response.json())
 			.then((data) => {
 				// Vérifie si la propriété "result" dans la réponse est vraie

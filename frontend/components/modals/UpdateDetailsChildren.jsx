@@ -7,7 +7,7 @@ import {
 } from 'react-native';
 import { checkDOB } from '../../utils/helper';
 import { useCallback, useState } from 'react';
-import { URL_EXPO } from '../../environnement';
+import { URL_EXPO } from '../../utils/constants';
 import { COLORS, COLORS_THEME } from '../../utils/styles';
 import Input from '../forms/Input';
 import DatePicker from '../forms/DatePicker';
@@ -39,7 +39,7 @@ export const UpdateDetailesChildren = ({
 			setRemoteDataSet([]);
 			return;
 		}
-		const response = await fetch(`${URL_EXPO}:3000/city/${cityLetters}`);
+		const response = await fetch(`${URL_EXPO}/city/${cityLetters}`);
 		const result = await response.json();
 
 		console.log(result);

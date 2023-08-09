@@ -1,5 +1,5 @@
 import { COLORS } from '../../utils/styles';
-import { URL_EXPO } from '../../environnement';
+import { URL_EXPO } from '../../utils/constants';
 import React, { useState, useEffect } from 'react';
 import { MultiSelect } from 'react-native-element-dropdown';
 import { StyleSheet, View, TouchableOpacity, Text } from 'react-native';
@@ -11,7 +11,7 @@ const MultiSelectComponent = ({ hobbies, setHobbies, setError }) => {
 
 	useEffect(() => {
 		(async () => {
-			const URL = `${URL_EXPO}:3000/hobbies`;
+			const URL = `${URL_EXPO}/hobbies`;
 
 			const response = await fetch(URL);
 			const data = await response.json();

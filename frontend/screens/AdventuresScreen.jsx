@@ -3,7 +3,7 @@ import { COLORS, STYLES_GLOBAL } from '../utils/styles';
 import Button from '../components/buttons/Button';
 import { useSelector } from 'react-redux';
 import React, { useEffect, useState } from 'react';
-import { URL_EXPO } from '../environnement';
+import { URL_EXPO } from '../utils/constants';
 import { useIsFocused } from '@react-navigation/native';
 import { AdventureCard } from '../components/cards/AdventuresCard';
 
@@ -24,7 +24,7 @@ const AdventuresScreen = ({ navigation }) => {
 
 	useEffect(() => {
 		if (isFocused) {
-			fetch(`${URL_EXPO}:3000/bookings/${thisUser.token}`)
+			fetch(`${URL_EXPO}/bookings/${thisUser.token}`)
 				.then((resp) => resp.json())
 				.then((result) => {
 					setUser(result.user);
@@ -67,7 +67,7 @@ const AdventuresScreen = ({ navigation }) => {
 	}, [isFocused, needReload]);
 
 	const deleteBooking = (id) => {
-		fetch(`${URL_EXPO}:3000/bookings/delete/${id}`, { method: 'DELETE' })
+		fetch(`${URL_EXPO}/bookings/delete/${id}`, { method: 'DELETE' })
 			.then((resp) => resp.json())
 			.then(() => {
 				setNeedReload(!needReload);
@@ -75,7 +75,7 @@ const AdventuresScreen = ({ navigation }) => {
 	};
 
 	const validateBooking = (id) => {
-		fetch(`${URL_EXPO}:3000/bookings/update/${id}`, { method: 'PATCH' })
+		fetch(`${URL_EXPO}/bookings/update/${id}`, { method: 'PATCH' })
 			.then((resp) => resp.json())
 			.then(() => {
 				setNeedReload(!needReload);

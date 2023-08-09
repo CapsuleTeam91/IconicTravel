@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import { addData } from '../reducers/user';
 import { ERRORS } from '../utils/constants';
-import { URL_EXPO } from '../environnement';
+import { URL_EXPO } from '../utils/constants';
 import { useDispatch, useSelector } from 'react-redux';
 import { COLORS, STYLES_GLOBAL } from '../utils/styles';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
@@ -32,7 +32,7 @@ const ProfileStepThreeScreen = ({ navigation }) => {
 			return;
 		}
 
-		fetch(`${URL_EXPO}:3000/users/signup`, {
+		fetch(`${URL_EXPO}/users/signup`, {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify({ ...user, hobbies }),

@@ -5,7 +5,7 @@ import { addData, rememberPassword } from '../../reducers/user';
 import { StyleSheet, Text, Animated, View } from 'react-native';
 import { COLORS, COLORS_THEME, STYLES_GLOBAL } from '../../utils/styles';
 import { EMAIL_REGEX, ERRORS, SIGN_VIEW } from '../../utils/constants';
-import { URL_EXPO } from '../../environnement';
+import { URL_EXPO } from '../../utils/constants';
 import Input from '../forms/Input';
 import Button from '../buttons/Button';
 import PasswordInput from '../forms/PasswordInput';
@@ -32,7 +32,7 @@ const SignIn = (props) => {
 		}
 
 		// send request for authentication
-		fetch(`${URL_EXPO}:3000/users/signin`, {
+		fetch(`${URL_EXPO}/users/signin`, {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify({
@@ -94,7 +94,7 @@ const SignIn = (props) => {
 	useEffect(() => {
 		if (user.token) {
 			// send request for authentication if token saved in store
-			fetch(`${URL_EXPO}:3000/users/${user.token}`)
+			fetch(`${URL_EXPO}/users/${user.token}`)
 				.then((response) => response.json())
 				.then((userFound) => {
 					if (userFound.result) {

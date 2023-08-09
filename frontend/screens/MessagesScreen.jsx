@@ -9,7 +9,7 @@ import {
 	ScrollView,
 } from 'react-native';
 import ButtonIcon from '../components/buttons/ButtonIcon';
-import { URL_EXPO } from '../environnement';
+import { URL_EXPO } from '../utils/constants';
 import { STYLES_GLOBAL, COLORS } from '../utils/styles';
 import { useDispatch, useSelector } from 'react-redux';
 import React, { useEffect, useState } from 'react';
@@ -23,7 +23,7 @@ const MessagesScreen = ({ navigation }, props) => {
 
 	useEffect(() => {
 		if (isFocused) {
-			fetch(`${URL_EXPO}:3000/chats/${user.token}`)
+			fetch(`${URL_EXPO}/chats/${user.token}`)
 				.then((resp) => resp.json())
 				.then((resp) => {
 					setChats(resp.chats);

@@ -6,7 +6,7 @@ import {
 	TouchableOpacity,
 	FlatList,
 } from 'react-native';
-import { URL_EXPO } from '../../environnement';
+import { URL_EXPO } from '../../utils/constants';
 import { COLORS, COLORS_THEME } from '../../utils/styles';
 import Input from './Input';
 import ButtonIcon from '../buttons/ButtonIcon';
@@ -33,7 +33,7 @@ const HobbiesAutoCompleteHomeMade = ({
 
 		let hobby = newHobby.toLowerCase().replace(' ', '_');
 
-		fetch(`${URL_EXPO}:3000/hobbies/new`, {
+		fetch(`${URL_EXPO}/hobbies/new`, {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify({ hobby }),

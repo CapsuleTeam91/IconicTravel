@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Camera } from 'expo-camera';
 import { useDispatch } from 'react-redux';
 import { addAvatar } from '../reducers/user';
-import { URL_EXPO } from '../environnement';
+import { URL_EXPO } from '../utils/constants';
 import { DEFAULT_AVATAR } from '../utils/constants';
 import { useIsFocused } from '@react-navigation/native';
 import { COLORS, STYLES_GLOBAL } from '../utils/styles';
@@ -60,7 +60,7 @@ const ProfileStepOneScreen = ({ navigation }) => {
 
 		setLoading(true);
 
-		fetch(`${URL_EXPO}:3000/users/upload`, {
+		fetch(`${URL_EXPO}/users/upload`, {
 			method: 'POST',
 			body: formData,
 		})

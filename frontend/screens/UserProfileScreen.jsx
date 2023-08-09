@@ -11,7 +11,7 @@ import { useState } from 'react';
 import { getAge } from '../utils/helper';
 import { addData } from '../reducers/user';
 import { ERRORS } from '../utils/constants';
-import { URL_EXPO } from '../environnement';
+import { URL_EXPO } from '../utils/constants';
 import { useDispatch, useSelector } from 'react-redux';
 import { useIsFocused } from '@react-navigation/native';
 import { COLORS, STYLES_GLOBAL } from '../utils/styles';
@@ -49,7 +49,7 @@ const UserProfileScreen = ({ navigation }) => {
 
 	// REQUESTS
 	const handleUpdateCanHost = () => {
-		fetch(`${URL_EXPO}:3000/users/hosting/${user.token}`, { method: 'PUT' })
+		fetch(`${URL_EXPO}/users/hosting/${user.token}`, { method: 'PUT' })
 			.then((response) => response.json())
 			.then((data) => {
 				if (data.result) {
@@ -68,7 +68,7 @@ const UserProfileScreen = ({ navigation }) => {
 			return;
 		}
 		// delete previous avatar
-		fetch(`${URL_EXPO}:3000/users/deletepicture/${user.token}`, {
+		fetch(`${URL_EXPO}/users/deletepicture/${user.token}`, {
 			method: 'DELETE',
 		})
 			.then((response) => response.json())
@@ -89,7 +89,7 @@ const UserProfileScreen = ({ navigation }) => {
 			type: 'image/jpeg',
 		});
 
-		fetch(`${URL_EXPO}:3000/users/upload`, {
+		fetch(`${URL_EXPO}/users/upload`, {
 			method: 'POST',
 			body: formData,
 		})
@@ -104,7 +104,7 @@ const UserProfileScreen = ({ navigation }) => {
 	};
 
 	const handleUpdate = (data) => {
-		fetch(`${URL_EXPO}:3000/users/update/${user.token}`, {
+		fetch(`${URL_EXPO}/users/update/${user.token}`, {
 			method: 'PUT',
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify(data),

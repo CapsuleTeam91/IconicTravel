@@ -1,7 +1,7 @@
 import React, { memo, useCallback, useState } from 'react';
 import { Text } from 'react-native';
 import { COLORS } from '../../utils/styles';
-import { URL_EXPO } from '../../environnement';
+import { URL_EXPO } from '../../utils/constants';
 import { AutocompleteDropdown } from 'react-native-autocomplete-dropdown';
 
 export const RemoteDataSet = memo((props) => {
@@ -18,7 +18,7 @@ export const RemoteDataSet = memo((props) => {
 
 		setLoading(true);
 
-		const response = await fetch(`${URL_EXPO}:3000/city/${cityLetters}`);
+		const response = await fetch(`${URL_EXPO}/city/${cityLetters}`);
 		const result = await response.json();
 
 		setRemoteDataSet(result.suggestions);

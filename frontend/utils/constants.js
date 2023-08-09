@@ -1,3 +1,5 @@
+export const URL_EXPO = 'https://iconic-travel-backend.vercel.app';
+
 /* DATA */
 export const DEFAULT_AVATAR =
 	'https://res.cloudinary.com/dvmipcwy7/image/upload/v1690571975/ezulphnetoa65bodxzwn.jpg';

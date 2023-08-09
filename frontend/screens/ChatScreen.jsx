@@ -10,7 +10,7 @@ import {
 	View,
 	Button,
 } from 'react-native';
-import { URL_EXPO } from '../environnement';
+import { URL_EXPO } from '../utils/constants';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Pusher from 'pusher-js/react-native';
 import { useSelector } from 'react-redux';
@@ -26,7 +26,7 @@ export default function ChatScreen({ navigation, route: { params } }) {
 
 	useEffect(() => {
 		const chatname = params.chat.traveler._id + params.chat.host._id;
-		fetch(`${URL_EXPO}:3000/chats/previousMessages/${chatname}`)
+		fetch(`${URL_EXPO}/chats/previousMessages/${chatname}`)
 			.then((resp) => resp.json())
 			.then((data) => {
 				setMessages(data.messages);
@@ -37,7 +37,7 @@ export default function ChatScreen({ navigation, route: { params } }) {
 	useEffect(() => {
 		const chatname = params.chat.traveler._id + params.chat.host._id;
 		(() => {
-			fetch(`${URL_EXPO}:3000/chats/${chatname}/${user.firstname}`, {
+			fetch(`${URL_EXPO}/chats/${chatname}/${user.firstname}`, {
 				method: 'PUT',
 			});
 
@@ -49,7 +49,7 @@ export default function ChatScreen({ navigation, route: { params } }) {
 		})();
 
 		return () =>
-			fetch(`${URL_EXPO}:3000/chats/${chatname}/${user.firstname}`, {
+			fetch(`${URL_EXPO}/chats/${chatname}/${user.firstname}`, {
 				method: 'DELETE',
 			});
 	}, [isFocused]);
@@ -70,7 +70,7 @@ export default function ChatScreen({ navigation, route: { params } }) {
 			createdAt: new Date(),
 			id: Math.floor(Math.random() * 100000),
 		};
-		fetch(`${URL_EXPO}:3000/chats/message`, {
+		fetch(`${URL_EXPO}/chats/message`, {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify(payload),

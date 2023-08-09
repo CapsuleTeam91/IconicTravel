@@ -13,7 +13,7 @@ import { useEffect, useState } from 'react';
 import { getAge } from '../utils/helper';
 import { addData } from '../reducers/user';
 import { ERRORS } from '../utils/constants';
-import { URL_EXPO } from '../environnement';
+import { URL_EXPO } from '../utils/constants';
 import { useDispatch, useSelector } from 'react-redux';
 import { COLORS, STYLES_GLOBAL } from '../utils/styles';
 import ButtonIcon from '../components/buttons/ButtonIcon';
@@ -36,12 +36,12 @@ const UserProfileScreen = ({ route, navigation }) => {
 	const [loading, setLoading] = useState(false);
 
 	useEffect(() => {
-		fetch(`${URL_EXPO}:3000/users/getId/${thisUser.token}/${user.email}`)
+		fetch(`${URL_EXPO}/users/getId/${thisUser.token}/${user.email}`)
 			.then((resp) => resp.json())
 			.then((data) => {
 				if (data.result) {
 					fetch(
-						`${URL_EXPO}:3000/bookings/exists/${data.travelerId}/${data.hostId}`
+						`${URL_EXPO}/bookings/exists/${data.travelerId}/${data.hostId}`
 					)
 						.then((resp) => resp.json())
 						.then((bookFound) => {
@@ -66,7 +66,7 @@ const UserProfileScreen = ({ route, navigation }) => {
 
 	const validateContact = () => {
 		setLoading(true);
-		fetch(`${URL_EXPO}:3000/users/getId/${thisUser.token}/${user.email}`)
+		fetch(`${URL_EXPO}/users/getId/${thisUser.token}/${user.email}`)
 			.then((resp) => resp.json())
 			.then((data) => {
 				const travelDatas = {
@@ -78,7 +78,7 @@ const UserProfileScreen = ({ route, navigation }) => {
 					childrenNumber,
 					babiesNumber,
 				};
-				fetch(`${URL_EXPO}:3000/bookings/request`, {
+				fetch(`${URL_EXPO}/bookings/request`, {
 					method: 'POST',
 					headers: { 'Content-Type': 'application/json' },
 					body: JSON.stringify({

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { ERRORS } from '../utils/constants';
-import { URL_EXPO } from '../environnement';
+import { URL_EXPO } from '../utils/constants';
 import { COLORS_THEME, STYLES_GLOBAL } from '../utils/styles';
 import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
 import Button from '../components/buttons/Button';
@@ -27,7 +27,7 @@ const SafetyScreen = ({ navigation }) => {
 			setError(ERRORS.difPassword);
 		}
 
-		fetch(`${URL_EXPO}:3000/users/password/${user.token}`, {
+		fetch(`${URL_EXPO}/users/password/${user.token}`, {
 			method: 'PUT',
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify({ password: newPassword }),
@@ -43,7 +43,7 @@ const SafetyScreen = ({ navigation }) => {
 	};
 
 	const handleDelete = () => {
-		fetch(`${URL_EXPO}:3000/users/deletepicture/${user.token}`, {
+		fetch(`${URL_EXPO}/users/deletepicture/${user.token}`, {
 			method: 'DELETE',
 		})
 			.then((response) => response.json())
@@ -55,7 +55,7 @@ const SafetyScreen = ({ navigation }) => {
 				}
 			});
 
-		fetch(`${URL_EXPO}:3000/users/delete/${user.token}`, { method: 'DELETE' })
+		fetch(`${URL_EXPO}/users/delete/${user.token}`, { method: 'DELETE' })
 			.then((response) => response.json())
 			.then((data) => {
 				if (data.result) {
