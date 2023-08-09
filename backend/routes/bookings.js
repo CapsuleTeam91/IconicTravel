@@ -105,38 +105,47 @@ router.post('/request', async (req, res) => {
 	});
 
 	newBooking.save().then(async (data) => {
-		const newChatChannel = new ChatChannel({
-			host,
-			traveler,
-			name: traveler + host,
-			messages: [],
-			createdAt: new Date(),
-		});
+		// Verify if chatChannel does not already exist
+		const chatExists = await ChatChannel.find().or([
+			{ name: traveler + host },
+			{ name: host + traveler },
+		]);
 
 		const travelerFound = await User.findById(traveler);
 		const hostFound = await User.findById(host);
-		newChatChannel.save().then(async (resp) => {
-			travelerFound.chatChannels.push(resp._id);
-			travelerFound.bookings.push(data._id);
-			hostFound.chatChannels.push(resp._id);
-			hostFound.bookings.push(data._id);
 
-			const newTraveler = await travelerFound.save();
-			const newHost = await hostFound.save();
+		travelerFound.bookings.push(data._id);
+		hostFound.bookings.push(data._id);
 
-			if (!newTraveler || !newHost)
-				return res
-					.status(409)
-					.json({ result: false, error: 'Can not add booking id to user' });
-
-			res.json({
-				result: true,
-				travelerBookings: newTraveler.bookings,
-				hostBookings: newHost.bookings,
+		if (!chatExists.length) {
+			const newChatChannel = new ChatChannel({
+				host,
+				traveler,
+				name: traveler + host,
+				messages: [],
+				createdAt: new Date(),
 			});
+
+			newChatChannel.save().then(async (resp) => {
+				travelerFound.chatChannels.push(resp._id);
+				hostFound.chatChannels.push(resp._id);
+			});
+		}
+
+		const newTraveler = await travelerFound.save();
+		const newHost = await hostFound.save();
+
+		if (!newTraveler || !newHost)
+			return res
+				.status(409)
+				.json({ result: false, error: 'Can not add booking id to user' });
+
+		res.json({
+			result: true,
 		});
 	});
 });
+
 // Obtenir les détails de l'utilisateur avec un jeton donné
 router.get('/:token', (req, res) => {
 	User.findOne({ token: req.params.token })
