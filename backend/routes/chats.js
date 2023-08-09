@@ -13,8 +13,8 @@ const pusher = new Pusher({
 });
 
 // Join chat
-router.put('/:chatname/:username', (req, res) => {
-	pusher.trigger(req.params.chatname, 'join', {
+router.put('/:chatname/:username', async (req, res) => {
+	await pusher.trigger(req.params.chatname, 'join', {
 		username: req.params.username,
 	});
 
@@ -22,8 +22,8 @@ router.put('/:chatname/:username', (req, res) => {
 });
 
 // Leave chat
-router.delete('/:chatname/:username', (req, res) => {
-	pusher.trigger(req.params.chatname, 'leave', {
+router.delete('/:chatname/:username', async (req, res) => {
+	await pusher.trigger(req.params.chatname, 'leave', {
 		username: req.params.username,
 	});
 
@@ -33,7 +33,7 @@ router.delete('/:chatname/:username', (req, res) => {
 // Send message
 router.post('/message', async (req, res) => {
 	const { text, username, chatname, createdAt } = req.body;
-	pusher.trigger(chatname, 'message', req.body);
+	await pusher.trigger(chatname, 'message', req.body);
 
 	ChatChannel.updateOne(
 		{ name: chatname },
