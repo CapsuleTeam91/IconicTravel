@@ -1,6 +1,4 @@
-/* VERCEL */
-export const URL_EXPO =
-	'https://iconic-travel-backend-git-main-iconic-travel.vercel.app';
+export const URL_EXPO = 'https://iconic-travel-backend.vercel.app';
 
 /* DATA */
 export const DEFAULT_AVATAR =
