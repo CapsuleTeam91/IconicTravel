@@ -35,10 +35,10 @@ const styles = StyleSheet.create({
 		height: 100,
 		backgroundColor: COLORS.darkBlue,
 	},
-	mapContainer: {
-		overflow: 'hidden',
-		borderTopRightRadius: 100,
-	},
+	// mapContainer: {
+	// 	overflow: 'hidden',
+	// 	borderTopRightRadius: 100,
+	// },
 	map: {
 		height: 340,
 		width: '100%',

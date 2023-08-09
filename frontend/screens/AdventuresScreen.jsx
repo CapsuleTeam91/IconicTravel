@@ -30,29 +30,32 @@ const AdventuresScreen = ({ navigation }) => {
 					setUser(result.user);
 
 					if (result.user.bookings) {
+						const bookings = result.user.bookings.filter(
+							(booking) => new Date(booking.endDate) > new Date()
+						);
 						setConfirmedTravels(
-							result.user.bookings.filter(
+							bookings.filter(
 								(booking) =>
 									booking.status === 'Confirmé' &&
 									booking.host._id !== result.user._id
 							)
 						);
 						setConfirmedHosts(
-							result.user.bookings.filter(
+							bookings.filter(
 								(booking) =>
 									booking.status === 'Confirmé' &&
 									booking.host._id === result.user._id
 							)
 						);
 						setPendingTravels(
-							result.user.bookings.filter(
+							bookings.filter(
 								(booking) =>
 									booking.status !== 'Confirmé' &&
 									booking.host._id !== result.user._id
 							)
 						);
 						setPendingHosts(
-							result.user.bookings.filter(
+							bookings.filter(
 								(booking) =>
 									booking.status !== 'Confirmé' &&
 									booking.host._id === result.user._id
@@ -113,7 +116,7 @@ const AdventuresScreen = ({ navigation }) => {
 							<AdventureCard
 								key={index}
 								isHost={true}
-								isConfirmed={false}
+								navigation={navigation}
 								userMatched={booking.traveler}
 								startDate={new Date(booking.startDate).toLocaleDateString()}
 								endDate={new Date(booking.endDate).toLocaleDateString()}
@@ -137,7 +140,7 @@ const AdventuresScreen = ({ navigation }) => {
 							<AdventureCard
 								key={index}
 								isHost={false}
-								isConfirmed={false}
+								navigation={navigation}
 								userMatched={booking.host}
 								startDate={new Date(booking.startDate).toLocaleDateString()}
 								endDate={new Date(booking.endDate).toLocaleDateString()}
@@ -162,7 +165,7 @@ const AdventuresScreen = ({ navigation }) => {
 								<AdventureCard
 									key={index}
 									isHost={false}
-									isConfirmed={true}
+									navigation={navigation}
 									userMatched={booking.traveler}
 									startDate={new Date(booking.startDate).toLocaleDateString()}
 									endDate={new Date(booking.endDate).toLocaleDateString()}
@@ -187,7 +190,7 @@ const AdventuresScreen = ({ navigation }) => {
 								<AdventureCard
 									key={index}
 									isHost={false}
-									isConfirmed={true}
+									navigation={navigation}
 									userMatched={booking.host}
 									startDate={new Date(booking.startDate).toLocaleDateString()}
 									endDate={new Date(booking.endDate).toLocaleDateString()}

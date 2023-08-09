@@ -231,7 +231,7 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		alignItems: 'center',
 		justifyContent: 'center',
-		backgroundColor: COLORS.darkBlue,
+		// backgroundColor: COLORS.darkBlue,
 	},
 	// map: {
 	// 	zIndex: -1,

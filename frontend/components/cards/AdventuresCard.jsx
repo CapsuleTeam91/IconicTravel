@@ -5,7 +5,7 @@ import { RADIUS } from '../../utils/styles';
 export const AdventureCard = ({
 	userMatched,
 	isHost,
-	isConfirmed,
+	navigation,
 	startDate,
 	endDate,
 	handleDismiss,
@@ -13,7 +13,9 @@ export const AdventureCard = ({
 }) => {
 	return (
 		<View style={styles.container}>
-			<TouchableOpacity onPress={() => {}} activeOpacity={0.8}>
+			<TouchableOpacity
+				onPress={() => navigation.navigate('Profile', { userMatched })}
+				activeOpacity={0.8}>
 				<Image source={{ uri: userMatched.avatarUrl }} style={styles.avatar} />
 			</TouchableOpacity>
 
@@ -27,22 +29,20 @@ export const AdventureCard = ({
 				</Text>
 			</View>
 
-			{!isConfirmed && (
-				<View style={styles.btnContainer}>
+			<View style={styles.btnContainer}>
+				<ButtonIcon
+					onpress={handleDismiss}
+					name="close-outline"
+					type="transparent"
+				/>
+				{isHost && (
 					<ButtonIcon
-						onpress={handleDismiss}
-						name="close-outline"
+						onpress={handleValidate}
+						name="checkmark-outline"
 						type="transparent"
 					/>
-					{isHost && (
-						<ButtonIcon
-							onpress={handleValidate}
-							name="checkmark-outline"
-							type="transparent"
-						/>
-					)}
-				</View>
-			)}
+				)}
+			</View>
 		</View>
 	);
 };

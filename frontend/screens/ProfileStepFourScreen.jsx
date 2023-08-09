@@ -28,7 +28,7 @@ const ProfileStepFourScreen = ({ navigation }) => {
 					type="primary"
 					label="Be Iconic Now !"
 					onpress={() =>
-						navigation.navigate('TabNavigator', { screen: 'Search' })
+						navigation.navigate('TabNavigator', { screen: 'Recherche' })
 					}
 				/>
 			</View>
