@@ -27,6 +27,7 @@ const ChatScreen = ({ navigation, route: { params } }) => {
 	const [messageText, setMessageText] = useState('');
 
 	const chatname = params.chat.traveler._id + params.chat.host._id;
+	const theOther = params.chat.traveler.firstname === user.firstname ? params.chat.host : params.chat.traveler
 
 	// Join chat
 	useEffect(() => {
@@ -107,11 +108,11 @@ const ChatScreen = ({ navigation, route: { params } }) => {
 					onpress={() => navigation.goBack()}
 				/>
 				<Image
-					source={{ uri: params.chat.traveler.avatarUrl }}
+					source={{ uri: theOther.avatarUrl }}
 					style={styles.avatar}
 				/>
 				<Text style={styles.greetingText}>
-					{params.chat.traveler.firstname} • {params.chat.traveler.city.name}
+					{theOther.firstname} • {theOther.city.name}
 				</Text>
 			</View>
 
