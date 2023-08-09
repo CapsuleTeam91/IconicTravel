@@ -19,14 +19,15 @@ import { COLORS, RADIUS } from '../utils/styles';
 import { useIsFocused } from '@react-navigation/native';
 import ButtonIcon from '../components/buttons/ButtonIcon';
 
-export default function ChatScreen({ navigation, route: { params } }) {
-	const pusher = new Pusher('61007bd879a7928d12d9', { cluster: 'eu' });
+const ChatScreen = ({ navigation, route: { params } }) => {
+	let pusher = null;
 	const isFocused = useIsFocused();
 	const user = useSelector((state) => state.user.value);
 	const [messages, setMessages] = useState([]);
 	const [messageText, setMessageText] = useState('');
 
 	useEffect(() => {
+		pusher = new Pusher('61007bd879a7928d12d9', { cluster: 'eu' });
 		const chatname = params.chat.traveler._id + params.chat.host._id;
 		fetch(`${URL_EXPO}/chats/previousMessages/${chatname}`)
 			.then((resp) => resp.json())
@@ -50,10 +51,12 @@ export default function ChatScreen({ navigation, route: { params } }) {
 			});
 		})();
 
-		return () =>
+		return () =>{
+			pusher.disconnect();
 			fetch(`${URL_EXPO}/chats/${chatname}/${user.firstname}`, {
 				method: 'DELETE',
 			});
+		}
 	}, [isFocused]);
 
 	const handleReceiveMessage = (data) => {
@@ -172,6 +175,8 @@ export default function ChatScreen({ navigation, route: { params } }) {
 		</KeyboardAvoidingView>
 	);
 }
+
+export default ChatScreen;
 
 const styles = StyleSheet.create({
 	container: {
