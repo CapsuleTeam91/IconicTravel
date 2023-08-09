@@ -4,6 +4,7 @@
     "src": "app.js",
     "use": "@vercel/node"
   }],
+  "regions": ["cdg1"],
   "routes": [{
     "src": "/(.*)",
     "dest": "app.js"
