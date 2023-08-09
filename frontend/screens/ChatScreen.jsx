@@ -59,7 +59,7 @@ const ChatScreen = ({ navigation, route: { params } }) => {
 		}
 	}, [isFocused]);
 
-	const handleReceiveMessage = (data) => {
+	const handleReceiveMessage = async (data) => {
 		setMessages((messages) => [...messages, data]);
 	};
 
