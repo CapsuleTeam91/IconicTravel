@@ -13,7 +13,7 @@ export const AdventureCard = ({
 }) => {
 	return (
 		<View style={styles.container}>
-			<TouchableOpacity onPress={navigate} activeOpacity={0.8}>
+			<TouchableOpacity onPress={() => {}} activeOpacity={0.8}>
 				<Image source={{ uri: userMatched.avatarUrl }} style={styles.avatar} />
 			</TouchableOpacity>
 
