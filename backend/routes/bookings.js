@@ -6,6 +6,7 @@ const User = require("../models/users");
 const ChatChannel = require("../models/chatChannels");
 
 router.post("/request", async (req, res) => {
+  // Récupération des données de voyage depuis la requête
   const {
     traveler,
     host,
