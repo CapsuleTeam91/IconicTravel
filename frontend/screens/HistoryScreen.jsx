@@ -1,6 +1,5 @@
 import { StyleSheet, Text, View, ScrollView } from 'react-native';
-import { COLORS, STYLES_GLOBAL } from '../utils/styles';
-import Button from '../components/buttons/Button';
+import { COLORS, RADIUS, STYLES_GLOBAL } from '../utils/styles';
 import { useSelector } from 'react-redux';
 import React, { useEffect, useState } from 'react';
 import { URL_EXPO } from '../environnement';
@@ -44,24 +43,15 @@ const HistoryScreen = ({ navigation }) => {
 
 	return (
 		<View style={styles.container}>
-			<Text style={STYLES_GLOBAL.subTitle}>Iconic Adventures</Text>
+			<Text style={STYLES_GLOBAL.subTitle}>Iconic History</Text>
 
-			{/* <View style={styles.tabContainer}>
-				<Button
-					label="Confirmés"
-					type={
-						currentTab === ADVENTURE_STATE.confirmed ? 'primary' : 'secondary'
-					}
-					onpress={() => setCurrentTab(ADVENTURE_STATE.confirmed)}
-				/>
-				<Button
-					label="En attente"
-					type={
-						currentTab === ADVENTURE_STATE.pending ? 'primary' : 'secondary'
-					}
-					onpress={() => setCurrentTab(ADVENTURE_STATE.pending)}
-				/>
-			</View> */}
+			{!doneHosts.length && !doneTravels.length && (
+				<View style={styles.emptyContainer}>
+					<Text style={styles.empty}>
+						Tu n'as pas encore d'Iconic Adventure dans ton historique
+					</Text>
+				</View>
+			)}
 
 			{doneHosts.length > 0 && (
 				<>
@@ -155,5 +145,20 @@ const styles = StyleSheet.create({
 		fontSize: 18,
 		paddingRight: 5,
 		fontWeight: '700',
+	},
+	emptyContainer: {
+		width: '70%',
+		padding: 20,
+		paddingVertical: 40,
+		alignItems: 'center',
+		justifyContent: 'center',
+		marginTop: '20%',
+		backgroundColor: 'white',
+		borderRadius: RADIUS.card,
+	},
+	empty: {
+		textAlign: 'center',
+		fontSize: 16,
+		letterSpacing: 1,
 	},
 });

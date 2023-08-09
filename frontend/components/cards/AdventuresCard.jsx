@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Image } from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 import ButtonIcon from '../buttons/ButtonIcon';
 import { RADIUS } from '../../utils/styles';
 
@@ -13,7 +13,9 @@ export const AdventureCard = ({
 }) => {
 	return (
 		<View style={styles.container}>
-			<Image source={{ uri: userMatched.avatarUrl }} style={styles.avatar} />
+			<TouchableOpacity onPress={navigate} activeOpacity={0.8}>
+				<Image source={{ uri: userMatched.avatarUrl }} style={styles.avatar} />
+			</TouchableOpacity>
 
 			<View style={styles.infoContainer}>
 				<View style={styles.profilContainer}>
