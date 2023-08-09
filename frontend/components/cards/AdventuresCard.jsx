@@ -1,14 +1,14 @@
 import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 import ButtonIcon from '../buttons/ButtonIcon';
-import { RADIUS } from '../../utils/styles';
+import { COLORS, RADIUS } from '../../utils/styles';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 export const AdventureCard = ({
-	// userMatched,
 	booking,
 	isHost,
 	isConfirmed,
 	navigation,
-
 	handleDismiss,
 	handleValidate,
 }) => {
@@ -40,6 +40,24 @@ export const AdventureCard = ({
 					{new Date(booking.startDate).toLocaleDateString()} -{' '}
 					{new Date(booking.endDate).toLocaleDateString()}
 				</Text>
+				<View style={styles.profilContainer}>
+					<View style={styles.date}>
+						<Ionicons name="body" size={10} color={COLORS.darkBlue} />
+						<Text style={styles.date}>{booking.adultsNumber}</Text>
+					</View>
+					{!!booking.childrenNumber && (
+						<View style={styles.date}>
+							<FontAwesome name="child" size={10} color={COLORS.darkBlue} />
+							<Text style={styles.date}>{booking.childrenNumber}</Text>
+						</View>
+					)}
+					{!!booking.babiesNumber && (
+						<View style={styles.date}>
+							<Ionicons name="egg" size={10} color={COLORS.darkBlue} />
+							<Text style={styles.date}>{booking.babiesNumber}</Text>
+						</View>
+					)}
+				</View>
 			</View>
 
 			{new Date(booking.endDate) >= new Date() && (
