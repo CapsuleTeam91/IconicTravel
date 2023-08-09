@@ -40,9 +40,7 @@ const UserProfileScreen = ({ route, navigation }) => {
 			.then((resp) => resp.json())
 			.then((data) => {
 				if (data.result) {
-					fetch(
-						`${URL_EXPO}/bookings/exists/${data.travelerId}/${data.hostId}`
-					)
+					fetch(`${URL_EXPO}/bookings/exists/${data.travelerId}/${data.hostId}`)
 						.then((resp) => resp.json())
 						.then((bookFound) => {
 							if (bookFound.result && !bookFound.booking.done) {
