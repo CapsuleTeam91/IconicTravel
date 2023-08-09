@@ -28,6 +28,7 @@ const ChatScreen = ({ navigation, route: { params } }) => {
 
 	const chatname = params.chat.traveler._id + params.chat.host._id;
 
+	// Join chat
 	useEffect(() => {
 		if(isFocused) {
 			(async () => {
@@ -53,7 +54,7 @@ const ChatScreen = ({ navigation, route: { params } }) => {
 		}
 	}, [isFocused]);
 
-	//Join and leave chat
+	// Leave chat
 	useEffect(() => {
 		return async () =>{
 			await pusher.disconnect();
