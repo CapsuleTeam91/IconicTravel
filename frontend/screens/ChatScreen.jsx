@@ -18,13 +18,14 @@ import { COLORS } from '../utils/styles';
 import { useIsFocused } from '@react-navigation/native';
 
 const ChatScreen = ({ navigation, route: { params } }) => {
-	const pusher = new Pusher('61007bd879a7928d12d9', { cluster: 'eu' });
+	let pusher = null;
 	const isFocused = useIsFocused();
 	const user = useSelector((state) => state.user.value);
 	const [messages, setMessages] = useState([]);
 	const [messageText, setMessageText] = useState('');
 
 	useEffect(() => {
+		pusher = new Pusher('61007bd879a7928d12d9', { cluster: 'eu' });
 		const chatname = params.chat.traveler._id + params.chat.host._id;
 		fetch(`${URL_EXPO}/chats/previousMessages/${chatname}`)
 			.then((resp) => resp.json())
@@ -48,10 +49,12 @@ const ChatScreen = ({ navigation, route: { params } }) => {
 			});
 		})();
 
-		return () =>
+		return () =>{
+			pusher.disconnect();
 			fetch(`${URL_EXPO}/chats/${chatname}/${user.firstname}`, {
 				method: 'DELETE',
 			});
+		}
 	}, [isFocused]);
 
 	const handleReceiveMessage = (data) => {
