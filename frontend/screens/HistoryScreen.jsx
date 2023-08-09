@@ -22,17 +22,18 @@ const HistoryScreen = ({ navigation }) => {
 					setUser(result.user);
 
 					if (result.user.bookings) {
+						console.log(result.user.bookings);
 						setDoneTravels(
 							result.user.bookings.filter(
 								(booking) =>
-									booking.endDate <= new Date() &&
+									new Date(booking.endDate) <= new Date() &&
 									booking.host._id !== result.user._id
 							)
 						);
 						setDoneHosts(
 							result.user.bookings.filter(
 								(booking) =>
-									booking.endDate <= new Date() &&
+									new Date(booking.endDate) <= new Date() &&
 									booking.host._id === result.user._id
 							)
 						);
