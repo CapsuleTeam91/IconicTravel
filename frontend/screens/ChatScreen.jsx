@@ -8,7 +8,6 @@ import {
 	TextInput,
 	TouchableOpacity,
 	View,
-	Button,
 } from 'react-native';
 import { URL_EXPO } from '../utils/constants';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -49,8 +48,8 @@ const ChatScreen = ({ navigation, route: { params } }) => {
 			});
 		})();
 
-		return () =>{
-			pusher.disconnect();
+		return async () =>{
+			await pusher.disconnect();
 			fetch(`${URL_EXPO}/chats/${chatname}/${user.firstname}`, {
 				method: 'DELETE',
 			});
