@@ -116,6 +116,7 @@ const AdventuresScreen = ({ navigation }) => {
 							<AdventureCard
 								key={index}
 								isHost={true}
+								isConfirmed={false}
 								navigation={navigation}
 								userMatched={booking.traveler}
 								startDate={new Date(booking.startDate).toLocaleDateString()}
@@ -140,12 +141,13 @@ const AdventuresScreen = ({ navigation }) => {
 							<AdventureCard
 								key={index}
 								isHost={false}
+								isConfirmed={false}
 								navigation={navigation}
 								userMatched={booking.host}
 								startDate={new Date(booking.startDate).toLocaleDateString()}
 								endDate={new Date(booking.endDate).toLocaleDateString()}
 								handleDismiss={() => deleteBooking(booking._id)}
-								handleValidate={() => { }}
+								handleValidate={() => {}}
 							/>
 						))}
 					</ScrollView>
@@ -165,12 +167,13 @@ const AdventuresScreen = ({ navigation }) => {
 								<AdventureCard
 									key={index}
 									isHost={false}
+									isConfirmed={false}
 									navigation={navigation}
 									userMatched={booking.traveler}
 									startDate={new Date(booking.startDate).toLocaleDateString()}
 									endDate={new Date(booking.endDate).toLocaleDateString()}
-									handleDismiss={() => { }}
-									handleValidate={() => { }}
+									handleDismiss={() => deleteBooking(booking._id)}
+									handleValidate={() => {}}
 								/>
 							))}
 						</ScrollView>
@@ -190,12 +193,13 @@ const AdventuresScreen = ({ navigation }) => {
 								<AdventureCard
 									key={index}
 									isHost={false}
+									isConfirmed={false}
 									navigation={navigation}
 									userMatched={booking.host}
 									startDate={new Date(booking.startDate).toLocaleDateString()}
 									endDate={new Date(booking.endDate).toLocaleDateString()}
-									handleDismiss={() => { }}
-									handleValidate={() => { }}
+									handleDismiss={() => deleteBooking(booking._id)}
+									handleValidate={() => {}}
 								/>
 							))}
 						</ScrollView>
