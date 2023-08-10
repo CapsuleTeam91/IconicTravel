@@ -15,13 +15,10 @@ const Button = ({ type, label, onpress, size = 'small' }) => {
 
 const styles = StyleSheet.create({
 	btn: {
-		// width: '70%',
-		// maxWidth: '70%',
-		alignItems: 'center',
 		borderRadius: 30,
-		paddingVertical: 10,
-		// paddingHorizontal: 25,
 		marginVertical: 20,
+		paddingVertical: 10,
+		alignItems: 'center',
 	},
 	smallBtn: {
 		paddingHorizontal: 25,
@@ -45,11 +42,13 @@ const styles = StyleSheet.create({
 		borderColor: COLORS.darkBlue,
 		backgroundColor: COLORS.bg,
 	},
+	lightBtn: {
+		backgroundColor: COLORS.lightBlue,
+	},
 	textBtn: {
 		fontSize: 18,
 		fontWeight: '700',
 		letterSpacing: 1,
-		// textTransform: 'capitalize',
 	},
 	primaryTextBtn: {
 		color: COLORS.bg,
@@ -60,6 +59,9 @@ const styles = StyleSheet.create({
 	tertiaryTextBtn: {
 		textAlign: 'center',
 		color: COLORS.darkBlue,
+	},
+	lightTextBtn: {
+		color: COLORS.bg,
 	},
 });
 

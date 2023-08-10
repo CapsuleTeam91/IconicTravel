@@ -10,7 +10,6 @@ import {
 } from 'react-native';
 import ButtonIcon from '../components/buttons/ButtonIcon';
 import { URL_EXPO } from '../utils/constants';
-
 import { useSelector } from 'react-redux';
 import React, { useEffect, useState } from 'react';
 import { useIsFocused } from '@react-navigation/native';
