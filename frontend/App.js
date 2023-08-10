@@ -133,10 +133,7 @@ export default function App() {
 							/>
 							<Stack.Screen name="About" component={AboutScreen} />
 							<Stack.Screen name="Legal" component={LegalScreen} />
-							<Stack.Screen
-								name="Notifications"
-								component={NotificationsScreen}
-							/>
+							<Stack.Screen name="Notifications" component={NotificationsScreen}/>
 							<Stack.Screen name="Traduction" component={TraductionScreen} />
 							<Stack.Screen name="Safety" component={SafetyScreen} />
 							<Stack.Screen name="UserProfile" component={UserProfileScreen} />

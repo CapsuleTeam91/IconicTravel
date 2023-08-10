@@ -54,12 +54,14 @@ const UserProfileScreen = ({ route, navigation }) => {
 	const startDateValidated = (date) => {
 		setStartDate(date);
 		if (endDate <= date) {
-			setEndDate(new Date(new Date().setDate(date.getDate() + 1)));
+			setEndDate(calculateNextdate(date));
 		}
 	};
 
 	const calculateNextdate = (date) => {
-		return new Date(new Date().setDate(date.getDate() + 1));
+		var nextDay = new Date(date);
+		nextDay.setDate(date.getDate() + 1); 
+		return nextDay;
 	};
 
 	const validateContact = () => {
@@ -85,10 +87,8 @@ const UserProfileScreen = ({ route, navigation }) => {
 				})
 					.then((resp) => resp.json())
 					.then((data) => {
-						console.log(data);
 						if (data.result) {
-							setModalVisible(!modalVisible);
-							setBookingStatus('Demande en attente');
+							navigation.navigate('Aventures')
 						} else {
 							setError(data.error);
 						}

@@ -23,40 +23,48 @@ const ChatScreen = ({ navigation, route: { params } }) => {
 	const [messages, setMessages] = useState([]);
 	const [messageText, setMessageText] = useState('');
 
+	const chatname = params.chat.traveler._id + params.chat.host._id;
+	const theOther =
+		params.chat.traveler.firstname === user.firstname
+			? params.chat.host
+			: params.chat.traveler;
+
+	// Join chat
 	useEffect(() => {
-		pusher = new Pusher('61007bd879a7928d12d9', { cluster: 'eu' });
-		const chatname = params.chat.traveler._id + params.chat.host._id;
-		fetch(`${URL_EXPO}/chats/previousMessages/${chatname}`)
-			.then((resp) => resp.json())
-			.then((data) => {
-				setMessages(data.messages);
-			});
+		if (isFocused) {
+			(async () => {
+				pusher = new Pusher('61007bd879a7928d12d9', { cluster: 'eu' });
+				fetch(`${URL_EXPO}/chats/previousMessages/${chatname}`)
+					.then((resp) => resp.json())
+					.then((data) => {
+						setMessages(data.messages);
+					});
+				fetch(`${URL_EXPO}/chats/${chatname}/${user.firstname}`, {
+					method: 'PUT',
+				})
+					.then((resp) => resp.json())
+					.then(() => {
+						const subscription = pusher.subscribe(chatname);
+
+						subscription.bind('pusher:subscription_succeeded', () => {
+							subscription.bind('message', handleReceiveMessage);
+						});
+					});
+			})();
+		}
 	}, [isFocused]);
 
-	//Join and leave chat
+	// Leave chat
 	useEffect(() => {
-		const chatname = params.chat.traveler._id + params.chat.host._id;
-		(() => {
-			fetch(`${URL_EXPO}/chats/${chatname}/${user.firstname}`, {
-				method: 'PUT',
-			});
-
-			const subscription = pusher.subscribe(chatname);
-
-			subscription.bind('pusher:subscription_succeeded', () => {
-				subscription.bind('message', handleReceiveMessage);
-			});
-		})();
-
-		return () => {
-			pusher.disconnect();
+		return async () => {
+			await pusher.disconnect();
 			fetch(`${URL_EXPO}/chats/${chatname}/${user.firstname}`, {
 				method: 'DELETE',
 			});
 		};
-	}, [isFocused]);
+	}, []);
 
-	const handleReceiveMessage = (data) => {
+	const handleReceiveMessage = async (data) => {
 		setMessages((messages) => [...messages, data]);
 	};
 
