@@ -75,7 +75,7 @@ const TabNavigator = () => (
 					case 'Messages':
 						iconName = 'chatbox-ellipses';
 						break;
-					case 'Paramètres':
+					case 'Profil':
 						iconName = 'person-circle';
 						break;
 					default:
@@ -93,7 +93,7 @@ const TabNavigator = () => (
 		<Tab.Screen name="Aventures" component={AdventuresScreen} />
 		<Tab.Screen name="Recherche" component={SearchScreen} />
 		<Tab.Screen name="Messages" component={MessagesScreen} />
-		<Tab.Screen name="Paramètres" component={SettingsScreen} />
+		<Tab.Screen name="Profil" component={SettingsScreen} />
 	</Tab.Navigator>
 );
 
@@ -133,7 +133,10 @@ export default function App() {
 							/>
 							<Stack.Screen name="About" component={AboutScreen} />
 							<Stack.Screen name="Legal" component={LegalScreen} />
-							<Stack.Screen name="Notifications" component={NotificationsScreen}/>
+							<Stack.Screen
+								name="Notifications"
+								component={NotificationsScreen}
+							/>
 							<Stack.Screen name="Traduction" component={TraductionScreen} />
 							<Stack.Screen name="Safety" component={SafetyScreen} />
 							<Stack.Screen name="UserProfile" component={UserProfileScreen} />
