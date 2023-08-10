@@ -114,12 +114,15 @@ const styles = StyleSheet.create({
 		fontSize: 16,
 		fontWeight: '700',
 		paddingHorizontal: 10,
+		color: COLORS.darkBlue,
 	},
 	city: {
 		fontSize: 14,
+		color: COLORS.darkBlue,
 	},
 	date: {
 		fontSize: 12,
 		paddingHorizontal: 10,
+		color: COLORS.darkBlue,
 	},
 });

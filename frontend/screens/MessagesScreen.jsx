@@ -10,14 +10,14 @@ import {
 } from 'react-native';
 import ButtonIcon from '../components/buttons/ButtonIcon';
 import { URL_EXPO } from '../utils/constants';
-import { STYLES_GLOBAL, COLORS } from '../utils/styles';
-import { useDispatch, useSelector } from 'react-redux';
+
+import { useSelector } from 'react-redux';
 import React, { useEffect, useState } from 'react';
 import { useIsFocused } from '@react-navigation/native';
+import { STYLES_GLOBAL, COLORS, RADIUS } from '../utils/styles';
 
 const MessagesScreen = ({ navigation }, props) => {
 	const isFocused = useIsFocused();
-
 	const user = useSelector((state) => state.user.value);
 	const [chats, setChats] = useState([]);
 
@@ -38,20 +38,25 @@ const MessagesScreen = ({ navigation }, props) => {
 		}
 
 		return (
-			<View key={i} style={styles.messageContainer}>
+			<TouchableOpacity
+				key={i}
+				style={styles.messageContainer}
+				onPress={() => chatClicked(chat)}>
 				<Image
 					source={{ uri: userToDisplay.avatarUrl }}
 					style={styles.avatar}
 				/>
-				<Text style={styles.message}>
-					{userToDisplay.firstname} · {userToDisplay.city.name}
-				</Text>
+				<View style={styles.profilContainer}>
+					<Text style={styles.name}>{userToDisplay.firstname}</Text>
+					<Text style={styles.city}>• {userToDisplay.city.name}</Text>
+				</View>
+
 				<ButtonIcon
 					onpress={() => chatClicked(chat)}
 					name="arrow-forward-outline"
 					type="transparent"
 				/>
-			</View>
+			</TouchableOpacity>
 		);
 	});
 
@@ -61,10 +66,8 @@ const MessagesScreen = ({ navigation }, props) => {
 
 	return (
 		<View style={styles.container}>
-			<Text style={styles.title}>Messages</Text>
-			<ScrollView
-				contentContainerStyle={styles.messagesContainer}
-				style={styles.messagesContainer2}>
+			<Text style={[STYLES_GLOBAL.subTitle, styles.title]}>Messages</Text>
+			<ScrollView contentContainerStyle={styles.messagesContainer}>
 				{chatList}
 			</ScrollView>
 		</View>
@@ -74,30 +77,26 @@ const MessagesScreen = ({ navigation }, props) => {
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		backgroundColor: '#f0f0f0',
+		alignItems: 'center',
+		backgroundColor: COLORS.bg,
 	},
 	title: {
-		color: COLORS.darkBlue,
-		fontSize: 20,
-		letterSpacing: 1.2,
-		fontWeight: '700',
-		textAlign: 'center',
-		textTransform: 'uppercase',
-		marginTop: 20,
+		margin: 20,
 	},
 	messagesContainer: {
+		width: '90%',
 		alignItems: 'center',
 	},
 	messageContainer: {
 		marginVertical: 10,
 		padding: 10,
+		paddingHorizontal: 20,
 		flexDirection: 'row',
 		justifyContent: 'space-between',
 		alignItems: 'center',
 		width: '90%',
-		height: 50,
-		borderWidth: 1,
-		borderRadius: 20,
+		borderRadius: RADIUS.card,
+		backgroundColor: 'white',
 	},
 	avatar: {
 		width: 42,
@@ -106,6 +105,20 @@ const styles = StyleSheet.create({
 	},
 	message: {
 		marginStart: 20,
+	},
+	profilContainer: {
+		flexDirection: 'row',
+		alignItems: 'baseline',
+	},
+	name: {
+		fontSize: 16,
+		fontWeight: '700',
+		paddingHorizontal: 10,
+		color: COLORS.darkBlue,
+	},
+	city: {
+		fontSize: 14,
+		color: COLORS.darkBlue,
 	},
 });
 

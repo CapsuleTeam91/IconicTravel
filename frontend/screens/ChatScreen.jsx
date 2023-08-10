@@ -102,21 +102,12 @@ const ChatScreen = ({ navigation, route: { params } }) => {
 				/>
 				<Image
 					source={{
-						uri:
-							user.firstname === params.chat.traveler.firstname
-								? params.chat.host.avatarUrl
-								: params.chat.traveler.avatarUrl,
+						uri: theOther.avatarUrl,
 					}}
 					style={styles.avatar}
 				/>
 				<Text style={styles.greetingText}>
-					{user.firstname === params.chat.traveler.firstname
-						? params.chat.host.firstname
-						: params.chat.traveler.firstname}{' '}
-					•{' '}
-					{user.firstname === params.chat.traveler.firstname
-						? params.chat.host.city.name
-						: params.chat.traveler.city.name}
+					{theOther.firstname} • {theOther.city.name}
 				</Text>
 			</View>
 
@@ -143,10 +134,7 @@ const ChatScreen = ({ navigation, route: { params } }) => {
 							{message.username !== user.firstname && (
 								<Image
 									source={{
-										uri:
-											user.firstname === params.chat.traveler.firstname
-												? params.chat.host.avatarUrl
-												: params.chat.traveler.avatarUrl,
+										uri: theOther.avatarUrl,
 									}}
 									style={styles.smallAvatar}
 								/>
