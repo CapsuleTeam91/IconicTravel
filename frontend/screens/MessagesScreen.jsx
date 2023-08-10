@@ -82,6 +82,7 @@ const styles = StyleSheet.create({
 	},
 	title: {
 		margin: 20,
+		marginBottom: 30,
 	},
 	messagesContainer: {
 		width: '90%',
