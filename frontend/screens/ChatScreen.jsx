@@ -1,4 +1,3 @@
-import { useEffect, useRef, useState } from 'react';
 import {
 	KeyboardAvoidingView,
 	Platform,
@@ -6,17 +5,15 @@ import {
 	StyleSheet,
 	Text,
 	TextInput,
-	TouchableOpacity,
 	View,
-	Button,
 	Image,
 } from 'react-native';
-import { URL_EXPO } from '../utils/constants';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import Pusher from 'pusher-js/react-native';
 import { useSelector } from 'react-redux';
+import { URL_EXPO } from '../utils/constants';
 import { COLORS, RADIUS } from '../utils/styles';
+import { useEffect, useRef, useState } from 'react';
 import { useIsFocused } from '@react-navigation/native';
+import Pusher from 'pusher-js/react-native';
 import ButtonIcon from '../components/buttons/ButtonIcon';
 
 const ChatScreen = ({ navigation, route: { params } }) => {
@@ -51,12 +48,12 @@ const ChatScreen = ({ navigation, route: { params } }) => {
 			});
 		})();
 
-		return () =>{
+		return () => {
 			pusher.disconnect();
 			fetch(`${URL_EXPO}/chats/${chatname}/${user.firstname}`, {
 				method: 'DELETE',
 			});
-		}
+		};
 	}, [isFocused]);
 
 	const handleReceiveMessage = (data) => {
@@ -89,12 +86,6 @@ const ChatScreen = ({ navigation, route: { params } }) => {
 			style={styles.container}
 			behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
 			<View style={styles.banner}>
-				{/* <MaterialIcons
-					name="keyboard-backspace"
-					color="#ffffff"
-					size={24}
-					onPress={() => navigation.goBack()}
-				/> */}
 				<ButtonIcon
 					type="primary"
 					size={18}
@@ -102,11 +93,22 @@ const ChatScreen = ({ navigation, route: { params } }) => {
 					onpress={() => navigation.goBack()}
 				/>
 				<Image
-					source={{ uri: params.chat.traveler.avatarUrl }}
+					source={{
+						uri:
+							user.firstname === params.chat.traveler.firstname
+								? params.chat.host.avatarUrl
+								: params.chat.traveler.avatarUrl,
+					}}
 					style={styles.avatar}
 				/>
 				<Text style={styles.greetingText}>
-					{params.chat.traveler.firstname} • {params.chat.traveler.city.name}
+					{user.firstname === params.chat.traveler.firstname
+						? params.chat.host.firstname
+						: params.chat.traveler.firstname}{' '}
+					•{' '}
+					{user.firstname === params.chat.traveler.firstname
+						? params.chat.host.city.name
+						: params.chat.traveler.city.name}
 				</Text>
 			</View>
 
@@ -130,6 +132,17 @@ const ChatScreen = ({ navigation, route: { params } }) => {
 										: styles.messageRecieved),
 								},
 							]}>
+							{message.username !== user.firstname && (
+								<Image
+									source={{
+										uri:
+											user.firstname === params.chat.traveler.firstname
+												? params.chat.host.avatarUrl
+												: params.chat.traveler.avatarUrl,
+									}}
+									style={styles.smallAvatar}
+								/>
+							)}
 							<View
 								style={[
 									styles.message,
@@ -159,11 +172,7 @@ const ChatScreen = ({ navigation, route: { params } }) => {
 						style={styles.input}
 						autoFocus
 					/>
-					{/* <TouchableOpacity
-						onPress={() => handleSendMessage()}
-						style={styles.sendButton}>
-						<MaterialIcons name="send" color="#ffffff" size={24} />
-					</TouchableOpacity> */}
+
 					<ButtonIcon
 						name="send-outline"
 						size={24}
@@ -174,7 +183,7 @@ const ChatScreen = ({ navigation, route: { params } }) => {
 			</View>
 		</KeyboardAvoidingView>
 	);
-}
+};
 
 export default ChatScreen;
 
@@ -246,15 +255,15 @@ const styles = StyleSheet.create({
 		alignItems: 'flex-start',
 	},
 	messageSentBg: {
-		backgroundColor: '#ffad99',
-		// backgroundColor: COLORS.extralightPink,
+		borderWidth: 1,
+		borderColor: COLORS.pink,
+		backgroundColor: COLORS.bg,
 	},
 	messageRecievedBg: {
-		backgroundColor: '#d6fff9',
-		// backgroundColor: COLORS.lightBlue,
+		backgroundColor: COLORS.grey,
 	},
 	messageText: {
-		color: '#506568',
+		color: COLORS.darkBlue,
 		fontWeight: '400',
 	},
 	timeText: {
@@ -269,7 +278,6 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 		justifySelf: 'flex-end',
 		alignItems: 'center',
-		// alignContent: 'flex-start',
 		marginBottom: 30,
 		marginTop: 'auto',
 		background: 'transparent',
@@ -297,43 +305,12 @@ const styles = StyleSheet.create({
 		marginLeft: 20,
 		borderRadius: RADIUS.image,
 	},
-	// recordButton: {
-	// 	borderRadius: 50,
-	// 	padding: 16,
-	// 	backgroundColor: '#ff5c5c',
-	// 	marginLeft: 12,
-	// 	alignItems: 'center',
-	// 	justifyContent: 'center',
-	// 	shadowColor: '#000',
-	// 	shadowOffset: {
-	// 		width: 0,
-	// 		height: 1,
-	// 	},
-	// 	shadowOpacity: 0.2,
-	// 	shadowRadius: 6.41,
-	// 	elevation: 1.2,
-	// },
-	// sendButton: {
-	// 	borderRadius: 50,
-	// 	padding: 16,
-	// 	backgroundColor: '#ffe099',
-	// 	marginLeft: 12,
-	// 	alignItems: 'center',
-	// 	justifyContent: 'center',
-	// 	shadowColor: '#000',
-	// 	shadowOffset: {
-	// 		width: 0,
-	// 		height: 1,
-	// 	},
-	// 	shadowOpacity: 0.2,
-	// 	shadowRadius: 6.41,
-	// 	elevation: 1.2,
-	// },
-	// buttonText: {
-	// 	color: '#ffffff',
-	// 	fontWeight: '800',
-	// 	textTransform: 'uppercase',
-	// },
+	smallAvatar: {
+		width: 22,
+		height: 22,
+		marginBottom: 2,
+		borderRadius: RADIUS.image,
+	},
 	scroller: {
 		paddingLeft: 20,
 		paddingRight: 20,

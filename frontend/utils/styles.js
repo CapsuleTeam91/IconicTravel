@@ -7,8 +7,7 @@ export const COLORS = {
 	pink: '#F87575',
 	darkBlue: '#073B4C',
 	lightBlue: '#95B8D1',
-	extralightPink: 'rgba(248,117,117,0.552280287114846)',
-	extralightBlue: 'rgba(149,184,209,0.6839329481792717)',
+	grey: '#D8D9DA',
 };
 
 export const RADIUS = {
