@@ -4,22 +4,17 @@ import {
 	StyleSheet,
 	Modal,
 	Text,
-	TouchableOpacity,
 	View,
-	Pressable,
 	ActivityIndicator,
 } from 'react-native';
-import { useEffect, useState } from 'react';
 import { getAge } from '../utils/helper';
-import { addData } from '../reducers/user';
-import { ERRORS } from '../utils/constants';
+import { useSelector } from 'react-redux';
+import { useEffect, useState } from 'react';
 import { URL_EXPO } from '../utils/constants';
-import { useDispatch, useSelector } from 'react-redux';
 import { COLORS, STYLES_GLOBAL } from '../utils/styles';
 import Button from '../components/buttons/Button';
-import ButtonIcon from '../components/buttons/ButtonIcon';
 import DatePicker from '../components/forms/DatePicker';
-import { AntDesign } from '@expo/vector-icons';
+import ButtonIcon from '../components/buttons/ButtonIcon';
 
 const UserProfileScreen = ({ route, navigation }) => {
 	const user = route.params.user;
@@ -33,24 +28,7 @@ const UserProfileScreen = ({ route, navigation }) => {
 	const [childrenNumber, setChildrenNumber] = useState(0);
 	const [babiesNumber, setBabiesNumber] = useState(0);
 	const [error, setError] = useState('');
-	const [bookingStatus, setBookingStatus] = useState(null);
 	const [loading, setLoading] = useState(false);
-
-	useEffect(() => {
-		fetch(`${URL_EXPO}/users/getId/${thisUser.token}/${user.email}`)
-			.then((resp) => resp.json())
-			.then((data) => {
-				if (data.result) {
-					fetch(`${URL_EXPO}/bookings/exists/${data.travelerId}/${data.hostId}`)
-						.then((resp) => resp.json())
-						.then((bookFound) => {
-							if (bookFound.result && !bookFound.booking.done) {
-								setBookingStatus(bookFound.booking.status);
-							}
-						});
-				}
-			});
-	}, []);
 
 	const startDateValidated = (date) => {
 		setStartDate(date);
@@ -100,61 +78,67 @@ const UserProfileScreen = ({ route, navigation }) => {
 
 	return (
 		<SafeAreaView style={styles.container}>
-			<View style={styles.btnContainer}>
-				<ButtonIcon
-					type="secondary"
-					size={18}
-					name="arrow-back-outline"
-					onpress={() => navigation.goBack()}
-				/>
-				<View style={styles.title}>
-					<Text style={STYLES_GLOBAL.subTitle}>{user.firstname}</Text>
-				</View>
-			</View>
-
-			<View style={styles.pictureContainer}>
-				<Image
-					source={{
-						uri: user.avatarUrl,
-					}}
-					style={styles.image}
-				/>
-				<View style={styles.infosContainer}>
-					<Text style={styles.city}>{user.city.name}</Text>
-					<Text style={styles.age}>{getAge(user.dateOfBirth)} ans</Text>
-					<View style={[styles.languagesContainer]}>
-						{user.spokenLanguages.map((language, i) => (
-							<Text
-								key={i}
-								style={[
-									styles.spokenLanguages,
-									{
-										color: COLORS.darkBlue,
-									},
-								]}>
-								{language}
-							</Text>
-						))}
+			<View>
+				<View style={styles.btnContainer}>
+					<ButtonIcon
+						type="secondary"
+						size={18}
+						name="arrow-back-outline"
+						onpress={() => navigation.goBack()}
+					/>
+					<View style={styles.title}>
+						<Text style={STYLES_GLOBAL.subTitle}>{user.firstname}</Text>
 					</View>
 				</View>
-			</View>
 
-			<View style={styles.detailsContainer}>
-				<Text style={STYLES_GLOBAL.textDark}>{user.description}</Text>
-			</View>
-
-			<View style={styles.detailsContainer}>
-				<Text style={STYLES_GLOBAL.textDark}>Mes Passions : </Text>
-				<View
-					style={{
-						flexDirection: 'row',
-						alignItems: 'flex-start',
-					}}>
-					{user.hobbies.map((h, i) => (
-						<View key={i} style={styles.hobbyContainer}>
-							<Text style={styles.hobby}>{h}</Text>
+				<View style={styles.pictureContainer}>
+					<Image
+						source={{
+							uri: user.avatarUrl,
+						}}
+						style={styles.image}
+					/>
+					<View style={styles.infosContainer}>
+						<Text style={styles.city}>{user.city.name}</Text>
+						<Text style={styles.age}>{getAge(user.dateOfBirth)} ans</Text>
+						<View style={[styles.languagesContainer]}>
+							{user.spokenLanguages.map((language, i) => (
+								<Text
+									key={i}
+									style={[
+										styles.spokenLanguages,
+										{
+											color: COLORS.darkBlue,
+										},
+									]}>
+									{language}
+								</Text>
+							))}
 						</View>
-					))}
+					</View>
+				</View>
+
+				<View style={styles.detailsContainer}>
+					<Text style={[STYLES_GLOBAL.textDark, styles.description]}>
+						{user.description}
+					</Text>
+				</View>
+
+				<View style={styles.detailsContainer}>
+					<Text style={[STYLES_GLOBAL.textDark, styles.passion]}>
+						Mes Passions :{' '}
+					</Text>
+					<View
+						style={{
+							flexDirection: 'row',
+							alignItems: 'flex-start',
+						}}>
+						{user.hobbies.map((h, i) => (
+							<View key={i} style={styles.hobbyContainer}>
+								<Text style={styles.hobby}>{h}</Text>
+							</View>
+						))}
+					</View>
 				</View>
 			</View>
 
@@ -175,7 +159,7 @@ const UserProfileScreen = ({ route, navigation }) => {
 				<View style={styles.centeredView}>
 					<View style={styles.modalView}>
 						<View style={styles.categoryContainer}>
-							<Text style={styles.subTitle}>Dates</Text>
+							<Text style={styles.subTitle}>Iconic Request</Text>
 							<View style={styles.datePickersContainer}>
 								<View style={styles.date}>
 									<Text>Départ</Text>
@@ -202,107 +186,100 @@ const UserProfileScreen = ({ route, navigation }) => {
 							</View>
 						</View>
 						<View style={styles.categoryContainer}>
-							<Text style={styles.subTitle}>Voyageurs</Text>
-
 							<View style={styles.modalDetailsContainer}>
 								<View style={styles.travelersDetailsContainer}>
-									<View style={styles.travelerDetailTitle}>
-										<Text
-											style={{
-												textAlign: 'center',
-												textAlignVertical: 'center',
-											}}>
-											Adultes
-										</Text>
-									</View>
+									<Text>Adultes</Text>
 									<View style={styles.travelerDetailParams}>
-										<TouchableOpacity
-											onPress={() =>
+										<ButtonIcon
+											type="count"
+											size={18}
+											name="remove-outline"
+											onpress={() =>
 												adultsNumber > 0 && setAdultsNumber(adultsNumber - 1)
-											}>
-											<AntDesign name="minuscircleo" size={24} color="black" />
-										</TouchableOpacity>
+											}
+										/>
 										<Text>{adultsNumber}</Text>
-										<TouchableOpacity
-											onPress={() => setAdultsNumber(adultsNumber + 1)}>
-											<AntDesign name="pluscircleo" size={24} color="black" />
-										</TouchableOpacity>
+										<ButtonIcon
+											type="count"
+											size={18}
+											name="add-outline"
+											onpress={() => setAdultsNumber(adultsNumber + 1)}
+										/>
 									</View>
 								</View>
 
 								<View style={styles.travelersDetailsContainer}>
-									<View style={styles.travelerDetailTitle}>
-										<Text
-											style={{
-												textAlign: 'center',
-												textAlignVertical: 'center',
-											}}>
-											Enfants
-										</Text>
-									</View>
+									<Text>Enfants</Text>
+
 									<View style={styles.travelerDetailParams}>
-										<TouchableOpacity
-											onPress={() =>
+										<ButtonIcon
+											type="count"
+											size={18}
+											name="remove-outline"
+											onpress={() =>
 												childrenNumber > 0 &&
 												setChildrenNumber(childrenNumber - 1)
-											}>
-											<AntDesign name="minuscircleo" size={24} color="black" />
-										</TouchableOpacity>
+											}
+										/>
 										<Text>{childrenNumber}</Text>
-										<TouchableOpacity
-											onPress={() => setChildrenNumber(childrenNumber + 1)}>
-											<AntDesign name="pluscircleo" size={24} color="black" />
-										</TouchableOpacity>
+										<ButtonIcon
+											type="count"
+											size={18}
+											name="add-outline"
+											onpress={() => setChildrenNumber(childrenNumber + 1)}
+										/>
 									</View>
 								</View>
 
 								<View style={styles.travelersDetailsContainer}>
-									<View style={styles.travelerDetailTitle}>
-										<Text
-											style={{
-												textAlign: 'center',
-												textAlignVertical: 'center',
-											}}>
-											Bébés
-										</Text>
-									</View>
+									{/* <View style={styles.travelerDetailTitle}> */}
+									<Text>Bébés</Text>
+									{/* </View> */}
 									<View style={styles.travelerDetailParams}>
-										<TouchableOpacity
-											onPress={() =>
+										<ButtonIcon
+											type="count"
+											size={18}
+											name="remove-outline"
+											onpress={() =>
 												babiesNumber > 0 && setBabiesNumber(babiesNumber - 1)
-											}>
-											<AntDesign name="minuscircleo" size={24} color="black" />
-										</TouchableOpacity>
+											}
+										/>
 										<Text>{babiesNumber}</Text>
-										<TouchableOpacity
-											onPress={() => setBabiesNumber(babiesNumber + 1)}>
-											<AntDesign name="pluscircleo" size={24} color="black" />
-										</TouchableOpacity>
+										<ButtonIcon
+											type="count"
+											size={18}
+											name="add-outline"
+											onpress={() => setBabiesNumber(babiesNumber + 1)}
+										/>
 									</View>
 								</View>
+
 								{error && (
 									<View style={{ alignItems: 'center', width: '100%' }}>
 										<Text style={{ color: 'red' }}>{error}</Text>
 									</View>
 								)}
 							</View>
+
 							{loading && (
 								<View style={styles.activityindicatorContainer}>
 									<ActivityIndicator size="large" color={COLORS.lightBlue} />
 								</View>
 							)}
 						</View>
-						<View style={styles.btnContainer}>
-							<TouchableOpacity
-								style={[styles.button, styles.buttonClose]}
-								onPress={() => setModalVisible(!modalVisible)}>
-								<Text style={styles.textStyle}>Annuler</Text>
-							</TouchableOpacity>
-							<TouchableOpacity
-								style={[styles.button, styles.buttonClose]}
-								onPress={() => validateContact()}>
-								<Text style={styles.textStyle}>Valider</Text>
-							</TouchableOpacity>
+						<View style={styles.modalBtnContainer}>
+							<Button
+								label="Annuler"
+								type="secondary"
+								size="small"
+								onpress={() => setModalVisible(!modalVisible)}
+							/>
+							<Button
+								label="Valider"
+								type="primary"
+								size="small"
+								onpress={() => validateContact()}
+							/>
 						</View>
 					</View>
 				</View>
@@ -326,34 +303,33 @@ const styles = StyleSheet.create({
 		paddingVertical: 20,
 		paddingHorizontal: 20,
 		alignItems: 'center',
-		justifyContent: 'flex-start',
+		justifyContent: 'space-between',
 	},
 	btnContainer: {
-		width: '100%',
+		width: Platform.OS === 'ios' ? '90%' : '100%',
+		marginBottom: 20,
 		flexDirection: 'row',
 		alignItems: 'center',
 		justifyContent: 'center',
-		marginBottom: 20,
 	},
 	detailsContainer: {
 		width: Platform.OS === 'ios' ? '90%' : '100%',
-		marginVertical: 20,
+		marginTop: 20,
 	},
 	pictureContainer: {
 		width: Platform.OS === 'ios' ? '90%' : '100%',
 		flexDirection: 'row',
 		alignItems: 'center',
-		justifyContent: 'center',
+		paddingLeft: 35,
 	},
 	infosContainer: {
 		margin: 10,
-		alignItems: 'center',
+		marginLeft: 20,
 		justifyContent: 'center',
 	},
 	languagesContainer: {
 		flexWrap: 'wrap',
 		flexDirection: 'row',
-		justifyContent: 'center',
 	},
 	image: {
 		width: 120,
@@ -375,11 +351,17 @@ const styles = StyleSheet.create({
 		color: COLORS.darkBlue,
 		paddingVertical: 5,
 	},
+	description: {
+		lineHeight: 20,
+	},
+	passion: {
+		fontSize: 20,
+	},
 	spokenLanguages: {
 		fontSize: 14,
 		letterSpacing: 1,
 		fontStyle: 'italic',
-		paddingHorizontal: 5,
+		paddingRight: 5,
 	},
 	hobbyContainer: {
 		margin: 2,
@@ -392,38 +374,13 @@ const styles = StyleSheet.create({
 		paddingHorizontal: 10,
 		backgroundColor: COLORS.lightBlue,
 	},
-
-	hostingBtn: {
-		justifyContent: 'center',
-		alignItems: 'center',
-		height: 80,
-		width: 80,
-	},
-	hostingTxt: {
-		backgroundColor: '#95B8D1',
-		height: '100%',
-		width: '100%',
-		textAlign: 'center',
-		textAlignVertical: 'center',
-		borderRadius: 30,
-	},
-	optionsContainer: {
-		width: Platform.OS === 'ios' ? '90%' : '100%',
-		flexWrap: 'wrap',
-		flexDirection: 'row',
-		alignItems: 'center',
-		justifyContent: 'space-between',
-	},
-
 	subTitle: {
 		fontSize: 24,
+		marginBottom: 10,
 		color: COLORS.darkBlue,
+		textAlign: 'center',
 		textTransform: 'uppercase',
 	},
-
-	// details: {
-	// 	paddingVertical: 2,
-	// },
 	centeredView: {
 		flex: 1,
 		justifyContent: 'center',
@@ -446,23 +403,7 @@ const styles = StyleSheet.create({
 		shadowRadius: 4,
 		elevation: 5,
 	},
-	button: {
-		marginHorizontal: 10,
-		borderRadius: 20,
-		padding: 10,
-		elevation: 2,
-	},
-	buttonOpen: {
-		backgroundColor: '#F194FF',
-	},
-	buttonClose: {
-		backgroundColor: '#2196F3',
-	},
-	textStyle: {
-		color: 'white',
-		fontWeight: 'bold',
-		textAlign: 'center',
-	},
+
 	modalText: {
 		marginBottom: 15,
 		textAlign: 'center',
@@ -490,25 +431,23 @@ const styles = StyleSheet.create({
 	travelersDetailsContainer: {
 		width: '100%',
 		flexDirection: 'row',
+		alignItems: 'center',
+		justifyContent: 'space-between',
 		marginVertical: 5,
-	},
-	travelerDetailTitle: {
 		paddingLeft: 10,
-		justifyContent: 'center',
-		alignItems: 'flex-start',
-		width: '60%',
 	},
 	travelerDetailParams: {
 		width: '40%',
 		flexDirection: 'row',
+		alignItems: 'center',
 		justifyContent: 'space-around',
 	},
-	// btnContainer: {
-	// 	width: '100%',
-	// 	flexDirection: 'row',
-	// 	justifyContent: 'center',
-	// 	alignItems: 'center',
-	// },
+	modalBtnContainer: {
+		width: '100%',
+		flexDirection: 'row',
+		alignItems: 'center',
+		justifyContent: 'space-between',
+	},
 });
 
 export default UserProfileScreen;

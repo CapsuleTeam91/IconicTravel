@@ -63,6 +63,12 @@ const styles = StyleSheet.create({
 		borderColor: COLORS.lightBlue,
 		backgroundColor: COLORS.bgModal,
 	},
+	countBtn: {
+		width: 28,
+		height: 28,
+		borderWidth: 2,
+		borderColor: COLORS.darkBlue,
+	},
 	transparentBtn: {
 		width: 32,
 		borderWidth: 0,

@@ -419,7 +419,6 @@ const styles = StyleSheet.create({
 	},
 	wrapperLayer: {
 		marginTop: 160,
-		// height: '100%',
 		minWidth: '100%',
 		alignItems: 'center',
 		borderTopLeftRadius: 100,
@@ -431,21 +430,12 @@ const styles = StyleSheet.create({
 		paddingHorizontal: 20,
 		marginBottom: 5,
 		alignItems: 'center',
-		// borderWidth: 1,
-		// borderColor: 'red',
 	},
 	border: {
 		borderWidth: 1,
 		borderRadius: 30,
 		borderColor: '#DDE6ED',
 		shadowColor: COLORS.bg,
-		// shadowOffset: {
-		// 	width: 0,
-		// 	height: 1,
-		// },
-		// shadowOpacity: 0.2,
-		// shadowRadius: 1.41,
-		// elevation: 2,
 	},
 	image: {
 		width: 120,
