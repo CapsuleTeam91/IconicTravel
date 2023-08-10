@@ -81,8 +81,6 @@ const styles = StyleSheet.create({
 		width: '100%',
 		alignItems: 'center',
 		justifyContent: 'center',
-		borderColor: 'red',
-		borderWidth: 1,
 	},
 	optionsContainer: {
 		width: Platform.OS === 'ios' ? '70%' : '80%',
