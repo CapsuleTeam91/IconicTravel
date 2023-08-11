@@ -42,7 +42,6 @@ export const UpdateDetailesChildren = ({
 		const response = await fetch(`${URL_EXPO}/city/${cityLetters}`);
 		const result = await response.json();
 
-		console.log(result);
 		setRemoteDataSet(result.suggestions);
 	}, []);
 

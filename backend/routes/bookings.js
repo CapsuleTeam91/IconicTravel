@@ -5,8 +5,8 @@ const Booking = require('../models/bookings');
 const User = require('../models/users');
 const ChatChannel = require('../models/chatChannels');
 
+/* POST /request - create a booking request */
 router.post('/request', async (req, res) => {
-	// Récupération des données de voyage depuis la requête
 	const {
 		traveler,
 		host,
@@ -17,15 +17,12 @@ router.post('/request', async (req, res) => {
 		babiesNumber,
 	} = req.body.travelDatas;
 
-	// Vérifie si le traveler à déjà demandé un hosting à cette personne
-	const sameBookings = await Booking.find({ $and: [{ traveler }, { host }] }); // Recherche des réservations avec le même voyageur et le même hôte
+	//  Check if traveler has already request a booking to host or reverse
+	const sameBookings = await Booking.find({ $and: [{ traveler }, { host }] });
 	const reverseBookings = await Booking.find({
 		$and: [{ traveler: host }, { host: traveler }],
-	}); // Recherche des réservations où le voyageur est maintenant l'hôte et vice versa
+	});
 
-	console.log('Reverse : ', reverseBookings);
-
-	// Fonction pour obtenir les dates entre une date de début et une date de fin
 	const getDates = (startDate, endDate) => {
 		let datesToCheckFromReq = [];
 		let dif = new Date(endDate).getTime() - new Date(startDate).getTime();
@@ -38,10 +35,10 @@ router.post('/request', async (req, res) => {
 		return datesToCheckFromReq;
 	};
 
-	// Tableau de dates à vérifier à partir de la requête
+	// Dates to be checked
 	const datesFromReq = getDates(startDate, endDate);
 
-	//Si oui, vérifier si les dates se chevauchent
+	// Check start date and end date interval
 	if (sameBookings.length) {
 		let datesToCheck = [];
 		for (let i = 0; i < sameBookings.length; i++) {
@@ -50,7 +47,6 @@ router.post('/request', async (req, res) => {
 				new Date(sameBookings[i].startDate).getTime();
 			let daysNbr = dif / (1000 * 3600 * 24);
 
-			// Vérifier les chevauchements de dates
 			for (let j = 0; j <= daysNbr; j++) {
 				const result = new Date(sameBookings[i].startDate);
 				const dateToCheck = result.setDate(result.getDate() + j);
@@ -60,7 +56,7 @@ router.post('/request', async (req, res) => {
 
 		for (let i = 0; i < datesFromReq.length; i++) {
 			if (datesToCheck.includes(datesFromReq[i])) {
-				// 2 dates se supperposent...
+				// dates not compatible
 				res.json({
 					result: false,
 					error: 'Vous avez déjà demandé un travel sur ce créneau',
@@ -70,6 +66,7 @@ router.post('/request', async (req, res) => {
 		}
 	}
 
+	// Check start date and end date interval
 	if (reverseBookings.length) {
 		let datesToCheck = [];
 		for (let i = 0; i < reverseBookings.length; i++) {
@@ -86,8 +83,8 @@ router.post('/request', async (req, res) => {
 		}
 
 		for (let i = 0; i < datesFromReq.length; i++) {
+			// dates not compatible
 			if (datesToCheck.includes(datesFromReq[i])) {
-				// 2 dates se supperposent...
 				res.json({
 					result: false,
 					error: 'Cet host vous a déjà fait une demande sur ce créneau',
@@ -130,7 +127,6 @@ router.post('/request', async (req, res) => {
 			});
 
 			newChatChannel.save().then(async (resp) => {
-				console.log('ChatChannel crée : ', resp);
 				travelerFound.chatChannels.push(resp._id);
 				hostFound.chatChannels.push(resp._id);
 				const newTraveler = await travelerFound.save();
@@ -162,7 +158,7 @@ router.post('/request', async (req, res) => {
 	});
 });
 
-// Obtenir les détails de l'utilisateur avec un jeton donné
+/* GET /:token - return user */
 router.get('/:token', (req, res) => {
 	User.findOne({ token: req.params.token })
 		.populate({
@@ -177,7 +173,7 @@ router.get('/:token', (req, res) => {
 		});
 });
 
-// Vérifier l'existence d'une réservation entre un voyageur et un hôte
+/* GET /exists/:traveler/:host - if exists returns bookings between two users*/
 router.get(`/exists/:traveler/:host`, (req, res) => {
 	Booking.findOne({
 		traveler: req.params.traveler,
@@ -197,7 +193,7 @@ router.get(`/exists/:traveler/:host`, (req, res) => {
 	});
 });
 
-//Obtenir les canaux de discussion d'un voyageur
+/* GET /traveler/:token - get user's chatchannels */
 router.get(`/traveler/:token`, (req, res) => {
 	User.findOne({ token: req.params.token })
 		.populate('chatChannels')
@@ -221,7 +217,7 @@ router.patch('/update/:bookingId', (req, res) => {
 	const { bookingId } = req.params;
 
 	Booking.findByIdAndUpdate(bookingId, { status: 'Confirmé' }).exec();
-	res.json({ result: true })
+	res.json({ result: true });
 });
 
 /* DELETE /delete/:bookingId - remove the booking using its id */

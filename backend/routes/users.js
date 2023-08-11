@@ -117,7 +117,7 @@ router.get('/', (req, res) => {
 	});
 });
 
-/* GET /:token - get some usefull user's datas ? DUE TO REDUX PERSIST MIGHT BE USELESS */
+/* GET /:token - get some usefull user's datas */
 router.get('/:token', (req, res) => {
 	User.findOne({ token: req.params.token }).then((data) => {
 		if (data) {
@@ -172,8 +172,6 @@ router.put('/update/:token', async (req, res) => {
 
 	const newUser = await user.save();
 
-	console.log('NewUser:', newUser);
-
 	if (!newUser)
 		return res
 			.status(409)
@@ -205,10 +203,8 @@ router.put('/booking/:token/:bookingId', async (req, res) => {
 	}
 });
 
-/* DELETE /delete/:token - remove all data from user in db (pusher ?) */
+/* DELETE /delete/:token - remove all data from user in db */
 router.delete('/delete/:token', (req, res) => {
-	//TODO : DELETE FOREIGN KEY OR NOT ?
-
 	// DELETE USER FROM DB
 	User.deleteOne({ token: req.params.token }).then((deletedDoc) => {
 		if (deletedDoc.deletedCount > 0) {
