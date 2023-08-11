@@ -7,9 +7,9 @@ import {
 	View,
 	ActivityIndicator,
 } from 'react-native';
+import { useState } from 'react';
 import { getAge } from '../utils/helper';
 import { useSelector } from 'react-redux';
-import { useEffect, useState } from 'react';
 import { URL_EXPO } from '../utils/constants';
 import { COLORS, STYLES_GLOBAL } from '../utils/styles';
 import Button from '../components/buttons/Button';

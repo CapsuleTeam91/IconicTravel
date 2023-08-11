@@ -118,7 +118,6 @@ const UserProfileScreen = ({ navigation }) => {
 					return;
 				}
 				if (userFound.result) {
-					console.log('User updated reçu avant dispatch:', userFound.data);
 					const {
 						firstname,
 						lastname,

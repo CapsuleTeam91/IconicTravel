@@ -66,8 +66,6 @@ const SigninScreen = ({ navigation, view = SIGN_VIEW.in }) => {
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		// alignItems: 'center',
-		// justifyContent: 'space-between',
 		backgroundColor: COLORS.lightBlue,
 	},
 	contentContainerStyle: {
@@ -78,8 +76,6 @@ const styles = StyleSheet.create({
 	switchLinkContainer: {
 		width: '100%',
 		height: 100,
-		// flexDirection: 'row',
-
 		backgroundColor: COLORS.darkBlue,
 	},
 	switchLinkContainer2: {
@@ -87,7 +83,6 @@ const styles = StyleSheet.create({
 		height: 100,
 		alignItems: 'center',
 		backgroundColor: COLORS.lightBlue,
-		// borderTopLeftRadius: 100,
 	},
 	link: {
 		fontSize: 16,

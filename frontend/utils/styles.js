@@ -47,7 +47,6 @@ export const STYLES_GLOBAL = StyleSheet.create({
 	},
 	subTitleLight: {
 		color: COLORS.bg,
-		// margin: 20,
 	},
 	textLight: {
 		padding: 15,

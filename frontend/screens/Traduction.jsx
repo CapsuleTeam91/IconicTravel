@@ -1,7 +1,7 @@
+import { useState } from 'react';
+import { COLORS, STYLES_GLOBAL } from '../utils/styles';
 import { SafeAreaView, StyleSheet, Switch, Text, View } from 'react-native';
 import ButtonIcon from '../components/buttons/ButtonIcon';
-import { COLORS, STYLES_GLOBAL } from '../utils/styles';
-import { useState } from 'react';
 
 const TraductionScreen = ({ navigation }) => {
 	const [isEnabled, setIsEnabled] = useState(false);

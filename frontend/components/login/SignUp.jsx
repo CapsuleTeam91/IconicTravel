@@ -156,7 +156,6 @@ const styles = StyleSheet.create({
 		width: '100%',
 		flex: 1,
 		alignItems: 'center',
-		// justifyContent: 'center',
 		backgroundColor: COLORS.darkBlue,
 		borderTopLeftRadius: 100,
 		borderBottomLeftRadius: 80,
@@ -164,7 +163,6 @@ const styles = StyleSheet.create({
 	},
 	inputContainer: {
 		width: '100%',
-		// marginTop: 20,
 		alignItems: 'center',
 		justifyContent: 'center',
 	},

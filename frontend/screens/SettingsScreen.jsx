@@ -7,11 +7,11 @@ import {
 	View,
 } from 'react-native';
 import { LINKS } from '../utils/data';
+import { disconnect } from '../reducers/user';
 import { useDispatch, useSelector } from 'react-redux';
 import { COLORS, STYLES_GLOBAL } from '../utils/styles';
 import Button from '../components/buttons/Button';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { disconnect } from '../reducers/user';
 
 const SettingsScreen = ({ navigation }) => {
 	const dispatch = useDispatch();

@@ -132,16 +132,13 @@ const styles = StyleSheet.create({
 		fontSize: 25,
 		paddingTop: 20,
 		paddingBottom: 20,
-		// fontFamily:'Montserrat',
 	},
-
 	baseText: {
 		flex: 1,
 		alignItems: 'center',
 		justifyContent: 'center',
 		textAlign: 'justify',
 	},
-
 	onePart: {
 		flex: 1,
 		alignItems: 'center',
@@ -150,11 +147,9 @@ const styles = StyleSheet.create({
 		paddingTop: 10,
 		paddingBottom: 10,
 	},
-
 	titleTwoPart: {
 		fontWeight: 'bold',
 	},
-
 	twoPart: {
 		flex: 1,
 		alignItems: 'center',
@@ -162,11 +157,9 @@ const styles = StyleSheet.create({
 		textAlign: 'justify',
 		paddingBottom: 10,
 	},
-
 	titleThreePart: {
 		fontWeight: 'bold',
 	},
-
 	threePart: {
 		flex: 1,
 		alignItems: 'center',
@@ -174,11 +167,9 @@ const styles = StyleSheet.create({
 		textAlign: 'justify',
 		paddingBottom: 10,
 	},
-
 	titleFourPart: {
 		fontWeight: 'bold',
 	},
-
 	fourPart: {
 		flex: 1,
 		alignItems: 'center',
@@ -186,7 +177,6 @@ const styles = StyleSheet.create({
 		textAlign: 'justify',
 		paddingBottom: 5,
 	},
-
 	fivePart: {
 		textAlign: 'justify',
 	},

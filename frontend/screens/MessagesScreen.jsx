@@ -1,9 +1,7 @@
 import {
-	SafeAreaView,
 	StyleSheet,
 	Text,
 	View,
-	FlatList,
 	TouchableOpacity,
 	Image,
 	ScrollView,
