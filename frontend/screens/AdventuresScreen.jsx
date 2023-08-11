@@ -14,7 +14,7 @@ const ADVENTURE_STATE = {
 const AdventuresScreen = ({ navigation }) => {
 	const isFocused = useIsFocused();
 	const thisUser = useSelector((state) => state.user.value);
-	const [currentTab, setCurrentTab] = useState(ADVENTURE_STATE.confirmed);
+	const [currentTab, setCurrentTab] = useState(ADVENTURE_STATE.pending);
 	const [pendingTravels, setPendingTravels] = useState([]);
 	const [pendingHosts, setPendingHosts] = useState([]);
 	const [confirmedTravels, setConfirmedTravels] = useState([]);

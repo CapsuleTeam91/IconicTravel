@@ -5,7 +5,7 @@ import ButtonIcon from '../../components/buttons/ButtonIcon';
 
 const Snap = (props) => {
 	let cameraRef = useRef(null);
-	const [type, setType] = useState(CameraType.back);
+	const [type, setType] = useState(CameraType.front);
 	const [flashMode, setFlashMode] = useState(FlashMode.off);
 
 	const takePicture = async () => {

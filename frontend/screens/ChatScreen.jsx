@@ -166,7 +166,7 @@ const ChatScreen = ({ navigation, route: { params } }) => {
 						onChangeText={(value) => setMessageText(value)}
 						value={messageText}
 						style={styles.input}
-						autoFocus
+						autoFocus={false}
 					/>
 
 					<ButtonIcon
